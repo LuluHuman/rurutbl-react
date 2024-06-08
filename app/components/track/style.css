@@ -1,0 +1,77 @@
+
+#track,
+#btime {
+	padding: 24px 0px;
+	margin: 15px 0px;
+
+	border-radius: 15px;
+	min-width: min(600px, 100vw);
+}
+
+#track > li::marker {
+	content: none;
+}
+
+.subjLi {
+	display: flex;
+	justify-content: space-between;
+	align-items: center;
+	flex-wrap: wrap;
+
+	padding: 10px;
+	margin: 10px 20px;
+
+	border-radius: 12px;
+	border: var(--color-grey) solid 1px;
+}
+
+.subjLi > div {
+	max-width: 200px;
+}
+
+.subjLi > div.rangeout {
+	max-width: unset;
+}
+
+.endLi {
+	display: flex;
+	align-items: center;
+	justify-content: center;
+
+	height: 0;
+	margin: 1.5rem 20px 0.5rem 20px;
+	border-top: thin solid var(--color-grey);
+}
+
+.endLi > span {
+	color: var(--color-grey);
+	padding: 2px 4px;
+	background: var(--color-bg);
+}
+
+#track > li.active {
+	outline: white 1px solid;
+}
+
+.rangeout {
+	width: 100%;
+	height: 20px;
+
+	display: flex;
+	align-items: center;
+}
+
+.rangein {
+	padding: 0px 10px;
+	height: 100%;
+
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	flex-wrap: nowrap;
+
+	margin: 0 5px;
+	font-size: 13px;
+	text-wrap: balance;
+	border-radius: 25px;
+}

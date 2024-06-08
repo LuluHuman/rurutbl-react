@@ -1,0 +1,32 @@
+table {
+	border-collapse: collapse;
+	width: 800px;
+}
+
+table > tr:nth-child(odd) {
+	background-color: #333;
+}
+
+#table > div {
+	max-width: 100%;
+	overflow-x: scroll;
+	padding: 30px 0;
+}
+
+td,
+th {
+	text-align: center;
+	padding: 8px;
+	border: var(--color-grey) solid 1px;
+}
+
+td {
+	font-size: 0.7em;
+	color: #ffffffaa;
+}
+
+#full-root {
+	display: block;
+	overflow: overlay;
+	width: auto;
+}

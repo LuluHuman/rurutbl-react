@@ -3,31 +3,108 @@
 @tailwind utilities;
 
 :root {
-  --foreground-rgb: 0, 0, 0;
-  --background-start-rgb: 214, 219, 220;
-  --background-end-rgb: 255, 255, 255;
-}
+	--color-bg: #222;
+	--color-txt: #fff;
+	--color-grey: #9799a0;
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --foreground-rgb: 255, 255, 255;
-    --background-start-rgb: 0, 0, 0;
-    --background-end-rgb: 0, 0, 0;
-  }
+	--pb-size-minWidth: 85vw;
+	--pb-size-maxWidth: 300px;
+	--pb-thickness: 5px;
+
+	background: var(--color-bg);
+	color: var(--color-txt);
+	font-family: sans-serif;
 }
 
 body {
-  color: rgb(var(--foreground-rgb));
-  background: linear-gradient(
-      to bottom,
-      transparent,
-      rgb(var(--background-end-rgb))
-    )
-    rgb(var(--background-start-rgb));
+	width: 100vw;
+	display: flex;
+	align-items: flex-start;
+}
+body > ul {
+	background-color: rgb(23 23 23);
+	height: 100vh;
+	padding: 10px;
+}
+body > ul > li {
+	white-space: nowrap;
+	margin: 5px;
+	padding: 0.5rem;
+	border-radius: 0.25rem;
+	transition: 0.5s;
+}
+body > ul > li:hover {
+	background-color: rgb(75 85 99);
+}
+body > ul > li > span.active {
+	border: solid 2px white;
+	width: 100%;
+	border-radius: 25px;
+}
+#root {
+	width: inherit;
+	background: var(--color-bg);
+	color: var(--color-txt);
+	font-family: sans-serif;
+	display: flex;
+	align-items: center;
+	flex-wrap: wrap;
+	justify-content: center;
+	margin: 0px;
+	overflow-x: hidden;
+
+	margin-left: 80px;
 }
 
-@layer utilities {
-  .text-balance {
-    text-wrap: balance;
-  }
+#classTitle {
+	margin-top: 40px;
+	width: 100vw;
+	display: flex;
+	justify-content: center;
+}
+
+#classTitle > a {
+	color: var(--color-txt);
+	font-size: inherit;
+	text-decoration: none;
+}
+
+#classTitle > a::after {
+	font-family: "Material Symbols Outlined";
+	content: "\e8b8";
+	margin-left: 10px;
+}
+
+@media (max-width: 640px) {
+	:root > body {
+		display: inherit;
+	}
+	:root > body > ul {
+		display: flex;
+		align-items: center;
+		justify-content: center;
+
+		height: inherit;
+		width: 100vw;
+		position: fixed;
+		bottom: 0;
+	}
+	:root > body > ul > li > span.active {
+		display: none;
+	}
+	:root > body > ul > li.active {
+		background: rgb(75 85 99);
+	}
+	:root > body > ul > li > a {
+		display: flex;
+		flex-direction: column;
+		text-align: center;
+	}
+	#root {
+		margin-left: 0;
+	}
+}
+
+h1 {
+	font-size: 2em;
 }
