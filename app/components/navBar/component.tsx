@@ -9,11 +9,11 @@ export function NavBar() {
 
 	const [collapsed, setCollapsed] = useState(true);
 	const buttons = {
-		__Menu: ["", "="],
-		"/": ["Main", "🕒"],
-		"/full": ["Full Table", "📄"],
+		__Menu: ["", "\ue5d2"],
+		"/": ["Main", "\ue88a"],
+		"/full": ["Full Table", "\ueb85"],
 		__Seperator: [],
-		"/settings": ["Settings", "⚙️"]
+		"/settings": ["Settings", "\ue8b8"],
 	};
 
 	const links = [];
@@ -26,9 +26,13 @@ export function NavBar() {
 
 		if (isMenu) {
 			links.push(
-				<li className={`p-2 rounded mb-3 sm:list-item hidden`}>
-					<button onClick={() => setCollapsed(!collapsed)}>
-						<span className="icon">{icon}</span>
+				<li
+					className={`p-2 rounded mb-5 sm:list-item hidden `}
+					key={path}>
+					<button
+						onClick={() => setCollapsed(!collapsed)}
+						className="flex">
+						<span className="icon material-icons">{icon}</span>
 						<span className={`label ${collapsed ? "hidden" : ""}`}>{label}</span>
 					</button>
 				</li>
@@ -36,14 +40,25 @@ export function NavBar() {
 			continue;
 		}
 		if (isSeperator) {
-			links.push(<li className={"border-t-gray-600 border-t-2 p-0"}></li>);
+			links.push(
+				<li
+					className={"border-t-gray-600 border-t-2 p-0"}
+					key={path}
+				/>
+			);
 			continue;
 		}
 		links.push(
-			<li className={isActive ? "active" : ""}>
-				{isActive ? <span className="active"></span> : <></>}
-				<Link href={path}>
-					<span className="icon">{icon}</span>
+			<li
+				className={isActive ? "active" : ""}
+				key={path}>
+				<Link
+					href={path}
+					className="flex">
+					<span
+						className="icon material-icons"
+						dangerouslySetInnerHTML={{ __html: icon }}
+					/>
 					<span className={`label ${collapsed ? "sm:hidden " : ""}`}>{label}</span>
 				</Link>
 			</li>

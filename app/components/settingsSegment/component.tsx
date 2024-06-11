@@ -52,6 +52,7 @@ export function ClassSelector({ title, props: classes }: { title: string; props:
 					<div>
 						<select
 							value={levelVal || ""}
+							key={levelVal || "idk"}
 							onChange={(e) => {
 								setLevelVal(e.target.value);
 
@@ -72,7 +73,7 @@ export function ClassSelector({ title, props: classes }: { title: string; props:
 					<div>
 						<select
 							value={classVal || ""}
-							key={classVal || ""}
+							key={classVal || "idk"}
 							onChange={(e) => {
 								setClassVal(e.target.value);
 
@@ -98,13 +99,13 @@ export function ElecSelector({ title, props: type }: { title: string; props: "Sc
 		const savedSettings = localStorage.getItem("settings");
 		if (savedSettings) setSettings(JSON.parse(savedSettings));
 		setElective(settings.Elec[type]);
-		
+
 		if (Object.prototype.hasOwnProperty.call(newSettings, "Elec")) {
 			localStorage.setItem("settings", JSON.stringify(newSettings));
 			setNewSettings({});
 		}
 	}, [newSettings, elective]);
-	
+
 	const SciElecEle = [<></>];
 	const SciElec = ["Physics", "Biology"];
 	SciElec.forEach((elective) => {
@@ -126,6 +127,7 @@ export function ElecSelector({ title, props: type }: { title: string; props: "Sc
 					<div>
 						<select
 							value={elective || ""}
+							key={elective || "idk"}
 							onChange={(e) => {
 								setElective(e.target.value);
 

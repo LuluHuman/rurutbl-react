@@ -62,5 +62,5 @@ export interface CircularProgressType {
 
 export interface ClientType {
     canteenCrowdness: object
-    oddeven: "odd" | "even";
+    isOdd: boolean;
 }

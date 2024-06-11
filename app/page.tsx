@@ -12,12 +12,16 @@ export default async function Home() {
 	// Grab dem week
 	const _timeDifference = currentDate.getTime() - semstartDate.getTime();
 	const weekNumber = Math.ceil(_timeDifference / millisecondsPerWeek);
+	
+	const isOdd = weekNumber % 2 !== 0;
 
-	const oddeven = weekNumber % 2 == 0 && weekNumber > 0 ? "even" : "odd";
-	const OddEven = weekNumber % 2 == 0 && weekNumber > 0 ? "Even" : "Odd"; //ill fix this later
 	const canteenCrowdness = {
-		Recess: JSONStringifyParse(await import(`../public/api/getCommonRecess${OddEven}.json`)),
-		Break: JSONStringifyParse(await import(`../public/api/getCommonBreak${OddEven}.json`)),
+		Recess: JSONStringifyParse(
+			await import(`../public/api/getCommonRecess${isOdd ? "Odd" : "Even"}.json`)
+		),
+		Break: JSONStringifyParse(
+			await import(`../public/api/getCommonBreak${isOdd ? "Odd" : "Even"}.json`)
+		),
 	};
 
 	function JSONStringifyParse(json: object) {
@@ -28,7 +32,7 @@ export default async function Home() {
 		<>
 			<Client
 				canteenCrowdness={canteenCrowdness}
-				oddeven={oddeven}
+				isOdd={isOdd}
 			/>
 		</>
 	);

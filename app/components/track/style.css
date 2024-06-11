@@ -61,17 +61,16 @@
 	align-items: center;
 }
 
-.rangein {
-	padding: 0px 10px;
-	height: 100%;
+.rangein { 
+  text-wrap: nowrap;
+  text-overflow: ellipsis;
+  text-align: left;
+  overflow: hidden;
+  font-size: 13px;
 
-	display: flex;
-	align-items: center;
-	justify-content: center;
-	flex-wrap: nowrap;
-
-	margin: 0 5px;
-	font-size: 13px;
-	text-wrap: balance;
-	border-radius: 25px;
+  border-radius: 25px;
+  
+  height: 100%;
+  margin: 0 5px;
+  padding: 0px 10px;
 }

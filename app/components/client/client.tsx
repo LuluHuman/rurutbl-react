@@ -2,15 +2,15 @@
 // Hold crap this code is a mess
 import { CircularProgress, CircularProgressLoading } from "../circularProgress/component";
 import { Track, TrackLoading } from "../track/component";
-import { dayList, ClientType, crowdedness } from "../../lib/types";
+import { dayList, ClientType, crowdedness, weekList } from "../../lib/types";
 import { Date24, getCurrentLsn, defaultSettings } from "../../lib/trackHelper";
 
 import { useEffect, useState } from "react";
 
 import "@/app/lib/skeleton.css";
 
-export default function Client({ oddeven, canteenCrowdness }: ClientType) {
-	const dayName = ["Monday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Monday"];
+export default function Client({ isOdd, canteenCrowdness }: ClientType) {
+	const dayName = ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"];
 	const shortDayName = ["Sun", "Mon", "Tues", "Wed", "Thurs", "Fri", "Sat"];
 
 	const [loading, setLoading] = useState(true);
@@ -21,7 +21,7 @@ export default function Client({ oddeven, canteenCrowdness }: ClientType) {
 	const [activeIndex, setActiveIndex] = useState(0);
 
 	const [settings, setSettings] = useState(defaultSettings);
-	const [weekList, setweekListn] = useState({});
+	var [weekList, setweekListn] = useState<weekList>();
 
 	// Do once
 	useEffect(() => {
@@ -32,22 +32,50 @@ export default function Client({ oddeven, canteenCrowdness }: ClientType) {
 	// When 'setting' is set
 	useEffect(() => {
 		const { level, class: className } = settings.class;
-		console.log(`../../../public/classes/${level}/${className}/${oddeven}.json`);
 
-		import(`../../../public/classes/${level}/${className}/${oddeven}.json`).then((res) => {
-			setweekListn(res);
-		});
+		import(`../../../public/classes/${level}/${className}/${isOdd ? "odd" : "even"}.json`).then(
+			(res) => {
+				setweekListn(res);
+			}
+		);
 	}, [settings]);
 
 	useEffect(() => {
 		const i: NodeJS.Timeout = setInterval(() => {
-			if (!Object.prototype.hasOwnProperty.call(weekList, "Monday")) return clearInterval(i);
+			if (!weekList) return clearInterval(i);
+
 			// Date stuff
 			const curDate = new Date();
 			const curTime24 = new Date24();
 			const curTime = curTime24.toInt();
 
-			const day = dayName[curDate.getDay()] as keyof typeof weekList;
+			var day = dayName[curDate.getDay()] as keyof typeof weekList;
+
+			if (!Object.prototype.hasOwnProperty.call(weekList, day)) {
+				day = "Monday";
+				setDay(day);
+
+				const { level, class: className } = settings.class;
+				import(
+					`../../../public/classes/${level}/${className}/${!isOdd ? "odd" : "even"}.json`
+				).then((res) => {
+					weekList = res;
+				});
+
+				setTrackLabels({
+					title: `${day} ${!isOdd ? "Odd" : "Even"} Week`,
+					subtitle: "",
+					timeRemaining: "",
+				});
+
+				const dayList: dayList = weekList[day] as dayList;
+				setDaylist(dayList);
+				
+				if (loading) setLoading(false);
+				clearInterval(i);
+				return;
+			}
+
 			const dayList: dayList = weekList[day] as dayList;
 			setDaylist(dayList);
 			setDay(day);
@@ -60,15 +88,6 @@ export default function Client({ oddeven, canteenCrowdness }: ClientType) {
 				clearInterval(i);
 
 				let _nextI = curDate.getDay() + 1;
-				if (_nextI == 6 || _nextI == 7) {
-					setTrackLabels({
-						title: `I dont know`,
-						subtitle: `how do i change weeks`,
-						timeRemaining: "",
-					});
-					return;
-				}
-
 				let _nextDay = dayName[_nextI] as keyof typeof weekList;
 				const nextday = weekList[_nextDay];
 
@@ -145,8 +164,8 @@ export default function Client({ oddeven, canteenCrowdness }: ClientType) {
 						active={activeIndex}
 					/>
 					<p className=" w-full text-center">
-						Showing: {oddeven.replace(/^./, (str) => str.toUpperCase())} Week /
-						{` ${day} `}/ Class {settings.class.level + settings.class.class}
+						Current: {isOdd ? "Odd" : "Even"} Week /{` ${day} `}/ Class{" "}
+						{settings.class.level + settings.class.class}
 					</p>
 				</>
 			) : (

@@ -1,16 +1,10 @@
-table {
+table > tbody {
 	border-collapse: collapse;
 	width: 800px;
 }
 
-table > tr:nth-child(odd) {
+table > tbody > tr:nth-child(odd) {
 	background-color: #333;
-}
-
-#table > div {
-	max-width: 100%;
-	overflow-x: scroll;
-	padding: 30px 0;
 }
 
 td,

@@ -111,7 +111,9 @@ export default function TableForWeek({ oddeven }: { oddeven: "even" | "odd" }) {
 			<h1 className="flex justify-center my-5 w-auto">
 				{classFullName}: {oddeven.replace(/^./, (str) => str.toUpperCase())} Week
 			</h1>
-			<table>{fullTable}</table>
+			<table>
+				<tbody>{fullTable}</tbody>
+			</table>
 		</>
 	);
 }
