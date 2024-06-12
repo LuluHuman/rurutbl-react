@@ -29,11 +29,11 @@ export default async function Home() {
 	}
 
 	return (
-		<>
+		<div className="flex items-center flex-wrap justify-center">
 			<Client
 				canteenCrowdness={canteenCrowdness}
 				isOdd={isOdd}
 			/>
-		</>
+		</div>
 	);
 }

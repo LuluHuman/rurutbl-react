@@ -12,6 +12,7 @@ export function NavBar() {
 		__Menu: ["", "\ue5d2"],
 		"/": ["Main", "\ue88a"],
 		"/full": ["Full Table", "\ueb85"],
+		"/bus-arrival": ["Bus Arrival", "\ue530"],
 		__Seperator: [],
 		"/settings": ["Settings", "\ue8b8"],
 	};

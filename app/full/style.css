@@ -1,20 +1,19 @@
-table > tbody {
+#full-root > table > tbody {
 	border-collapse: collapse;
 	width: 800px;
 }
-
-table > tbody > tr:nth-child(odd) {
+#full-root > table > tbody > tr:nth-child(odd) {
 	background-color: #333;
 }
 
-td,
-th {
+#full-root > table > tbody > tr > td,
+#full-root > table > tbody > tr > th {
 	text-align: center;
 	padding: 8px;
 	border: var(--color-grey) solid 1px;
 }
 
-td {
+#full-root > table > tbody > td {
 	font-size: 0.7em;
 	color: #ffffffaa;
 }
