@@ -133,19 +133,33 @@ export default function Client({ isOdd, canteenCrowdness }: ClientType) {
 			setActiveIndex(sortedTimeList.indexOf(curLessont24.toString()) - 1);
 
 			const _hr = hoursLeft.toString().padStart(2, "0");
-			const _min = (Math.abs(minutesLeft) - 1).toString().padStart(2, "0");
+			const _min = minutesLeft.toString().padStart(2, "0");
 			const _sec = (60 - curDate.getSeconds()).toString().padStart(2, "0");
 
 			const _fallbackTitle = `Time until Start class (${dayList[sortedTimeList[0]]})`;
 			setTrackLabels({
-				title: curLsn || _fallbackTitle,
-				subtitle: curLsn ? (nextLsn ? `Time until ${nextLsn}` : "Time Left") : "",
+				title: localisedSubject(curLsn) || _fallbackTitle,
+				subtitle: curLsn
+					? nextLsn
+						? `Time until ${localisedSubject(nextLsn)}`
+						: "Time Left"
+					: "",
 				timeRemaining: `${_hr}:${_min.length == 1 ? "0" + _min : _min}:${_sec}`,
 			});
 
 			if (loading) setLoading(false);
 		}, 500);
 	}, [settings, weekList]);
+
+	function localisedSubject(Subject: string | null) {
+		switch (Subject) {
+			case "{SciElec}":
+				return settings.Elec.Sci || Subject;
+
+			default:
+				return Subject;
+		}
+	}
 
 	return (
 		<>

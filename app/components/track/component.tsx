@@ -24,16 +24,18 @@ export function Track({ dayList, active, canteenCrowdness, day, settings }: Trac
 		const hours = isPM ? curDate24.hours - 12 : curDate24.hours;
 		const minutes = curDate24.minutes == 0 ? "00" : curDate24.minutes;
 
+		let isFinished = i < (active || 0);
 		let isActive = i == active;
 		let isEND = subject == "END";
 
-		var opacity = 1;
+		var styles: string[] = [];
 		var crowd = null;
 
+		if (isFinished) styles.push("line-through");
 		switch (subject) {
 			case "Recess":
 			case "Break": {
-				opacity = 0.5;
+				styles.push("text-gray-500");
 				const a = canteenCrowdness[subject];
 				const b = a[day];
 				if (b == undefined) break;
@@ -54,7 +56,7 @@ export function Track({ dayList, active, canteenCrowdness, day, settings }: Trac
 			}
 
 			case "{SciElec}":
-			subject = settings.Elec.Sci || subject;
+				subject = settings.Elec.Sci || subject;
 
 			default:
 				break;
@@ -69,10 +71,19 @@ export function Track({ dayList, active, canteenCrowdness, day, settings }: Trac
 					</span>
 				) : (
 					<>
-						<div style={{ opacity: opacity }}>{subject}</div>
-						<div style={{ opacity: opacity }}>{`${hours}:${minutes} ${
-							isPM ? "PM" : "AM"
-						}`}</div>
+						<div className={styles.join(" ")}>
+							{isFinished ? (
+								<span className="material-icons-outlined text-green-500 !text-base">
+									{"\ue86c"}
+								</span>
+							) : (
+								""
+							)}
+							{subject}
+						</div>
+						<div className={styles.join(" ")}>
+							{`${hours}:${minutes} ${isPM ? "PM" : "AM"}`}
+						</div>
 						{crowd}
 					</>
 				)}
@@ -84,7 +95,7 @@ export function Track({ dayList, active, canteenCrowdness, day, settings }: Trac
 	return <ul id="track">{track}</ul>;
 }
 
-export function TrackLoading(){
+export function TrackLoading() {
 	return (
 		<ul id="track">
 			{[1, 2, 3, 4, 5, 6].map((index) => (

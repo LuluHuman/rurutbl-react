@@ -84,6 +84,11 @@ body > ul > li > span.active {
 		width: 100vw;
 		position: fixed;
 		bottom: 0;
+
+		padding: 0;
+	}
+	.label{
+		font-size: 10px;
 	}
 	:root > body > ul > li > span.active {
 		display: none;

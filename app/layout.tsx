@@ -15,8 +15,14 @@ export default function RootLayout({ children }: Readonly<layout>) {
 	
 	return (
 		<html lang="en">
+			<head>
+				<link
+					rel="manifest"
+					href="/manifest.json"
+				/>
+			</head>
 			<body>
-				<NavBar/>
+				<NavBar />
 				<div id="root">{children}</div>
 			</body>
 		</html>

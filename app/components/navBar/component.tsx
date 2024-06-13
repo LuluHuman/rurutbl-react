@@ -65,5 +65,5 @@ export function NavBar() {
 			</li>
 		);
 	}
-	return <ul className="fixed">{links}</ul>;
+	return <ul className="fixed z-10	">{links}</ul>;
 }
