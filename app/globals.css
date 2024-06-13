@@ -2,14 +2,32 @@
 @tailwind components;
 @tailwind utilities;
 
+/* 
+Don't you dare call me out for this CSS file,
+It has worked for decades
+*/
+
 :root {
 	--color-bg: #222;
 	--color-txt: #fff;
 	--color-grey: #9799a0;
+	--color-secondary: rgb(23 23 23);
 
 	--pb-size-minWidth: 85vw;
 	--pb-size-maxWidth: 300px;
 	--pb-thickness: 5px;
+}
+
+@media (prefers-color-scheme: light) {
+  :root {
+	--color-bg: #fff;
+	--color-txt: #000;
+	--color-secondary: #9799a0;
+
+	--pb-size-minWidth: 85vw;
+	--pb-size-maxWidth: 300px;
+	--pb-thickness: 5px;
+}
 }
 
 body {
@@ -21,7 +39,7 @@ body {
 }
 
 body > ul {
-	background-color: rgb(23 23 23);
+	background-color: var(--color-secondary);
 	height: 100vh;
 	padding: 10px;
 }
@@ -40,6 +58,19 @@ body > ul > li > span.active {
 	width: 100%;
 	border-radius: 25px;
 }
+
+h1 {
+	font-size: 2em;
+}
+
+.icon {
+	margin: 0px 2px;
+}
+
+.active {
+	border-left: solid 3px white;
+}
+
 #root {
 	width: inherit;
 	background: var(--color-bg);
@@ -71,6 +102,37 @@ body > ul > li > span.active {
 	margin-left: 10px;
 }
 
+/* 
+This is so that i can use this site on my Galaxy Watch (previusly on /watch). 
+! Id rather die then rewrite Client/component.tsx 
+*/
+
+@media (max-width: 500px) and (max-height: 500px) {
+	:root {
+		--color-bg: #000;
+		--color-txt: #fff;
+		--color-grey: #9799a0;
+
+		--pb-size-minWidth: 100vw;
+		--pb-size-maxWidth: 100vw;
+		--pb-thickness: 5px;
+	}
+	:root > body,
+	#root,
+	div.timer-container {
+		font-size: 2rem;
+		margin: 0;
+		padding: 0;
+		height: 100vh;
+		width: 100vw;
+	}
+
+	:root > body > ul,
+	#classTitle {
+		display: none !important;
+	}
+}
+
 @media (max-width: 640px) {
 	:root > body {
 		display: inherit;
@@ -87,7 +149,7 @@ body > ul > li > span.active {
 
 		padding: 0;
 	}
-	.label{
+	.label {
 		font-size: 10px;
 	}
 	:root > body > ul > li > span.active {
@@ -103,22 +165,10 @@ body > ul > li > span.active {
 	}
 	#root {
 		padding-left: 0;
-		padding-bottom: 200px
+		padding-bottom: 200px;
 	}
 	body > ul > li.active {
 		border-left: none;
 		border-bottom: solid 3px white;
 	}
-}
-
-h1 {
-	font-size: 2em;
-}
-
-.icon {
-	margin: 0px 2px;
-}
-
-.active {
-	border-left: solid 3px white;
 }
