@@ -13,7 +13,7 @@ export function Loading() {
 
 	}, []);
 	return (
-		<div className="w-full h-dvh flex items-center flex-col justify-center">
+		<div className="w-full h-full flex items-center flex-col justify-center">
 			<Image
 				src="/loading.gif"
 				alt="loader"

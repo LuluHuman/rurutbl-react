@@ -1,6 +1,6 @@
 # Rurutbl 
 ## Overview
-Rurutbl is a [Next.js](https://nextjs.org/) webapp that uses the converted output from [RuruTbl Scanner](https://github.com/rurutbl/rurutbl-scanner)  which transforms [aSc Timetables](https://www.asctimetables.com/) to a more glacable page
+Rurutbl is a [Next.js](https://nextjs.org/) webapp that uses the converted output from [RuruTbl Scanner](https://github.com/rurutbl/rurutbl-scanner)  which transforms [aSc Timetables](https://www.asctimetables.com/) to a more glanceable page
 
 Website: https://rurutbl.luluhoy.tech/
 

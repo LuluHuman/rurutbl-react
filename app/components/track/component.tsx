@@ -13,6 +13,8 @@ function assignColor(percentage: number) {
 export function Track({ dayList, active, canteenCrowdness, day, settings }: TrackType) {
 	var track: React.JSX.Element[] = [];
 	var i = 0;
+	if (!dayList) return <>Error</>
+	
 	const timeList = Object.keys(dayList).toSorted();
 
 	timeList.forEach(async (lsnStartTime) => {

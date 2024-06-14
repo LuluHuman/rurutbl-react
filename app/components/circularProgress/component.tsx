@@ -1,6 +1,5 @@
 import { CircularProgressType } from "@/app/lib/types";
 
-import "./style.css";
 import React from "react";
 
 export function CircularProgress({ valuePercentage = 0, text }: CircularProgressType) {
@@ -10,21 +9,22 @@ export function CircularProgress({ valuePercentage = 0, text }: CircularProgress
 	let timer = (
 		<path
 			strokeDasharray={circleDasharray}
-			className="base-timer__path-remaining"
+			className="stroke-[5px] rotate-90 origin-center transition-all duration-1000 ease-linear  stroke-current"
+			style={{ strokeLinecap: "round", fillRule: "nonzero" }} // Tailwind you suck (better then bootstrap tho)
 			d="M 50, 50m -45, 0a 45,45 0 1,0 90,0a 45,45 0 1,0 -90,0"
 		/>
 	);
 
 	return (
-		<div className="timer-container">
-			<div className="base-timer">
+		<div className="h-[85vw] w-[85vw] max-h-[300px] max-w-[300px]">
+			<div className="relative w-full h-full">
 				<svg
-					className="base-timer__svg"
+					className="scale-x-[1]"
 					viewBox="0 0 100 100"
 					xmlns="http://www.w3.org/2000/svg">
-					<g className="base-timer__circle">
+					<g className="fill-none stroke-none]">
 						<circle
-							className="base-timer__path-elapsed"
+							className="stroke-[5px] stroke-gray-600"
 							cx="50"
 							cy="50"
 							r="45"
@@ -32,7 +32,7 @@ export function CircularProgress({ valuePercentage = 0, text }: CircularProgress
 						{timer}
 					</g>
 				</svg>
-				<div>
+				<div className="absolute top-0  w-full h-full    flex items-center justify-center flex-col   text-center">
 					<span>{text.title /*Math*/}</span>
 					<span>{text.subtitle /*Time until {Next Subject} || Time Left*/}</span>
 					<span>{text.timeRemaining}</span>
@@ -41,29 +41,30 @@ export function CircularProgress({ valuePercentage = 0, text }: CircularProgress
 		</div>
 	);
 }
+
 export function CircularProgressLoading() {
 	return (
-		<div className="timer-container">
-			<div className="base-timer">
+		<div className="h-[85vw] w-[85vw] max-h-[300px] max-w-[300px]">
+			<div className="relative w-full h-full">
 				<svg
-					className="base-timer__svg"
+					className="scale-x-[1]"
 					viewBox="0 0 100 100"
 					xmlns="http://www.w3.org/2000/svg">
-					<g className="base-timer__circle">
+					<g className="fill-none stroke-none">
 						<circle
-							className="base-timer__path-elapsed"
+							className="stroke-[5px] stroke-gray-600"
 							cx="50"
 							cy="50"
 							r="45"
 						/>
 						<path
 							strokeDasharray="283"
-							className="base-timer__path-remaining"
+							className="stroke-[5px] rotate-90 origin-center transition-all ease-linear  stroke-current"
 							d="M 50, 50m -45, 0a 45,45 0 1,0 90,0a 45,45 0 1,0 -90,0"
 						/>
 					</g>
 				</svg>
-				<div>
+				<div className="absolute top-0  w-full h-full    flex items-center justify-center flex-col   text-center">
 					<span className="px40" />
 					<span
 						className="px40"

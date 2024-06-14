@@ -9,7 +9,7 @@ import { useEffect, useState } from "react";
 
 import "@/app/lib/skeleton.css";
 
-export default function Client({ isOdd, canteenCrowdness }: ClientType) {
+export default function Client({ isOdd, canteenCrowdness }: ClientType) {	
 	const dayName = ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"];
 	const shortDayName = ["Sun", "Mon", "Tues", "Wed", "Thurs", "Fri", "Sat"];
 
@@ -51,7 +51,7 @@ export default function Client({ isOdd, canteenCrowdness }: ClientType) {
 
 			var day = dayName[curDate.getDay()] as keyof typeof weekList;
 
-			if (!Object.prototype.hasOwnProperty.call(weekList, day)) {
+			function loadNextWeek(weekList: weekList, isOdd: boolean) {
 				day = "Monday";
 				setDay(day);
 
@@ -59,7 +59,8 @@ export default function Client({ isOdd, canteenCrowdness }: ClientType) {
 				import(
 					`../../../public/classes/${level}/${className}/${!isOdd ? "odd" : "even"}.json`
 				).then((res) => {
-					weekList = res;
+					const dayList: dayList = res[day] as dayList;
+					setDaylist(dayList);
 				});
 
 				setTrackLabels({
@@ -68,12 +69,13 @@ export default function Client({ isOdd, canteenCrowdness }: ClientType) {
 					timeRemaining: "",
 				});
 
-				const dayList: dayList = weekList[day] as dayList;
-				setDaylist(dayList);
-				
 				if (loading) setLoading(false);
-				clearInterval(i);
+				clearInterval(i)
 				return;
+			}
+
+			if (!Object.prototype.hasOwnProperty.call(weekList, day)) {
+				loadNextWeek(weekList, isOdd);
 			}
 
 			const dayList: dayList = weekList[day] as dayList;
@@ -84,13 +86,19 @@ export default function Client({ isOdd, canteenCrowdness }: ClientType) {
 			let lastLsnTime = parseInt(sortedTimeList[sortedTimeList.length - 1]);
 
 			if (curTime > lastLsnTime) {
-				if (loading) setLoading(false);
 				clearInterval(i);
 
 				let _nextI = curDate.getDay() + 1;
 				let _nextDay = dayName[_nextI] as keyof typeof weekList;
 				const nextday = weekList[_nextDay];
 
+				if (_nextI == 6 || _nextI == 7 || _nextI == 0) {
+					loadNextWeek(weekList, isOdd);
+					return;
+				}
+				// ILL [string] MYSELF IF THIS BREAKS AGAIN
+
+				if (loading) setLoading(false);
 				setDaylist(nextday);
 				setDay(_nextDay);
 

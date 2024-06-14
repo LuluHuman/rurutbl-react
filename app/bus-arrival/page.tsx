@@ -55,8 +55,15 @@ export default function BusArrival() {
 					setChildren(list);
 					setState({ state: "loaded", error: "" });
 				})
-				.catch((err) => {
-					setState({ state: "error", error: err.message });
+				.catch((err: TypeError) => {
+					console.log(err);
+
+					setState({
+						state: "error",
+						error: err.message.includes("NetworkError")
+							? "Server can't be reached"
+							: err.message,
+					});
 				});
 		}
 	}, [coords]);
@@ -67,7 +74,7 @@ export default function BusArrival() {
 	if (isLoading) {
 		fallbackText = <Loading />;
 	} else if (isError) {
-		fallbackText = "An error occured, " + state.error;
+		fallbackText = "Error: " + state.error;
 	}
 
 	return (
@@ -98,32 +105,11 @@ export default function BusArrival() {
 						}}
 					/>
 				</div>
-				<div className="pb-10 border-b-gray-500 border-b-2">
-					<span className="font-bold">
-						2<sup>nd</sup>
-					</span>
-					<span>
-						: 2<sup>nd</sup> Visit
-					</span>
-					{", "}
-					<span className="font-bold">Dbl</span>
-					<span>: Double Decker</span>
-					{", "}
-					<span
-						className="material-icons"
-						style={{ fontSize: "0.875rem", lineHeight: "1.25rem" }}>
-						{"\uf0fe"}
-					</span>
-					<span>: Not wheelchair accessable</span>
-				</div>
+				{/*come on the poeple in my school are literally young if they dont undertand they are cooked*/}
+				{searchChildren ? <span>Search Results</span> : <h1>Nearby Bus Stops</h1>}
 				{(isLoading || isError) && !searchChildren
 					? fallbackText
-					: searchChildren || (
-							<>
-								<h1>Nearby Bus Stops</h1>
-								{children}
-							</>
-					  )}
+					: searchChildren || <>{children}</>}
 			</div>
 		</div>
 	);
@@ -149,11 +135,16 @@ function BusStopElement({ busStop }: { busStop: busStop }) {
 
 	function populateTable() {
 		setCollapsedState(!isCollapsed);
-		if (!isCollapsed) return;
+		if (!isCollapsed) return; // if it has been set to colapsed
 
 		fetch(`${apiEndpoint}/bus-arrival?BusStopCode=${busStop.BusStopCode}`)
 			.then((req) => req.json())
 			.then((Services: services) => {
+				if (Services.length == 0) {
+					setElementChildren([<span>{"Not In Operation. [ Services[] is empty]"}</span>]);
+					return;
+				}
+
 				const table: React.JSX.Element[] = [];
 				Services.forEach((service) => {
 					const row = (
@@ -171,25 +162,19 @@ function BusStopElement({ busStop }: { busStop: busStop }) {
 			});
 	}
 
-	
 	function NextBusSection({ nextBus }: { nextBus: nextBus }) {
 		const children = (() => {
 			if (nextBus.EstimatedArrival == "") return <span>~</span>;
 
 			const estArr = new Date(nextBus.EstimatedArrival);
-			var textColor = "";
+			var textColor = {
+				SEA: "text-green-400",
+				SDA: "text-yellow-600",
+				LSD: "text-red-600",
+				"": "",
+			}[nextBus.Load]; //
 			var footerTexts = [];
-			switch (nextBus.Load) {
-				case "SEA":
-					textColor = "text-green-400";
-					break;
-				case "SDA":
-					textColor = "text-yellow-600";
-					break;
-				case "LSD":
-					textColor = "text-red-600";
-					break;
-			}
+
 			if (nextBus.VisitNumber == "2") {
 				footerTexts.push(
 					<span className="font-bold">
@@ -231,19 +216,21 @@ function BusStopElement({ busStop }: { busStop: busStop }) {
 		);
 	}
 
-
 	return (
 		<div
 			key={busStop.BusStopCode}
-			className="flex flex-wrap items-center p-2 border-b-gray-500 border-b-2 min-w-max select-none ">
-			<span className="material-icons">{isCollapsed ? "\ue5df" : "\ue5c5"}</span>
+			className="flex flex-wrap items-center p-2 border-b-gray-500 border-b-2 min-w-max select-none">
+			<span className={`material-icons transition ${isCollapsed ? "" : "rotate-90"}`}>
+				{"\ue5df"}
+			</span>
 			<div
 				className="flex flex-col m-2 cursor-pointer"
+				style={{ width: "calc(100% - 3rem)" }}
 				onClick={populateTable}>
 				<span>{busStop.Description}</span>
 				<span className="text-gray-600 text-sm">{`${busStop.RoadName} (${busStop.BusStopCode})`}</span>
 			</div>
-			<div className={isCollapsed ? "hidden" : "w-full max-w-[100vw]"}>
+			<div className={`${isCollapsed ? "hidden" : "w-full max-w-[100vw]"}`}>
 				<table className="w-full">
 					<tbody>{elementChildren}</tbody>
 				</table>
