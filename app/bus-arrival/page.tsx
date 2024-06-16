@@ -182,7 +182,7 @@ function BusStopElement({ busStop }: { busStop: busStop }) {
 					</span>
 				);
 			}
-			if (nextBus.Type != "DD") {
+			if (nextBus.Type == "DD") {
 				footerTexts.push(<span className="font-bold">Dbl</span>);
 			}
 			if (nextBus.Feature != "WAB") {
