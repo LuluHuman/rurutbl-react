@@ -4,6 +4,7 @@ import React, { useState, useEffect, DOMElement } from "react";
 import { state, busStop, services, nextBus } from "../lib/types";
 import "material-icons/iconfont/material-icons.css";
 import { Loading } from "../components/loading/component";
+import { DirectionBusDouble, NotAccessible, VisitDouble } from "../components/icons";
 
 // const apiEndpoint = "http://localhost";
 const apiEndpoint = "https://api.luluhoy.tech";
@@ -145,81 +146,73 @@ function BusStopElement({ busStop }: { busStop: busStop }) {
 					return;
 				}
 
-				const table: React.JSX.Element[] = [];
+				const list: React.JSX.Element[] = [];
 				Services.forEach((service) => {
 					const row = (
-						<tr className="border-[1px] border-solid border-gray-300">
-							<th className="text-left px-[4px] py-[8px]">{service.ServiceNo}</th>
+						<ul className="flex justify-between border-b border-gray-500">
+							<li className="text-left px-[4px] py-[8px] w-11">{service.ServiceNo}</li>
 							<NextBusSection nextBus={service.NextBus} />
 							<NextBusSection nextBus={service.NextBus2} />
 							<NextBusSection nextBus={service.NextBus3} />
-						</tr>
+						</ul>
 					);
-					table.push(row);
+					list.push(row);
 				});
 
-				setElementChildren(table);
+				setElementChildren(list);
 			});
 	}
 
 	function NextBusSection({ nextBus }: { nextBus: nextBus }) {
 		const children = (() => {
-			if (nextBus.EstimatedArrival == "") return <span>~</span>;
+			if (nextBus.EstimatedArrival == "") return <></>;
 
 			const estArr = new Date(nextBus.EstimatedArrival);
-			var textColor = {
-				SEA: "text-green-400",
-				SDA: "text-yellow-600",
-				LSD: "text-red-600",
+			var borderColor = {
+				SEA: "border-green-400",
+				SDA: "border-yellow-600",
+				LSD: "border-red-600",
 				"": "",
 			}[nextBus.Load]; //
-			var footerTexts = [];
+			var icons = [];
 
 			if (nextBus.VisitNumber == "2") {
-				footerTexts.push(
-					<span className="font-bold">
-						2<sup>nd</sup>
-					</span>
-				);
+				icons.push(<VisitDouble />);
 			}
 			if (nextBus.Type == "DD") {
-				footerTexts.push(<span className="font-bold">Dbl</span>);
+				icons.push(<DirectionBusDouble />);
 			}
 			if (nextBus.Feature != "WAB") {
-				footerTexts.push(
-					<span
-						className="material-icons"
-						style={{ fontSize: "0.875rem", lineHeight: "1.25rem" }}>
-						{"\uf0fe"}
-					</span>
-				);
+				icons.push(<NotAccessible />);
 			}
 
 			return (
-				<>
-					<span className={textColor}>{timeLeft(nextBus.EstimatedArrival)}</span>
+				<div className={`bg-gray-600 border-l-2 ${borderColor} rounded-lg`}>
+					<div className={" flex items-center justify-center"}>
+						<span>{timeLeft(nextBus.EstimatedArrival)}</span>
+						{icons}
+					</div>
 					<span className="text-sm">
 						{estArr.getHours()}:
 						{estArr.getMinutes().toString().length == 1
 							? estArr.getMinutes().toString() + "0"
 							: estArr.getMinutes()}
 					</span>
-					<span className="text-sm space-x-2 text-gray-600 ">{footerTexts}</span>
-				</>
+				</div>
 			);
 		})();
 
 		return (
-			<td className="text-center py-[4px] px-[8px]">
-				<div className="flex flex-col">{children}</div>
-			</td>
+			<li className="text-center py-[4px] px-[8px] ">
+				<div className={`flex flex-col w-20`}>{children}</div>
+			</li>
 		);
 	}
 
 	return (
 		<div
 			key={busStop.BusStopCode}
-			className="flex flex-wrap items-center p-2 border-b-gray-500 border-b-2 min-w-max select-none">
+			className="flex flex-wrap items-center p-3 border-b-gray-500 border-b-2 w-[99%] select-none">
 			<span className={`material-icons transition ${isCollapsed ? "" : "rotate-90"}`}>
 				{"\ue5df"}
 			</span>
@@ -231,9 +224,7 @@ function BusStopElement({ busStop }: { busStop: busStop }) {
 				<span className="text-gray-600 text-sm">{`${busStop.RoadName} (${busStop.BusStopCode})`}</span>
 			</div>
 			<div className={`${isCollapsed ? "hidden" : "w-full max-w-[100vw]"}`}>
-				<table className="w-full">
-					<tbody>{elementChildren}</tbody>
-				</table>
+				{elementChildren}
 			</div>
 		</div>
 	);
