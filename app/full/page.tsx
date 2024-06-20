@@ -1,4 +1,4 @@
-import TableForWeek from "../components/tableForWeek/component";
+import TableForWeek from "./tableForWeek";
 import "./style.css";
 
 export default function Full() {

@@ -12,6 +12,7 @@ export function NavBar() {
 		__Menu: ["", "\ue5d2"],
 		"/": ["Main", "\ue88a"],
 		"/full": ["Full Table", "\ueb85"],
+		"/chat": ["Chat", "\ue0ca"],
 		"/bus-arrival": ["Bus Arrival", "\ue530"],
 		__Seperator: [],
 		"/settings": ["Settings", "\ue8b8"],
@@ -23,7 +24,7 @@ export function NavBar() {
 
 		const isSeperator = path == "__Seperator";
 		const isMenu = path == "__Menu";
-		const isActive = path == pathname;
+		const isActive = path.split("/")[1] == pathname.split("/")[1];
 
 		if (isMenu) {
 			links.push(
@@ -56,14 +57,11 @@ export function NavBar() {
 				<Link
 					href={path}
 					className="flex">
-					<span
-						className="icon material-icons"
-						dangerouslySetInnerHTML={{ __html: icon }}
-					/>
+					<span className="icon material-icons">{icon}</span>
 					<span className={`label ${collapsed ? "sm:hidden " : ""}`}>{label}</span>
 				</Link>
 			</li>
 		);
 	}
-	return <ul className="fixed z-10	">{links}</ul>;
+	return <ul className="fixed z-10 bg-menu-color">{links}</ul>;
 }

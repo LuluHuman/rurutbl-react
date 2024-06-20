@@ -1,6 +1,6 @@
 import type { Metadata } from "next";
 import "./globals.css";
-import { NavBar } from "./components/navBar/component";
+import { NavBar } from "./components/navBar";
 import "material-icons/iconfont/material-icons.css";
 
 export const metadata: Metadata = {
@@ -12,7 +12,6 @@ interface layout {
 }
 
 export default function RootLayout({ children }: Readonly<layout>) {
-	
 	return (
 		<html lang="en">
 			<head>
@@ -23,7 +22,23 @@ export default function RootLayout({ children }: Readonly<layout>) {
 			</head>
 			<body>
 				<NavBar />
-				<div id="root">{children}</div>
+				<div id="root">
+					<noscript>
+						<div
+							style={{
+								textAlign: "center",
+								color: "red",
+								fontSize: "2rem",
+								position: "fixed",
+								top: "50vh",
+								background:"white"
+							}}>
+							ah boy/girl/whatever, who teach you websites still can work without
+							javascript
+						</div>
+					</noscript>
+					{children}
+				</div>
 			</body>
 		</html>
 	);

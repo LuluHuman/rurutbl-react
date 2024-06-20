@@ -1,4 +1,4 @@
-import { ClassSelector, ElecSelector } from "../components/settingsSegment/component";
+import { ClassSelector, ElecSelector } from "./settingsSegment";
 import "./style.css";
 
 export default async function Settigs() {

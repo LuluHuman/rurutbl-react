@@ -9,11 +9,12 @@ const config: Config = {
   theme: {
     extend: {
       colors: {
-        "primary-color": "var(--primary-color)",
-        "secondary-color": "var(--color-secondary)"
+        "primary-color": "var(--bg-primary)",
+        "secondary-color": "var(--bg-secondary)",
+        "menu-color": "var(--bg-menu)"
       },
     },
   },
   plugins: [],
 };
-export default config     
+export default config

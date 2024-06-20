@@ -13,21 +13,25 @@ It has worked for decades
 	--color-grey: #9799a0;
 	--color-secondary: rgb(23 23 23);
 
+	--bg-primary: #1e1e1e;
+	--bg-secondary: #252526;
+	--bg-menu: #333333;
+
 	--pb-size-minWidth: 85vw;
 	--pb-size-maxWidth: 300px;
 	--pb-thickness: 5px;
 }
 
 @media (prefers-color-scheme: light) {
-  :root {
-	--color-bg: #fff;
-	--color-txt: #000;
-	--color-secondary: #9799a0;
+	:root {
+		--color-bg: #fff;
+		--color-txt: #000;
+		--color-secondary: #9799a0;
 
-	--pb-size-minWidth: 85vw;
-	--pb-size-maxWidth: 300px;
-	--pb-thickness: 5px;
-}
+		--pb-size-minWidth: 85vw;
+		--pb-size-maxWidth: 300px;
+		--pb-thickness: 5px;
+	}
 }
 
 body {
@@ -39,7 +43,6 @@ body {
 }
 
 body > ul {
-	background-color: var(--color-secondary);
 	height: 100vh;
 	padding: 10px;
 }
@@ -165,7 +168,7 @@ This is so that i can use this site on my Galaxy Watch (previusly on /watch).
 	}
 	#root {
 		padding-left: 0;
-		padding-bottom: 200px;
+		padding-bottom: 100px;
 	}
 	body > ul > li.active {
 		border-left: none;

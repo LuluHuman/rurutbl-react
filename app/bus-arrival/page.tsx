@@ -3,7 +3,7 @@
 import React, { useState, useEffect, DOMElement } from "react";
 import { state, busStop, services, nextBus } from "../lib/types";
 import "material-icons/iconfont/material-icons.css";
-import { Loading } from "../components/loading/component";
+import { Loading } from "../components/Loading";
 import { DirectionBusDouble, NotAccessible, VisitDouble } from "../components/icons";
 
 // const apiEndpoint = "http://localhost";
@@ -102,6 +102,12 @@ export default function BusArrival() {
 										list.push(busStopDiv);
 									});
 									setSearchChildren(list);
+								})
+								.catch((err) => {
+									console.log(err);
+									setSearchChildren([
+										<div>Error: Could not search for bus stops</div>,
+									]);
 								});
 						}}
 					/>
@@ -150,7 +156,9 @@ function BusStopElement({ busStop }: { busStop: busStop }) {
 				Services.forEach((service) => {
 					const row = (
 						<ul className="flex justify-between border-b border-gray-500">
-							<li className="text-left px-[4px] py-[8px] w-11">{service.ServiceNo}</li>
+							<li className="text-left px-[4px] py-[8px] w-11">
+								{service.ServiceNo}
+							</li>
 							<NextBusSection nextBus={service.NextBus} />
 							<NextBusSection nextBus={service.NextBus2} />
 							<NextBusSection nextBus={service.NextBus3} />
@@ -160,6 +168,10 @@ function BusStopElement({ busStop }: { busStop: busStop }) {
 				});
 
 				setElementChildren(list);
+			})
+			.catch((err) => {
+				console.log(err);
+				setElementChildren([<span>Server Error: Could not load bus arrival</span>]);
 			});
 	}
 

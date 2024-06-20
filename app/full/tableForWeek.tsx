@@ -3,7 +3,7 @@
 import React, { useEffect, useState } from "react";
 import { defaultSettings, getCurrentLsn } from "@/app/lib/trackHelper";
 import { weekList } from "@/app/lib/types";
-import { Loading } from "../loading/component";
+import { Loading } from "../components/Loading";
 
 export default function TableForWeek({ oddeven }: { oddeven: "even" | "odd" }) {
 	const [settings, setSettings] = useState(defaultSettings);
@@ -22,9 +22,13 @@ export default function TableForWeek({ oddeven }: { oddeven: "even" | "odd" }) {
 	useEffect(() => {
 		const { level, class: className } = settings.class;
 
-		import(`../../../public/classes/${level}/${className}/${oddeven}.json`).then((res) => {
-			setweekList(res);
-		});
+		try {
+			import(`../../public/classes/${level}/${className}/${oddeven}.json`).then((res) => {
+				setweekList(res);
+			});
+		} catch (err) {
+			console.log(err);
+		}
 
 		setClassFullName(level + className);
 	}, [settings]);
