@@ -86,7 +86,7 @@ export default function ChatView({ apiEndpoint, cid: _c }: ChatView) {
 		<Loading />
 	) : (
 		<div className="w-full h-[85%] flex flex-col-reverse overflow-y-scroll">
-			{messagesArr?.reverse().map((discordMessage: any) => {
+			{messagesArr?.map((discordMessage: any) => {
 				var message = discordMessage;
 				try {
 					const bsf = Buffer.from(discordMessage.cleanContent, "base64").toString();
