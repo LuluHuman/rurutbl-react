@@ -1,0 +1,57 @@
+{
+    "Monday": {
+        "0800": "CCE",
+        "0900": "PE",
+        "1000": "MTL (TG 1 to 4)",
+        "1040": "Recess",
+        "1120": [
+            "Geog",
+            "G1 Humanities (TG 1 to 4)"
+        ],
+        "1220": "Sci (TG 1 to 4)",
+        "1300": "EL (TG 1 to 4)",
+        "1400": null
+    },
+    "Tuesday": {
+        "0800": "Math (TG 1 to 4)",
+        "0840": "MTL (TG 1 to 4)",
+        "0940": "PE",
+        "1040": "Recess",
+        "1120": "LS-Music",
+        "1220": "EL(TG 1 to 4)",
+        "1300": "Sci (TG 1 to 4)",
+        "1400": null
+    },
+    "Wednesday": {
+        "0840": "CCE",
+        "0940": "Math (TG 1 to 4)",
+        "1040": "Recess",
+        "1120": "LS-FCE",
+        "1200": "LS-Art",
+        "1300": "EL (TG 1 to 4)",
+        "1420": null,
+        "1340": "MTL (TG 1 to 4)"
+    },
+    "Thursday": {
+        "0800": "CCE",
+        "0840": "LS-FCE",
+        "0940": "Sci (TG 1 to 4)",
+        "1020": "Recess",
+        "1100": [
+            "Hist",
+            "G1 Humanities (TG 1to 4)"
+        ],
+        "1200": "Math (TG 1 to 4)",
+        "1300": "Lit (TG 1 to 3)",
+        "1400": null
+    },
+    "Friday": {
+        "0840": "Math ",
+        "0940": null,
+        "1000": "MTL ",
+        "1100": "LS-Sci ",
+        "1140": "{SciElec}",
+        "1220": "History ",
+        "1300": null
+    }
+}

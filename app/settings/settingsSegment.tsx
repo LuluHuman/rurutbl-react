@@ -2,8 +2,9 @@
 import { defaultSettings } from "@/app/lib/trackHelper";
 import React, { useEffect, useState } from "react";
 export function ClassSelector({ title, props: classes }: { title: string; props: any }) {
-	const [levelVal, setLevelVal] = useState("");
-	const [classVal, setClassVal] = useState("");
+	const alp = "xABCDEFGHI".split("");
+	const [levelVal, setLevelVal] = useState<number>();
+	const [classVal, setClassVal] = useState<number>();
 	const [settings, setSettings] = useState(defaultSettings);
 	const [newSettings, setNewSettings] = useState({});
 
@@ -35,7 +36,7 @@ export function ClassSelector({ title, props: classes }: { title: string; props:
 			<option
 				key={className}
 				value={className}>
-				{className}
+				{alp[parseInt(className)]}
 			</option>
 		);
 	});
@@ -46,7 +47,7 @@ export function ClassSelector({ title, props: classes }: { title: string; props:
 			<div>
 				<span>
 					Selected: {levelVal || "_"}
-					{classVal || "_"}
+					{classVal ? alp[classVal] : "_"}
 				</span>
 				<div>
 					<div>
@@ -54,16 +55,14 @@ export function ClassSelector({ title, props: classes }: { title: string; props:
 							value={levelVal || ""}
 							key={levelVal || "idk"}
 							onChange={(e) => {
-								setLevelVal(e.target.value);
+								setLevelVal(parseInt(e.target.value));
+								settings.class.level = parseInt(e.target.value);
 
-								settings.class.level = e.target.value;
-								const classExists = Object.prototype.hasOwnProperty.call(
-									classes[e.target.value],
-									classVal
-								);
-								if (!classExists) {
-									settings.class.class = classes[e.target.value][0];
-								}
+								const valueInObject = Object.prototype.hasOwnProperty;
+								const level = classes[e.target.value];
+								const classExists = valueInObject.call(level, classVal || -1);
+								if (!classExists) settings.class.class = classes[e.target.value][0];
+
 								setSettings(settings);
 								setNewSettings(settings);
 							}}>
@@ -75,9 +74,10 @@ export function ClassSelector({ title, props: classes }: { title: string; props:
 							value={classVal || ""}
 							key={classVal || "idk"}
 							onChange={(e) => {
-								setClassVal(e.target.value);
+								const val = parseInt(e.target.value);
+								setClassVal(val);
+								settings.class.class = val;
 
-								settings.class.class = e.target.value;
 								setSettings(settings);
 								setNewSettings(settings);
 							}}>

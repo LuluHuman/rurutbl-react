@@ -8,8 +8,8 @@ import { redirect, useSearchParams } from "next/navigation";
 import { defaultSettings } from "@/app/lib/trackHelper";
 import { Loading } from "@/app/components/Loading";
 
-
 const apiEndpoint = "https://api.luluhoy.tech";
+const alp = "xABCDEFGHI".split("");
 export default function Chat() {
 	const query = useSearchParams();
 	const _c = query.get("ctype");
@@ -38,7 +38,7 @@ export default function Chat() {
 				cid = "public";
 				break;
 			case "class":
-				cid = settings.class.level + settings.class.class;
+				cid = settings.class.level + alp[settings.class.class];
 				break;
 			case "level":
 				cid = "sec-" + settings.class.level;

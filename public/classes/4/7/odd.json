@@ -1,0 +1,67 @@
+{
+    "Monday": {
+        "0800": "CCE",
+        "0900": "Comb.SS",
+        "1000": "Recess",
+        "1040": "{SciElec}",
+        "1140": "PE",
+        "1240": "Comb Hum",
+        "1320": "Eng",
+        "1400": "Break",
+        "1420": "Chemestry",
+        "1600": null,
+        "1520": "MTL-HCL"
+    },
+    "Tuesday": {
+        "0800": "POA",
+        "0900": "Eng",
+        "1000": "MTL",
+        "1040": "Recess",
+        "1120": "Comb Hum",
+        "1220": "PE",
+        "1320": "MTL-HCL",
+        "1420": null
+    },
+    "Wednesday": {
+        "0840": "CCE",
+        "0940": "Eng",
+        "1020": "Recess",
+        "1100": "{SciElec}",
+        "1200": "Math",
+        "1300": "Comb.SS",
+        "1340": "Break",
+        "1400": [
+            "Elect-POA",
+            "P.Geo",
+            "P.Lit[4F & 4G]"
+        ],
+        "1600": null,
+        "1500": "Chemestry"
+    },
+    "Thursday": {
+        "0800": "CCE",
+        "0840": "MTL",
+        "0940": "Recess",
+        "1020": "Eng",
+        "1120": "POA",
+        "1220": "Math",
+        "1320": [
+            "Elect-POA",
+            "P.Geo",
+            "P.Lit[4F & 4G]"
+        ],
+        "1420": null
+    },
+    "Friday": {
+        "0840": [
+            "Elect-POA",
+            "P.Geo",
+            "P.Lit[4F & 4G]"
+        ],
+        "0940": "Math",
+        "1040": "Recess",
+        "1120": "POA",
+        "1220": "MTL-HCL",
+        "1320": null
+    }
+}

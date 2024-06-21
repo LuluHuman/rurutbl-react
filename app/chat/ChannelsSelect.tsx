@@ -5,8 +5,8 @@ import { defaultSettings } from "../lib/trackHelper";
 
 import { useSearchParams } from "next/navigation";
 import Link from "next/link";
-import { fstat } from "fs";
 
+const alp = "xABCDEFGHI".split("");
 export default function ChannelsSelect() {
 	const searchParams = useSearchParams();
 	const curChannel = searchParams.get("ctype");
@@ -30,7 +30,7 @@ export default function ChannelsSelect() {
 	const channels = [
 		{ ctype: "public", name: "public" },
 		{ ctype: "level", name: "Sec-" + settings.class.level },
-		{ ctype: "class", name: settings.class.level + settings.class.class },
+		{ ctype: "class", name: settings.class.level + alp[settings.class.class] },
 	];
 
 	return (

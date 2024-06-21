@@ -7,7 +7,7 @@ export type weekList = {
 };
 
 export interface dayList {
-    [key: string]: string | null;
+    [key: string]: string | string[] | null;
 }
 export interface crowdedness {
     Recess: {
@@ -25,8 +25,8 @@ export interface crowdedness {
 export interface TrackType {
     settings: {
         class: {
-            level: string;
-            class: string;
+            level: number;
+            class: number;
         };
         Elec: {
             Sci: string;

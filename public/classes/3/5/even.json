@@ -1,0 +1,72 @@
+{
+    "Monday": {
+        "0800": "CCE",
+        "0900": "Eng",
+        "0940": "Comb.SS",
+        "1040": "Recess",
+        "1120": "PE",
+        "1220": [
+            "POA",
+            "Elect-POA"
+        ],
+        "1320": "Break",
+        "1340": [
+            "AM",
+            "Elect-AM"
+        ],
+        "1520": null,
+        "1440": "MTL"
+    },
+    "Tuesday": {
+        "0800": "Chemestry",
+        "0900": "PE",
+        "1000": "Math",
+        "1100": "Recess",
+        "1140": [
+            "AM",
+            "Elect-AM"
+        ],
+        "1240": "Eng",
+        "1320": "MTL",
+        "1420": null
+    },
+    "Wednesday": {
+        "0840": "CCE",
+        "0940": "MTL",
+        "1020": "Recess",
+        "1100": "Comb Hum",
+        "1200": [
+            "POA",
+            "Elect-POA"
+        ],
+        "1300": "{SciElec}",
+        "1340": "Chemestry",
+        "1420": null
+    },
+    "Thursday": {
+        "0800": "CCE",
+        "0840": [
+            "POA",
+            "Elect-POA"
+        ],
+        "0940": "Recess",
+        "1020": "Eng",
+        "1120": "Math",
+        "1220": [
+            "AM",
+            "Elect-AM"
+        ],
+        "1320": "{SciElec}",
+        "1420": null
+    },
+    "Friday": {
+        "0840": "Math",
+        "0940": null,
+        "1000": "Eng",
+        "1100": "{SciElec}",
+        "1120": "Chemestry",
+        "1140": "SS",
+        "1220": "Combined Humanities(Upper Sec) HBL",
+        "1300": null
+    }
+}

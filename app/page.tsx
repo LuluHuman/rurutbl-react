@@ -3,8 +3,7 @@ import Client from "./components/client/client";
 export default async function Home() {
 	// Config values / Static values
 	const millisecondsPerWeek = 7 * 24 * 60 * 60 * 1000;
-	const dayName = ["Monday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Monday"];
-	const semstartDate = new Date("2024-3-17");
+	const semstartDate = new Date("2024-6-23");
 
 	// Date Stuff
 	const currentDate = new Date();

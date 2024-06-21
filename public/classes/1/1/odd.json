@@ -1,0 +1,41 @@
+{
+    "Monday": {
+        "0800": "CCE",
+        "0820": [
+            "Geog",
+            "G1 Humanities (TG 1to 4)"
+        ],
+        "0840": "LS-Music",
+        "0900": "Sci (TG 1 to 4)",
+        "0940": null,
+        "0920": "Math (TG 1 to 4)"
+    },
+    "Tuesday": {
+        "0800": "PE",
+        "0820": "Sci (TG 1 to 4)",
+        "0840": "Math (TG 1 to 4)",
+        "0900": "EL (TG 1 to 4)",
+        "0940": null,
+        "0920": "MTL (TG 1 to 4)"
+    },
+    "Wednesday": {
+        "0820": "MTL (TG 1 to 4)",
+        "0840": "Sci (TG 1 to 4)",
+        "0900": "Lit (TG 1 to 3)",
+        "0920": null
+    },
+    "Thursday": {
+        "0800": "PE",
+        "0820": "LS-FCE",
+        "0840": [
+            "Hist",
+            "G1 Humanities (TG 1 to4)"
+        ],
+        "0900": "EL (TG 1 to 4)"
+    },
+    "Friday": {
+        "0820": "LS-Art",
+        "0840": "EL (TG 1 to 4)",
+        "0900": null
+    }
+}

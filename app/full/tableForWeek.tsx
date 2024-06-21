@@ -5,6 +5,8 @@ import { defaultSettings, getCurrentLsn } from "@/app/lib/trackHelper";
 import { weekList } from "@/app/lib/types";
 import { Loading } from "../components/Loading";
 
+const alp = "xABCDEFGHI".split("");
+
 export default function TableForWeek({ oddeven }: { oddeven: "even" | "odd" }) {
 	const [settings, setSettings] = useState(defaultSettings);
 	const [weekList, setweekList] = useState<weekList>();
@@ -30,7 +32,7 @@ export default function TableForWeek({ oddeven }: { oddeven: "even" | "odd" }) {
 			console.log(err);
 		}
 
-		setClassFullName(level + className);
+		setClassFullName(level + alp[className]);
 	}, [settings]);
 
 	useEffect(() => {
@@ -115,9 +117,10 @@ export default function TableForWeek({ oddeven }: { oddeven: "even" | "odd" }) {
 				checkAfter(i + 1);
 
 				const isElecSci = curSubj == "{SciElec}";
+				const isMany = typeof curSubj == "object" && curSubj !== null
 				const td = (
 					<td colSpan={colspan > 1 ? colspan : undefined}>
-						{isElecSci ? settings.Elec.Sci : curSubj}
+						{isElecSci ? settings.Elec.Sci : isMany ? curSubj.join(" / ") : curSubj}
 					</td>
 				);
 				dayRowChildren.push(td);

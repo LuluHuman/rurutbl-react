@@ -9,7 +9,8 @@ import { useEffect, useState } from "react";
 
 import "@/app/lib/skeleton.css";
 
-export default function Client({ isOdd, canteenCrowdness }: ClientType) {	
+const alp = "xABCDEFGHI".split("");
+export default function Client({ isOdd, canteenCrowdness }: ClientType) {
 	const dayName = ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"];
 	const shortDayName = ["Sun", "Mon", "Tues", "Wed", "Thurs", "Fri", "Sat"];
 
@@ -51,11 +52,12 @@ export default function Client({ isOdd, canteenCrowdness }: ClientType) {
 
 			var day = dayName[curDate.getDay()] as keyof typeof weekList;
 
-			function loadNextWeek(weekList: weekList, isOdd: boolean) {
+			function loadNextWeek(isOdd: boolean) {
 				day = "Monday";
 				setDay(day);
 
 				const { level, class: className } = settings.class;
+
 				import(
 					`../../../public/classes/${level}/${className}/${!isOdd ? "odd" : "even"}.json`
 				).then((res) => {
@@ -70,12 +72,12 @@ export default function Client({ isOdd, canteenCrowdness }: ClientType) {
 				});
 
 				if (loading) setLoading(false);
-				clearInterval(i)
+				clearInterval(i);
 				return;
 			}
 
 			if (!Object.prototype.hasOwnProperty.call(weekList, day)) {
-				loadNextWeek(weekList, isOdd);
+				loadNextWeek(isOdd);
 			}
 
 			const dayList: dayList = weekList[day] as dayList;
@@ -93,7 +95,7 @@ export default function Client({ isOdd, canteenCrowdness }: ClientType) {
 				const nextday = weekList[_nextDay];
 
 				if (_nextI == 6 || _nextI == 7 || _nextI == 0) {
-					loadNextWeek(weekList, isOdd);
+					loadNextWeek(isOdd);
 					return;
 				}
 				// ILL [string] MYSELF IF THIS BREAKS AGAIN
@@ -146,10 +148,15 @@ export default function Client({ isOdd, canteenCrowdness }: ClientType) {
 
 			const _fallbackTitle = `Time until Start class (${dayList[sortedTimeList[0]]})`;
 			setTrackLabels({
-				title: localisedSubject(curLsn) || _fallbackTitle,
+				title:
+					localisedSubject(
+						typeof curLsn == "string" || curLsn == null ? curLsn : curLsn[0]
+					) || _fallbackTitle,
 				subtitle: curLsn
 					? nextLsn
-						? `Time until ${localisedSubject(nextLsn)}`
+						? `Time until ${localisedSubject(
+								typeof nextLsn == "string" || nextLsn == null ? nextLsn : nextLsn[0]
+						  )}`
 						: "Time Left"
 					: "",
 				timeRemaining: `${_hr}:${_min.length == 1 ? "0" + _min : _min}:${_sec}`,
@@ -169,11 +176,18 @@ export default function Client({ isOdd, canteenCrowdness }: ClientType) {
 		}
 	}
 
+	const pth = [
+		(isOdd ? "Odd" : "Even") + " Week",
+		day,
+		`Class ${settings.class.level + alp[settings.class.class]}`,
+	];
 	return (
 		<>
 			{!loading ? (
 				<>
-					<h2 id="classTitle">Class {settings.class.level + settings.class.class} </h2>
+					<h2 id="classTitle">
+						Class {settings.class.level + alp[settings.class.class]}
+					</h2>
 					<CircularProgress
 						valuePercentage={progressPercentage}
 						text={trackLabels}
@@ -185,10 +199,7 @@ export default function Client({ isOdd, canteenCrowdness }: ClientType) {
 						day={day}
 						active={activeIndex}
 					/>
-					<p className=" w-full text-center">
-						Current: {isOdd ? "Odd" : "Even"} Week /{` ${day} `}/ Class{" "}
-						{settings.class.level + settings.class.class}
-					</p>
+					<p className=" w-full text-center">Current: {pth.join(" / ")}</p>
 				</>
 			) : (
 				<>

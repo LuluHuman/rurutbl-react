@@ -1,0 +1,35 @@
+{
+    "Monday": {
+        "0800": "CCE",
+        "0820": "Eng",
+        "0840": "CPA",
+        "0900": "Chemestry",
+        "0920": null
+    },
+    "Tuesday": {
+        "0800": "CPA",
+        "0820": "Math",
+        "0840": "{SciElec}",
+        "0900": "MTL",
+        "0940": null,
+        "0920": "PE"
+    },
+    "Wednesday": {
+        "0820": "{SciElec}",
+        "0840": "CPA",
+        "0900": null
+    },
+    "Thursday": {
+        "0800": "Eng",
+        "0820": "MTL",
+        "0840": "PE",
+        "0900": "Math",
+        "0940": null,
+        "0920": "EBS"
+    },
+    "Friday": {
+        "0820": "Chemestry",
+        "0840": "EBS",
+        "0900": null
+    }
+}

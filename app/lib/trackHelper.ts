@@ -46,8 +46,8 @@ export function getCurrentLsn(timeList: Array<string>, curTime: number) {
 
 export const defaultSettings = {
     class: {
-        level: "3",
-        class: "B",
+        level: 3,
+        class: 1,
     },
     Elec: {
         Sci: "Phy/Bio",

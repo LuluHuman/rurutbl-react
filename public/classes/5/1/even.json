@@ -1,0 +1,44 @@
+{
+    "Monday": {
+        "0800": "Math",
+        "0820": "Comb.SS",
+        "0840": "Chemestry",
+        "0900": null
+    },
+    "Tuesday": {
+        "0800": "PE",
+        "0820": [
+            "Elect-POA",
+            "Art",
+            "D&T"
+        ],
+        "0840": "{SciElec}",
+        "0900": null
+    },
+    "Wednesday": {
+        "0820": [
+            "Elect-POA",
+            "Art",
+            "D&T"
+        ],
+        "0840": "Eng",
+        "0900": "Comb Hum",
+        "0920": null
+    },
+    "Thursday": {
+        "0800": "Eng",
+        "0820": "Math",
+        "0840": "PE",
+        "0900": "MTL",
+        "0920": null
+    },
+    "Friday": {
+        "0820": "Math",
+        "0840": [
+            "Elect-POA",
+            "Art",
+            "D&T"
+        ],
+        "0900": null
+    }
+}

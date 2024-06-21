@@ -13,8 +13,8 @@ function assignColor(percentage: number) {
 export function Track({ dayList, active, canteenCrowdness, day, settings }: TrackType) {
 	var track: React.JSX.Element[] = [];
 	var i = 0;
-	if (!dayList) return <>Error</>
-	
+	if (!dayList) return <>Error</>;
+
 	const timeList = Object.keys(dayList).toSorted();
 
 	timeList.forEach(async (lsnStartTime) => {
@@ -66,7 +66,7 @@ export function Track({ dayList, active, canteenCrowdness, day, settings }: Trac
 		const li = (
 			<li
 				className={`${isEND ? "endLi" : "subjLi"} ${isActive ? "active" : ""} `}
-				key={subject}>
+				key={typeof subject == "string" ? subject : subject[0]}>
 				{isEND ? (
 					<span>
 						END - {hours}:{minutes} {isPM ? "PM" : "AM"}
@@ -81,7 +81,7 @@ export function Track({ dayList, active, canteenCrowdness, day, settings }: Trac
 							) : (
 								""
 							)}
-							{subject}
+							{typeof subject == "string" ? subject : subject.join(" / ")}
 						</div>
 						<div className={styles.join(" ")}>
 							{`${hours}:${minutes} ${isPM ? "PM" : "AM"}`}

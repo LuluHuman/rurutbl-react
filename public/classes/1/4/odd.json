@@ -1,0 +1,57 @@
+{
+    "Monday": {
+        "0800": "CCE",
+        "0900": [
+            "Hist",
+            "G1 Humanities(TG 5 to 8)"
+        ],
+        "1000": "Recess",
+        "1040": "EL (TG 5 to 8)",
+        "1140": "Math (TG 5 to 8)",
+        "1240": "MTL (TG 5 to 8)",
+        "1340": "Break",
+        "1600": null,
+        "1420": "LS-FCE",
+        "1520": "LS-FCE"
+    },
+    "Tuesday": {
+        "0800": "Sci (TG 5 to 8)",
+        "0900": "LS-Art",
+        "1000": "Recess",
+        "1040": "EL(TG 5 to 8)",
+        "1120": "PE",
+        "1220": "Math (TG 5 to 8)",
+        "1320": "Lit (TG 5 to 7)",
+        "1420": null
+    },
+    "Wednesday": {
+        "0840": "CCE",
+        "0940": "Math (TG 5 to8)",
+        "1020": "Recess",
+        "1100": "PE",
+        "1200": [
+            "Geog",
+            "G1 Humanities(TG 5 to 8)"
+        ],
+        "1300": "Break",
+        "1320": "MTL",
+        "1400": null
+    },
+    "Thursday": {
+        "0800": "CCE",
+        "0840": "Sci (TG 5 to 8)",
+        "0940": "EL (TG 5 to 8)",
+        "1020": "LS-Music",
+        "1120": "Recess",
+        "1200": "Math (TG 5 to 8)",
+        "1300": "MTL",
+        "1340": null
+    },
+    "Friday": {
+        "0840": "EL (TG 5 to 8)",
+        "0940": "MTL (TG 5 to 8)",
+        "1040": "Recess",
+        "1120": "Sci (TG 5 to 8)",
+        "1220": null
+    }
+}
