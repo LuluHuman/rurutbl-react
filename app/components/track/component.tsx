@@ -41,8 +41,8 @@ export function Track({ dayList, active, canteenCrowdness, day, settings }: Trac
 				const a = canteenCrowdness[subject];
 				const b = a[day];
 				if (b == undefined) break;
-
 				const classes = b[lsnStartTime.toString()];
+				if (classes == undefined) break
 				crowd = (
 					<div className={"rangeout"}>
 						Crowdedness

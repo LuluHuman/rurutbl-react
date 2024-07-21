@@ -14,8 +14,6 @@ Other Rurutbl Repos
 * **Only your class:** your selected class without going through 23 pages in a PDF file
 * **Just today and tommorow:** Focuses on current/next day
 * **Bus Arrival:** Bus Arrival timings using LTA's [Datamall](https://datamall.lta.gov.sg/) API
-* ~~Chat rooms~~ (Upcoming)
-* ~~Note taking~~ (Upcoming)
 
 
 # Installation

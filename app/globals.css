@@ -17,9 +17,9 @@ It has worked for decades
 	--bg-secondary: #252526;
 	--bg-menu: #333333;
 
-	--pb-size-minWidth: 85vw;
+	/* --pb-size-minWidth: 85vw;
 	--pb-size-maxWidth: 300px;
-	--pb-thickness: 5px;
+	--pb-thickness: 5px; no idea where was thease var used */
 }
 
 @media (prefers-color-scheme: light) {
@@ -28,9 +28,9 @@ It has worked for decades
 		--color-txt: #000;
 		--color-secondary: #9799a0;
 
-		--pb-size-minWidth: 85vw;
+		/* --pb-size-minWidth: 85vw;
 		--pb-size-maxWidth: 300px;
-		--pb-thickness: 5px;
+		--pb-thickness: 5px; */
 	}
 }
 

@@ -37,3 +37,4 @@ next-env.d.ts
 
 sw*.js
 workbox*.js
+pnpm-lock.yaml

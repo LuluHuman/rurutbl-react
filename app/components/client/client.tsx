@@ -11,8 +11,8 @@ import "@/app/lib/skeleton.css";
 
 const alp = "xABCDEFGHI".split("");
 export default function Client({ isOdd, canteenCrowdness }: ClientType) {
-	const dayName = ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"];
-	const shortDayName = ["Sun", "Mon", "Tues", "Wed", "Thurs", "Fri", "Sat"];
+	const dayName = ["Monday", "Monday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday"];
+	const shortDayName = ["Mon", "Mon", "Mon", "Tues", "Wed", "Thurs", "Fri"];
 
 	const [loading, setLoading] = useState(true);
 	const [trackLabels, setTrackLabels] = useState({ title: "", subtitle: "", timeRemaining: "" });
@@ -34,11 +34,7 @@ export default function Client({ isOdd, canteenCrowdness }: ClientType) {
 	useEffect(() => {
 		const { level, class: className } = settings.class;
 
-		import(`../../../public/classes/${level}/${className}/${isOdd ? "odd" : "even"}.json`).then(
-			(res) => {
-				setweekListn(res);
-			}
-		);
+		import(`../../../public/classes/${level}/${className}/${isOdd ? "odd" : "even"}.json`).then(setweekListn);
 	}, [settings]);
 
 	useEffect(() => {
@@ -94,10 +90,10 @@ export default function Client({ isOdd, canteenCrowdness }: ClientType) {
 				let _nextDay = dayName[_nextI] as keyof typeof weekList;
 				const nextday = weekList[_nextDay];
 
-				if (_nextI == 6 || _nextI == 7 || _nextI == 0) {
-					loadNextWeek(isOdd);
-					return;
-				}
+				// if (_nextI == 6 || _nextI == 7 || _nextI == 0) {
+				// 	loadNextWeek(isOdd);
+				// 	return;
+				// }
 				// ILL [string] MYSELF IF THIS BREAKS AGAIN
 
 				if (loading) setLoading(false);
@@ -203,7 +199,7 @@ export default function Client({ isOdd, canteenCrowdness }: ClientType) {
 				</>
 			) : (
 				<>
-					<h2 id="classTitle">Loading bombs for Mr Ryan Tan...</h2>
+					<h2 id="classTitle">I know no one uses this website to <br/> I WANT TO BE A GIRL!!! {">w<"}</h2>
 
 					<CircularProgressLoading />
 					<TrackLoading />
