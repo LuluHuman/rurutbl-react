@@ -11,8 +11,10 @@ import "@/app/lib/skeleton.css";
 
 const alp = "xABCDEFGHI".split("");
 export default function Client({ isOdd, canteenCrowdness }: ClientType) {
-	const dayName = ["Monday", "Monday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday"];
-	const shortDayName = ["Mon", "Mon", "Mon", "Tues", "Wed", "Thurs", "Fri"];
+	//!              "Sunday"                                                          "Saturday"
+	const dayName = ["Monday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Monday"];
+	//!                   "Sun"                                       "Sat"
+	const shortDayName = ["Mon", "Mon", "Tues", "Wed", "Thurs", "Fri", "Mon"];
 
 	const [loading, setLoading] = useState(true);
 	const [trackLabels, setTrackLabels] = useState({ title: "", subtitle: "", timeRemaining: "" });
@@ -34,7 +36,10 @@ export default function Client({ isOdd, canteenCrowdness }: ClientType) {
 	useEffect(() => {
 		const { level, class: className } = settings.class;
 
-		import(`../../../public/classes/${level}/${className}/${isOdd ? "odd" : "even"}.json`).then(setweekListn);
+		const req = import(
+			`../../../public/classes/${level}/${className}/${isOdd ? "odd" : "even"}.json`
+		);
+		req.then(setweekListn);
 	}, [settings]);
 
 	useEffect(() => {
@@ -48,34 +53,6 @@ export default function Client({ isOdd, canteenCrowdness }: ClientType) {
 
 			var day = dayName[curDate.getDay()] as keyof typeof weekList;
 
-			function loadNextWeek(isOdd: boolean) {
-				day = "Monday";
-				setDay(day);
-
-				const { level, class: className } = settings.class;
-
-				import(
-					`../../../public/classes/${level}/${className}/${!isOdd ? "odd" : "even"}.json`
-				).then((res) => {
-					const dayList: dayList = res[day] as dayList;
-					setDaylist(dayList);
-				});
-
-				setTrackLabels({
-					title: `${day} ${!isOdd ? "Odd" : "Even"} Week`,
-					subtitle: "",
-					timeRemaining: "",
-				});
-
-				if (loading) setLoading(false);
-				clearInterval(i);
-				return;
-			}
-
-			if (!Object.prototype.hasOwnProperty.call(weekList, day)) {
-				loadNextWeek(isOdd);
-			}
-
 			const dayList: dayList = weekList[day] as dayList;
 			setDaylist(dayList);
 			setDay(day);
@@ -87,14 +64,10 @@ export default function Client({ isOdd, canteenCrowdness }: ClientType) {
 				clearInterval(i);
 
 				let _nextI = curDate.getDay() + 1;
+
 				let _nextDay = dayName[_nextI] as keyof typeof weekList;
 				const nextday = weekList[_nextDay];
 
-				// if (_nextI == 6 || _nextI == 7 || _nextI == 0) {
-				// 	loadNextWeek(isOdd);
-				// 	return;
-				// }
-				// ILL [string] MYSELF IF THIS BREAKS AGAIN
 
 				if (loading) setLoading(false);
 				setDaylist(nextday);
@@ -199,7 +172,9 @@ export default function Client({ isOdd, canteenCrowdness }: ClientType) {
 				</>
 			) : (
 				<>
-					<h2 id="classTitle">I know no one uses this website to <br/> I WANT TO BE A GIRL!!! {">w<"}</h2>
+					<h2 id="classTitle">
+						I know no one uses this website to <br /> I WANT TO BE A GIRL!!! {">w<"}
+					</h2>
 
 					<CircularProgressLoading />
 					<TrackLoading />
