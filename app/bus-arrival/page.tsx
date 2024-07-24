@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState, useEffect, DOMElement } from "react";
+import React, { useState, useEffect } from "react";
 import { state, busStop, services, nextBus } from "../lib/types";
 import "material-icons/iconfont/material-icons.css";
 import { Loading } from "../components/Loading";
@@ -34,7 +34,7 @@ export default function BusArrival() {
 					setState({ state: "error", error: "Position is unavalable" });
 					break;
 				case error.TIMEOUT:
-					setState({ state: "error", error: "Timeed out while getting location" });
+					setState({ state: "error", error: "Timed out while getting location" });
 					break;
 				default:
 					setState({ state: "error", error: "Unknown Error. Code: " + error.code });

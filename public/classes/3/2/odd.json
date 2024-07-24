@@ -1,64 +1,52 @@
 {
     "Monday": {
-        "0800": "CCE",
-        "0900": "PE",
-        "1000": [
-            "Elect-AM",
-            "D&T",
-            "POA"
-        ],
-        "1100": "Recess",
-        "1140": "Eng",
-        "1240": "Math",
-        "1320": "Break",
-        "1340": "MTL",
-        "1500": null,
-        "1420": "Comb Hum"
+        "28800000": "CCE",
+        "32400000": "PE",
+        "36000000": "Elevtives",
+        "39600000": "Recess",
+        "42000000": "English",
+        "45600000": "Math",
+        "48000000": "Break",
+        "49200000": "MTL",
+        "54000000": null,
+        "51600000": "Humanities"
     },
     "Tuesday": {
-        "0800": "Comb Hum",
-        "0900": "PE",
-        "1000": "Recess",
-        "1040": "Eng",
-        "1120": [
-            "Elect-AM",
-            "D&T",
-            "POA"
-        ],
-        "1220": "Math",
-        "1320": "{SciElec}",
-        "1420": null
+        "28800000": "Humanities",
+        "32400000": "PE",
+        "36000000": "Recess",
+        "38400000": "English",
+        "40800000": "Electives",
+        "44400000": "Math",
+        "48000000": "{SciElec}",
+        "51600000": null
     },
     "Wednesday": {
-        "0840": "CCE",
-        "0940": "Recess",
-        "1020": "Comb.SS",
-        "1100": [
-            "Elect-AM",
-            "D&T",
-            "POA"
-        ],
-        "1200": "Chemestry",
-        "1300": "Eng",
-        "1340": "Break",
-        "1400": "MTL",
-        "1440": null
+        "31200000": "CCE",
+        "34800000": "Recess",
+        "37200000": "Social Studies",
+        "39600000": "Electives",
+        "43200000": "Chemestry",
+        "46800000": "English",
+        "49200000": "Break",
+        "50400000": "MTL",
+        "52800000": null
     },
     "Thursday": {
-        "0800": "CCE",
-        "0840": "{SciElec}",
-        "0940": "MTL",
-        "1040": "Recess",
-        "1120": "Math",
-        "1220": "Chemestry",
-        "1320": "Eng",
-        "1420": null
+        "28800000": "CCE",
+        "31200000": "{SciElec}",
+        "34800000": "MTL",
+        "38400000": "Recess",
+        "40800000": "Math",
+        "44400000": "Chemestry",
+        "48000000": "English",
+        "51600000": null
     },
     "Friday": {
-        "0840": "Math",
-        "0940": "Comb.SS",
-        "1040": "Recess",
-        "1120": "MTL",
-        "1220": null
+        "31200000": "Math",
+        "34800000": "Social Studies",
+        "38400000": "Recess",
+        "40800000": "MTL",
+        "44400000": null
     }
 }

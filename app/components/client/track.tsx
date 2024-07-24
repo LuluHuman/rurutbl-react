@@ -1,7 +1,7 @@
 "use client";
 
 import { TrackType } from "@/app/lib/types";
-import { Date24 } from "@/app/lib/trackHelper";
+import { msToHM } from "@/app/lib/trackHelper";
 import "./style.css";
 
 function assignColor(percentage: number) {
@@ -17,14 +17,12 @@ export function Track({ dayList, active, canteenCrowdness, day, settings }: Trac
 
 	const timeList = Object.keys(dayList).toSorted();
 
-	timeList.forEach(async (lsnStartTime) => {
-		var subject = dayList[lsnStartTime];
+	timeList.forEach(async (lsnStartTimex) => {
+		const lsnStartTime = parseInt(lsnStartTimex);
+		var subject = dayList[lsnStartTimex];
 		subject = i == timeList.length - 1 ? "END" : subject || "";
 
-		const curDate24 = new Date24(lsnStartTime).toTimeHourObject();
-		const isPM = curDate24.hours > 12;
-		const hours = isPM ? curDate24.hours - 12 : curDate24.hours;
-		const minutes = curDate24.minutes == 0 ? "00" : curDate24.minutes;
+		var HM = msToHM(lsnStartTime);
 
 		let isFinished = i < (active || 0);
 		let isActive = i == active;
@@ -42,7 +40,7 @@ export function Track({ dayList, active, canteenCrowdness, day, settings }: Trac
 				const b = a[day];
 				if (b == undefined) break;
 				const classes = b[lsnStartTime.toString()];
-				if (classes == undefined) break
+				if (classes == undefined) break;
 				crowd = (
 					<div className={"rangeout"}>
 						Crowdedness
@@ -68,24 +66,13 @@ export function Track({ dayList, active, canteenCrowdness, day, settings }: Trac
 				className={`${isEND ? "endLi" : "subjLi"} ${isActive ? "active" : ""} `}
 				key={typeof subject == "string" ? subject : subject[0]}>
 				{isEND ? (
-					<span>
-						END - {hours}:{minutes} {isPM ? "PM" : "AM"}
-					</span>
+					<span>END - {HM}</span>
 				) : (
 					<>
 						<div className={styles.join(" ")}>
-							{isFinished ? (
-								<span className="material-icons-outlined text-green-500 !text-base">
-									{"\ue86c"}
-								</span>
-							) : (
-								""
-							)}
 							{typeof subject == "string" ? subject : subject.join(" / ")}
 						</div>
-						<div className={styles.join(" ")}>
-							{`${hours}:${minutes} ${isPM ? "PM" : "AM"}`}
-						</div>
+						<div className={styles.join(" ")}>{HM}</div>
 						{crowd}
 					</>
 				)}

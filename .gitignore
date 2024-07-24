@@ -5,6 +5,7 @@
 /.pnp
 .pnp.js
 .yarn/install-state.gz
+pnpm-lock.yaml
 
 # testing
 /coverage
@@ -35,6 +36,7 @@ yarn-error.log*
 *.tsbuildinfo
 next-env.d.ts
 
-sw*.js
-workbox*.js
-pnpm-lock.yaml
+public/sw*.js
+public/workbox*.js
+public/sw.js.map
+public/workbox-*.js.map

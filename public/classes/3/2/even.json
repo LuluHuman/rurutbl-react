@@ -1,65 +1,53 @@
 {
     "Monday": {
-        "0800": "CCE",
-        "0900": "Recess",
-        "0940": [
-            "Elect-AM",
-            "D&T",
-            "POA"
-        ],
-        "1040": "PE",
-        "1140": "Math",
-        "1240": "Break",
-        "1300": "MTL",
-        "1400": null
+        "28800000": "CCE",
+        "32400000": "Recess",
+        "34800000": "Electives",
+        "38400000": "PE",
+        "42000000": "Math",
+        "45600000": "Break",
+        "46800000": "MTL",
+        "50400000": null
     },
     "Tuesday": {
-        "0800": "PE",
-        "0900": "Math",
-        "1000": [
-            "Elect-AM",
-            "D&T",
-            "POA"
-        ],
-        "1100": "Recess",
-        "1140": "Comb.SS",
-        "1240": "Eng",
-        "1420": null,
-        "1320": "Chemestry"
+        "28800000": "PE",
+        "32400000": "Math",
+        "36000000": "Electives",
+        "39600000": "Recess",
+        "42000000": "Social Studies",
+        "45600000": "English",
+        "51600000": null,
+        "48000000": "Chemestry"
     },
     "Wednesday": {
-        "0840": "CCE",
-        "0940": "Comb Hum",
-        "1040": "Recess",
-        "1120": "MTL",
-        "1200": "Eng",
-        "1240": "Break",
-        "1300": "{SciElec}",
-        "1340": null
+        "31200000": "CCE",
+        "34800000": "Humanities",
+        "38400000": "Recess",
+        "40800000": "MTL",
+        "43200000": "English",
+        "45600000": "Break",
+        "46800000": "{SciElec}",
+        "49200000": null
     },
     "Thursday": {
-        "0800": "CCE",
-        "0840": "Eng",
-        "0940": [
-            "Elect-AM",
-            "D&T",
-            "POA"
-        ],
-        "1040": "Recess",
-        "1120": "MTL",
-        "1200": "Chemestry",
-        "1240": "Math",
-        "1420": null,
-        "1320": "{SciElec}"
+        "28800000": "CCE",
+        "31200000": "English",
+        "34800000": "Electives",
+        "38400000": "Recess",
+        "40800000": "MTL",
+        "43200000": "Chemestry",
+        "45600000": "Math",
+        "51600000": null,
+        "48000000": "{SciElec}"
     },
     "Friday": {
-        "0840": "Math",
-        "0940": null,
-        "1000": "Eng",
-        "1100": "{SciElec}",
-        "1120": "Chemestry",
-        "1140": "SS",
-        "1220": "Humanities",
-        "1300": null
+        "31200000": "Math",
+        "34800000": null,
+        "36000000": "English",
+        "39600000": "{SciElec}",
+        "40800000": "Chemestry",
+        "42000000": "SS",
+        "44400000": "Humanities",
+        "46800000": null
     }
 }

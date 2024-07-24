@@ -1,5 +1,3 @@
-import { Date24 } from "./trackHelper";
-
 export type weekList = {
     [day in "Monday" | "Tuesday" | "Wednesday" | "Thursday" | "Friday"]: {
         [time: string]: string | null;
@@ -39,18 +37,6 @@ export interface TrackType {
 }
 
 // 
-
-export type TrackComponent = {
-    weekList: weekList;
-    CurTime24: Date24;
-}
-
-export type CircProgressComponent = {
-    weekList: weekList;
-    CurTime24: Date24;
-    curDate: Date;
-}
-
 export interface CircularProgressType {
     valuePercentage?: number;
     text: {

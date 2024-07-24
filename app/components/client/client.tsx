@@ -1,9 +1,10 @@
 "use client";
-// Hold crap this code is a mess
-import { CircularProgress, CircularProgressLoading } from "../circularProgress/component";
-import { Track, TrackLoading } from "../track/component";
+// Hold crap this code better without date24
+import { CircularProgress, CircularProgressLoading } from "./circularProgress";
+import { Track, TrackLoading } from "./track";
+
 import { dayList, ClientType, crowdedness, weekList } from "../../lib/types";
-import { Date24, getCurrentLsn, defaultSettings } from "../../lib/trackHelper";
+import { getMidnightOffset, getCurrentLsn, defaultSettings, msToHM } from "../../lib/trackHelper";
 
 import { useEffect, useState } from "react";
 
@@ -13,32 +14,27 @@ const alp = "xABCDEFGHI".split("");
 export default function Client({ isOdd, canteenCrowdness }: ClientType) {
 	//!              "Sunday"                                                          "Saturday"
 	const dayName = ["Monday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Monday"];
-	//!                   "Sun"                                       "Sat"
+	//!                   "Sun"                                        "Sat"
 	const shortDayName = ["Mon", "Mon", "Tues", "Wed", "Thurs", "Fri", "Mon"];
 
 	const [loading, setLoading] = useState(true);
 	const [trackLabels, setTrackLabels] = useState({ title: "", subtitle: "", timeRemaining: "" });
 	const [progressPercentage, setProgressPercentage] = useState(0);
+	const [weekList, setweekListn] = useState<weekList>();
 	const [daylist, setDaylist] = useState({});
 	const [day, setDay] = useState("");
 	const [activeIndex, setActiveIndex] = useState(0);
-
 	const [settings, setSettings] = useState(defaultSettings);
-	var [weekList, setweekListn] = useState<weekList>();
 
-	// Do once
 	useEffect(() => {
 		const savedSettings = localStorage.getItem("settings");
 		if (savedSettings) setSettings(JSON.parse(savedSettings));
 	}, []);
 
-	// When 'setting' is set
 	useEffect(() => {
 		const { level, class: className } = settings.class;
 
-		const req = import(
-			`../../../public/classes/${level}/${className}/${isOdd ? "odd" : "even"}.json`
-		);
+		const req = import(`@/public/classes/${level}/${className}/${isOdd ? "odd" : "even"}.json`);
 		req.then(setweekListn);
 	}, [settings]);
 
@@ -48,94 +44,77 @@ export default function Client({ isOdd, canteenCrowdness }: ClientType) {
 
 			// Date stuff
 			const curDate = new Date();
-			const curTime24 = new Date24();
-			const curTime = curTime24.toInt();
+			const midnightOffset = getMidnightOffset(curDate);
 
-			var day = dayName[curDate.getDay()] as keyof typeof weekList;
+			const day = dayName[curDate.getDay()] as keyof typeof weekList;
+			setDay(day);
 
 			const dayList: dayList = weekList[day] as dayList;
 			setDaylist(dayList);
-			setDay(day);
 
 			const sortedTimeList = Object.keys(dayList).toSorted();
-			let lastLsnTime = parseInt(sortedTimeList[sortedTimeList.length - 1]);
+			const lastLsnTime = parseInt(sortedTimeList[sortedTimeList.length - 1]);
 
-			if (curTime > lastLsnTime) {
+			if (midnightOffset > lastLsnTime) {
 				clearInterval(i);
 
-				let _nextI = curDate.getDay() + 1;
+				const nextI = curDate.getDay() + 1;
+				const nextDay = dayName[nextI] as keyof typeof weekList;
+				setDay(nextDay);
 
-				let _nextDay = dayName[_nextI] as keyof typeof weekList;
-				const nextday = weekList[_nextDay];
+				const nextdayList = weekList[nextDay];
+				setDaylist(nextdayList);
 
+				const sortedTimeList = Object.keys(nextdayList).toSorted();
 
-				if (loading) setLoading(false);
-				setDaylist(nextday);
-				setDay(_nextDay);
-
-				const sortedTimeList = Object.keys(nextday).toSorted();
-				const reportTime = sortedTimeList[0];
-
+				const startMs = parseInt(sortedTimeList[0]);
+				const HM = msToHM(startMs);
 				setTrackLabels({
-					title: `${shortDayName[_nextI] || shortDayName[1]} - ${reportTime}`,
-					subtitle: `First lesson is ${nextday[reportTime]}`,
+					title: `${shortDayName[nextI] || shortDayName[1]} - ${HM}`,
+					subtitle: `First lesson is ${nextdayList[sortedTimeList[0]]}`,
 					timeRemaining: "",
 				});
+
+				if (loading) setLoading(false);
 				return;
 			}
 
-			const curLessont24: Date24 = getCurrentLsn(sortedTimeList, curTime);
-			let prevI = sortedTimeList.indexOf(curLessont24.toString()) - 1;
+			const nextLsnTime: string = getCurrentLsn(sortedTimeList, midnightOffset);
+
+			const prevI = sortedTimeList.indexOf(nextLsnTime) - 1;
 			const curLsn = dayList[sortedTimeList[prevI]];
-			const nextLsn = dayList[curLessont24.t24];
+			const nextLsn = dayList[nextLsnTime];
 
-			const { hours: curHours, minutes: curMins } = curTime24.toTimeHourObject();
-			const { hours: LessonHours, minutes: LessonMins } = curLessont24.toTimeHourObject();
+			const curSecTotal = midnightOffset / 1000;
+			const LessonSecTotal = parseInt(nextLsnTime) / 1000;
+			const remainingSec = LessonSecTotal - curSecTotal;
 
-			const curMinsTotal = curHours * 60 + curMins;
-			const LessonMinsTotal = LessonHours * 60 + LessonMins;
+			const prevSubTime = sortedTimeList[prevI];
+			const prevtotalSec = parseInt(prevSubTime) / 1000;
+			const SubjDuration = LessonSecTotal - prevtotalSec;
 
-			const remainingMinutes =
-				LessonMinsTotal * 60 - (curMinsTotal * 60 + curDate.getSeconds());
-			const prevSub = sortedTimeList[prevI];
-			const { hours: prevhours, minutes: prevminutes } = new Date24(prevSub);
-
-			const prevtotalMinutes = parseInt(prevhours) * 60 + parseInt(prevminutes);
-			const SubjDuration = LessonMinsTotal * 60 - prevtotalMinutes * 60;
-
-			const remainingPercentage = (SubjDuration - remainingMinutes) / SubjDuration;
+			const remainingPercentage = (SubjDuration - remainingSec) / SubjDuration;
 			setProgressPercentage(remainingPercentage);
+			setActiveIndex(sortedTimeList.indexOf(nextLsnTime) - 1);
 
-			const totalMinutesLeft = LessonMinsTotal - curMinsTotal;
-			const hoursLeft = Math.floor(totalMinutesLeft / 60);
-			const minutesLeft = totalMinutesLeft % 60;
-			setActiveIndex(sortedTimeList.indexOf(curLessont24.toString()) - 1);
-
-			const _hr = hoursLeft.toString().padStart(2, "0");
-			const _min = minutesLeft.toString().padStart(2, "0");
-			const _sec = (60 - curDate.getSeconds()).toString().padStart(2, "0");
+			const totalSecLeft = LessonSecTotal - curSecTotal;
+			const time = new Date(totalSecLeft * 1000).toISOString().substr(11, 8);
 
 			const _fallbackTitle = `Time until Start class (${dayList[sortedTimeList[0]]})`;
+			const nextLessionLabel = "Time " + (nextLsn ? `until ${locSubj(nextLsn)}` : "Left");
+
 			setTrackLabels({
-				title:
-					localisedSubject(
-						typeof curLsn == "string" || curLsn == null ? curLsn : curLsn[0]
-					) || _fallbackTitle,
-				subtitle: curLsn
-					? nextLsn
-						? `Time until ${localisedSubject(
-								typeof nextLsn == "string" || nextLsn == null ? nextLsn : nextLsn[0]
-						  )}`
-						: "Time Left"
-					: "",
-				timeRemaining: `${_hr}:${_min.length == 1 ? "0" + _min : _min}:${_sec}`,
+				title: locSubj(curLsn) || _fallbackTitle,
+				subtitle: curLsn ? nextLessionLabel : "",
+				timeRemaining: time,
 			});
 
 			if (loading) setLoading(false);
 		}, 500);
 	}, [settings, weekList]);
 
-	function localisedSubject(Subject: string | null) {
+	function locSubj(Subject: string | null | string[]) {
+		Subject = typeof Subject == "string" || Subject == null ? Subject : Subject[0];
 		switch (Subject) {
 			case "{SciElec}":
 				return settings.Elec.Sci || Subject;
@@ -173,7 +152,7 @@ export default function Client({ isOdd, canteenCrowdness }: ClientType) {
 			) : (
 				<>
 					<h2 id="classTitle">
-						I know no one uses this website to <br /> I WANT TO BE A GIRL!!! {">w<"}
+						I know no one uses this website so <br /> I WANT TO BE A GIRL!!! {">w<"}
 					</h2>
 
 					<CircularProgressLoading />

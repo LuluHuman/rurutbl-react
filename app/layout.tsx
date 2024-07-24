@@ -5,7 +5,7 @@ import "material-icons/iconfont/material-icons.css";
 
 export const metadata: Metadata = {
 	title: "RuruTBL",
-	description: "RuruTBL - ihavenoideawhattobuthere",
+	description: "RuruTBL - ihavenoideawhattoputhere",
 };
 interface layout {
 	children: React.ReactNode;
@@ -23,20 +23,6 @@ export default function RootLayout({ children }: Readonly<layout>) {
 			<body>
 				<NavBar />
 				<div id="root">
-					<noscript>
-						<div
-							style={{
-								textAlign: "center",
-								color: "red",
-								fontSize: "2rem",
-								position: "fixed",
-								top: "50vh",
-								background:"white"
-							}}>
-							ah boy/girl/whatever, who teach you websites still can work without
-							javascript
-						</div>
-					</noscript>
 					{children}
 				</div>
 			</body>

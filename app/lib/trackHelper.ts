@@ -1,47 +1,38 @@
-export class Date24 {
-    hours: string;
-    minutes: string;
-    t24: string;
-    constructor(t24?: number | string) {
-        if (!t24) {
-            const curDate = new Date(); //document._spoofDay ? new Date(document._spoofDay) : new Date();
-            const hours = curDate.getHours();
-            const minutes = curDate.getMinutes();
-            this.hours = ("0" + hours).slice(-2);
-            this.minutes = ("0" + minutes).slice(-2);
-            this.t24 = this.hours + this.minutes;
-            return this;
-        }
-        this.minutes = t24.toString().slice(-2).padStart(2, "0");
-        this.hours = t24.toString().replace(this.minutes, "").padStart(2, "0");
-        this.t24 = this.hours + this.minutes;
-        return this
-    }
-    toString() {
-        return this.t24.toString();
-    }
-    toInt() {
-        return parseInt(this.t24);
-    }
-    toTimeHourObject() {
-        const curTimeLengh = this.t24.length == 3 ? 1 : 2;
-        const hours = parseInt(this.t24.substring(0, curTimeLengh), 10);
-        const minutes = parseInt(this.t24.substring(curTimeLengh), 10);
-
-        return { hours: this.toInt() < 100 ? 0 : hours, minutes: minutes };
-    }
+export function getMidnightOffset(curDate: Date) {
+    const _h = curDate.getHours() * 60 * 60 * 1000;
+    const _m = curDate.getMinutes() * 60 * 1000;
+    const _s = curDate.getSeconds() * 1000;
+    const midnightOffset = _h + _m + _s;
+    return midnightOffset
 }
 
-export function getCurrentLsn(timeList: Array<string>, curTime: number) {
+export function msToHM(duration: number) {
+    const DateNow = new Date()
+    const midnight = DateNow.getTime() - getMidnightOffset(DateNow);
+    const startDate = new Date(midnight + duration);
+
+
+    var hours = startDate.getHours();
+    var minutes: string | number = startDate.getMinutes();
+    minutes = (minutes < 10) ? "0" + minutes : minutes;
+
+    const isPM = hours > 12;
+    hours = isPM ? hours - 12 : hours;
+    minutes = minutes == 0 ? "00" : minutes;
+
+    return `${hours}:${minutes} ${isPM ? "PM" : "AM"}`;
+}
+
+export function getCurrentLsn(timeList: Array<string>, midOffset: number) {
     let curLessont24: any = -Infinity;
     timeList.forEach((lsnStartTime) => {
-        const intTime = new Date24(lsnStartTime).toInt();
-        const _beforeNow = curTime < intTime;
+        const intTime = parseInt(lsnStartTime)
+        const _beforeNow = midOffset < intTime;
         const _lastSavedisLess = curLessont24 < intTime;
         const _default = curLessont24 == -Infinity;
-        if (_beforeNow && _lastSavedisLess && _default) curLessont24 = new Date24(intTime);
+        if (_beforeNow && _lastSavedisLess && _default) curLessont24 = intTime
     });
-    return curLessont24 == -Infinity ? null : curLessont24;
+    return curLessont24 == -Infinity ? null : curLessont24.toString();
 }
 
 export const defaultSettings = {

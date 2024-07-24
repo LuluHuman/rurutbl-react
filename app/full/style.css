@@ -1,4 +1,3 @@
-
 #full-root > table > tbody > tr > td,
 #full-root > table > tbody > tr > th {
 	text-align: center;
@@ -6,7 +5,7 @@
 	border: var(--color-grey) solid 1px;
 }
 
-#full-root > table > tbody > td {
+#full-root > table > tbody > tr > th {
 	font-size: 0.7em;
 	color: #ffffffaa;
 }

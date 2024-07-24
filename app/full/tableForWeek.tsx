@@ -1,7 +1,7 @@
 "use client";
 
 import React, { useEffect, useState } from "react";
-import { defaultSettings, getCurrentLsn } from "@/app/lib/trackHelper";
+import { defaultSettings, getCurrentLsn, msToHM } from "@/app/lib/trackHelper";
 import { weekList } from "@/app/lib/types";
 import { Loading } from "../components/Loading";
 
@@ -12,9 +12,9 @@ export default function TableForWeek({ oddeven }: { oddeven: "even" | "odd" }) {
 	const [weekList, setweekList] = useState<weekList>();
 	const [fullTable, setFullTable] = useState<React.JSX.Element[]>();
 	const [loading, setLoading] = useState(true);
-
 	const [classFullName, setClassFullName] = useState<string>("");
 	// Do once
+
 	useEffect(() => {
 		const savedSettings = localStorage.getItem("settings");
 		if (savedSettings) setSettings(JSON.parse(savedSettings));
@@ -23,20 +23,18 @@ export default function TableForWeek({ oddeven }: { oddeven: "even" | "odd" }) {
 	// When 'setting' is set
 	useEffect(() => {
 		const { level, class: className } = settings.class;
+		setClassFullName(level + alp[className]);
 
 		try {
-			import(`../../public/classes/${level}/${className}/${oddeven}.json`).then((res) => {
-				setweekList(res);
-			});
+			const filePromise = import(`@/public/classes/${level}/${className}/${oddeven}.json`);
+			filePromise.then(setweekList);
 		} catch (err) {
 			console.log(err);
 		}
-
-		setClassFullName(level + alp[className]);
 	}, [settings]);
 
 	useEffect(() => {
-		const time = { h: 8, m: 0 };
+		var timeMs = 8 * 60 * 60 * 1000;
 		const weekListIncremented: { [key: string]: any } = {};
 
 		const fulltbl: React.JSX.Element[] = [];
@@ -44,43 +42,36 @@ export default function TableForWeek({ oddeven }: { oddeven: "even" | "odd" }) {
 		/*  */
 		const timeRowChildren = [<th key={"-1"}></th>];
 		for (let i = 0; i < 22; i++) {
+			var timeAfterMs = timeMs + 20 * 60 * 1000;
+			const from = msToHM(timeMs)
+			const to = msToHM(timeAfterMs);
 			timeRowChildren.push(
-				<th key={i.toString()}>{`${time.h}:${time.m.toString().padStart(2, "0")}`}</th>
+				<th key={i.toString()}>
+					<div>{from}</div>
+					<div>to</div>
+					<div>{to}</div>
+				</th>
 			);
+
 			for (const day in weekList) {
-				if (!Object.prototype.hasOwnProperty.call(weekListIncremented, day)) {
-					weekListIncremented[day] = {};
-				}
+				const dayExists = Object.prototype.hasOwnProperty.call(weekListIncremented, day);
+				if (!dayExists) weekListIncremented[day] = {};
+
 				const dayList = weekList[day as keyof weekList];
-
-				const h = (time.h < 10 ? "0" + time.h : time.h).toString();
-				const m = (time.m < 10 ? "0" + time.m : time.m).toString();
-				const t24 = h + m;
-
-				const exactStartName = dayList[t24];
-				if (exactStartName) {
-					weekListIncremented[day][t24] = exactStartName;
-					continue;
-				}
-
 				const timeList = Object.keys(dayList).toSorted();
 
-				const timeAfter = getCurrentLsn(timeList, parseInt(t24));
-				if (timeAfter == null) {
-					weekListIncremented[day][t24] = "";
+				const timeAfter = getCurrentLsn(timeList, timeMs);
+				if (timeAfter !== null) {
+					const timeI = timeList.indexOf(timeAfter.toString()) - 1;
+					const steppedTime = timeList[timeI];
+					weekListIncremented[day][timeMs] = dayList[steppedTime];
 					continue;
 				}
 
-				const timeI = timeList.indexOf(timeAfter.toString()) - 1;
-				const steppedTime = timeList[timeI];
-				weekListIncremented[day][t24] = dayList[steppedTime];
+				weekListIncremented[day][timeMs] = "";
 			}
 
-			time.m += 20;
-			if (time.m >= 60) {
-				time.h++;
-				time.m -= 60;
-			}
+			timeMs = timeAfterMs;
 		}
 		fulltbl.push(<tr key={"timeTr"}>{timeRowChildren}</tr>);
 
@@ -96,10 +87,10 @@ export default function TableForWeek({ oddeven }: { oddeven: "even" | "odd" }) {
 			const sortedTime = Object.keys(weekListIncremented[day]).toSorted();
 
 			for (let i = 0; i < sortedTime.length; i++) {
-				const curTime = sortedTime[i];
-				var curSubj = weekListIncremented[day][curTime];
-
 				var colspan = 1;
+
+				const curTime = sortedTime[i];
+				const curSubj = weekListIncremented[day][curTime];
 
 				const prevTime = sortedTime[i - 1];
 				const prevSubj = weekListIncremented[day][prevTime];
@@ -109,15 +100,15 @@ export default function TableForWeek({ oddeven }: { oddeven: "even" | "odd" }) {
 				const checkAfter = (index: number) => {
 					const futreTime = sortedTime[index];
 					const futreSubj = weekListIncremented[day][futreTime];
-					if (futreSubj == curSubj) {
-						colspan++;
-						checkAfter(index + 1);
-					}
+					if (futreSubj !== curSubj) return;
+
+					colspan++;
+					checkAfter(index + 1);
 				};
 				checkAfter(i + 1);
 
 				const isElecSci = curSubj == "{SciElec}";
-				const isMany = typeof curSubj == "object" && curSubj !== null
+				const isMany = typeof curSubj == "object" && curSubj !== null;
 				const td = (
 					<td colSpan={colspan > 1 ? colspan : undefined}>
 						{isElecSci ? settings.Elec.Sci : isMany ? curSubj.join(" / ") : curSubj}
@@ -129,12 +120,13 @@ export default function TableForWeek({ oddeven }: { oddeven: "even" | "odd" }) {
 
 		setFullTable(fulltbl);
 		setLoading(false);
+		console.log(weekListIncremented);
 	}, [weekList]);
 
 	return (
 		<>
 			<h1 className="flex justify-center my-5 w-auto">
-				{classFullName}: {oddeven.replace(/^./, (str) => str.toUpperCase())} Week
+				{classFullName || "XX"}: {oddeven.replace(/^./, (str) => str.toUpperCase())} Week
 			</h1>
 			{loading ? (
 				<Loading />
@@ -146,25 +138,3 @@ export default function TableForWeek({ oddeven }: { oddeven: "even" | "odd" }) {
 		</>
 	);
 }
-
-/*
-#full-root > table > tbody {
-	border-collapse: collapse;
-	width: 800px;
-}
-#full-root > table > tbody > tr:nth-child(odd) {
-	background-color:  var(--color-secondary);
-}
-
-#full-root > table > tbody > tr > td,
-#full-root > table > tbody > tr > th {
-	text-align: center;
-	padding: 8px;
-	border: var(--color-grey) solid 1px;
-}
-
-#full-root > table > tbody > td {
-	font-size: 0.7em;
-	color: #ffffffaa;
-}
-*/
