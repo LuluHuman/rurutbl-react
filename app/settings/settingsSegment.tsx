@@ -1,12 +1,48 @@
 "use client";
 import { defaultSettings } from "@/app/lib/trackHelper";
 import React, { useEffect, useState } from "react";
-export function ClassSelector({ title, props: classes }: { title: string; props: any }) {
+export function ClassSelector({ title }: { title: string }) {
 	const alp = "xABCDEFGHI".split("");
 	const [levelVal, setLevelVal] = useState<number>();
 	const [classVal, setClassVal] = useState<number>();
 	const [settings, setSettings] = useState(defaultSettings);
 	const [newSettings, setNewSettings] = useState({});
+	
+	const [classes, setClasses] = useState<any>();
+	const [classNames, setclassNames] = useState<React.JSX.Element[]>();
+	const [levels, setlevels] = useState<React.JSX.Element[]>();
+	useEffect(() => {
+		fetch("/api/getClasses")
+			.then((d) => d.json())
+			.then((classes) => {
+				const classNamesa = [<></>];
+				const levelsa = [<></>];
+
+				classes[settings.class.level].forEach((className: string) => {
+					classNamesa.push(
+						<option
+							key={className}
+							value={className}>
+							{alp[parseInt(className)]}
+						</option>
+					);
+				});
+
+				for (const level in classes) {
+					if (level == "default") continue;
+					levelsa.push(
+						<option
+							key={level}
+							value={level}>
+							{level}
+						</option>
+					);
+				}
+				setClasses(classes);
+				setclassNames(classNamesa);
+				setlevels(levelsa);
+			});
+	}, []);
 
 	useEffect(() => {
 		const savedSettings = localStorage.getItem("settings");
@@ -18,28 +54,6 @@ export function ClassSelector({ title, props: classes }: { title: string; props:
 			setNewSettings({});
 		}
 	}, [newSettings, levelVal, classVal]);
-
-	const levels = [<></>];
-	for (const level in classes) {
-		if (level == "default") continue;
-		levels.push(
-			<option
-				key={level}
-				value={level}>
-				{level}
-			</option>
-		);
-	}
-	const classNames = [<></>];
-	classes[settings.class.level].forEach((className: string) => {
-		classNames.push(
-			<option
-				key={className}
-				value={className}>
-				{alp[parseInt(className)]}
-			</option>
-		);
-	});
 
 	return (
 		<div className="settingsSegment">

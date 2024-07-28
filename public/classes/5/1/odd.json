@@ -1,1 +1,34 @@
-{"Monday": {"28800000": "CCE", "30000000": "Elect-POA/Art/D&T", "31200000": "Eng", "32400000": "{SciElec}", "33600000": null}, "Tuesday": {"28800000": "Eng", "30000000": "Chemestry", "31200000": "PE", "32400000": "Math", "34800000": null, "33600000": "MTL"}, "Wednesday": {"30000000": "Elect-POA/Art/D&T", "31200000": "Comb Hum", "32400000": "Math", "33600000": null}, "Thursday": {"28800000": "Elect-POA/Art/D&T", "30000000": "PE", "31200000": "Comb.SS", "32400000": null}, "Friday": {"30000000": "Math", "31200000": "{SciElec}", "32400000": null}}
+{
+    "Monday": {
+        "28800000": "CCE",
+        "30000000": "Elect-POA/Art/D&T",
+        "31200000": "Eng",
+        "32400000": "{SciElec}",
+        "33600000": null
+    },
+    "Tuesday": {
+        "28800000": "Eng",
+        "30000000": "Chemestry",
+        "31200000": "PE",
+        "32400000": "Math",
+        "34800000": null,
+        "33600000": "MTL"
+    },
+    "Wednesday": {
+        "30000000": "Elect-POA/Art/D&T",
+        "31200000": "Comb Hum",
+        "32400000": "Math",
+        "33600000": null
+    },
+    "Thursday": {
+        "28800000": "Elect-POA/Art/D&T",
+        "30000000": "PE",
+        "31200000": "Comb.SS",
+        "32400000": null
+    },
+    "Friday": {
+        "30000000": "Math",
+        "31200000": "{SciElec}",
+        "32400000": null
+    }
+}

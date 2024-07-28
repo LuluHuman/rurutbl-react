@@ -11,7 +11,7 @@ import { useEffect, useState } from "react";
 import "@/app/lib/skeleton.css";
 
 const alp = "xABCDEFGHI".split("");
-export default function Client({ isOdd, canteenCrowdness }: ClientType) {
+export default function Client({ isOdd }: ClientType) {
 	//!              "Sunday"                                                          "Saturday"
 	const dayName = ["Monday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Monday"];
 	//!                   "Sun"                                        "Sat"
@@ -33,7 +33,6 @@ export default function Client({ isOdd, canteenCrowdness }: ClientType) {
 
 	useEffect(() => {
 		const { level, class: className } = settings.class;
-
 		const req = import(`@/public/classes/${level}/${className}/${isOdd ? "odd" : "even"}.json`);
 		req.then(setweekListn);
 	}, [settings]);
@@ -117,12 +116,26 @@ export default function Client({ isOdd, canteenCrowdness }: ClientType) {
 		Subject = typeof Subject == "string" || Subject == null ? Subject : Subject[0];
 		switch (Subject) {
 			case "{SciElec}":
-				return settings.Elec.Sci || Subject;
-
+				return settings.Elec.Sci || Subject;	
 			default:
 				return Subject;
 		}
 	}
+
+	const [canteenCrowdness, setCanteenCrowdness] = useState<crowdedness>();
+	useEffect(() => {
+		const canteenCrowdness: crowdedness = {
+			Recess: { "0": { "0": ["x"] } },
+			Break: { "0": { "0": ["x"] } },
+		};
+		const p = ["Recess", "Break"];
+		p.map(async (d) => {
+			const url = `/api/getCommonSubj?subjectName=${d}&week=${isOdd ? "Odd" : "Even"}`;
+			const res = await fetch(url).then((d) => d.json());
+			canteenCrowdness[d as keyof crowdedness] = res;
+		})
+		setCanteenCrowdness(canteenCrowdness);
+	}, []);
 
 	const pth = [
 		(isOdd ? "Odd" : "Even") + " Week",
@@ -151,9 +164,7 @@ export default function Client({ isOdd, canteenCrowdness }: ClientType) {
 				</>
 			) : (
 				<>
-					<h2 id="classTitle">
-						I know no one uses this website so <br /> I WANT TO BE A GIRL!!! {">w<"}
-					</h2>
+					<h2 id="classTitle">I WANT TO BE A GIRL!!! {">w<"}</h2>
 
 					<CircularProgressLoading />
 					<TrackLoading />

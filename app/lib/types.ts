@@ -47,7 +47,6 @@ export interface CircularProgressType {
 }
 
 export interface ClientType {
-    canteenCrowdness: object
     isOdd: boolean;
 }
 
