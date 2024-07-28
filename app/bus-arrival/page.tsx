@@ -6,8 +6,6 @@ import "material-icons/iconfont/material-icons.css";
 import { Loading } from "../components/Loading";
 import { DirectionBusDouble, NotAccessible, VisitDouble } from "../components/icons";
 
-// const apiEndpoint = "http://localhost";
-const apiEndpoint = "https://api.luluhoy.tech";
 export default function BusArrival() {
 	const [state, setState] = useState<state>({ state: "loading", error: null });
 	const [coords, setCoords] = useState<{ latitude: number; longitude: number }>();
@@ -45,7 +43,7 @@ export default function BusArrival() {
 
 	useEffect(() => {
 		if (state.state !== "error" && coords) {
-			fetch(`${apiEndpoint}/nearby-busstops?lat=${coords.latitude}&lon=${coords.longitude}`)
+			fetch(`/api/nearby-busstops?lat=${coords.latitude}&lon=${coords.longitude}`)
 				.then((req) => req.json())
 				.then((data) => {
 					const list: React.JSX.Element[] = [];
@@ -93,7 +91,7 @@ export default function BusArrival() {
 							const q = (e.target as HTMLInputElement).value;
 							if (q == "") return setSearchChildren(undefined);
 
-							fetch(`${apiEndpoint}/search-busstops?q=${encodeURI(q)}`)
+							fetch(`/api/search-busstops?q=${encodeURI(q)}`)
 								.then((req) => req.json())
 								.then((data) => {
 									const list: React.JSX.Element[] = [];
@@ -144,7 +142,7 @@ function BusStopElement({ busStop }: { busStop: busStop }) {
 		setCollapsedState(!isCollapsed);
 		if (!isCollapsed) return; // if it has been set to colapsed
 
-		fetch(`${apiEndpoint}/bus-arrival?BusStopCode=${busStop.BusStopCode}`)
+		fetch(`/api/bus-arrival?BusStopCode=${busStop.BusStopCode}`)
 			.then((req) => req.json())
 			.then((Services: services) => {
 				if (Services.length == 0) {
