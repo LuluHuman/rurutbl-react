@@ -5,7 +5,7 @@ import { dayList, weekList } from '@/app/lib/types'
 interface mem {
     [key: string]: {
         [key: string]: object | undefined
-    } | undefined
+    }
 }
 const memory: mem = {}
 const alp = "xABCDEFGHI".split("");
@@ -18,13 +18,8 @@ export async function GET(req: NextRequest) {
     const _w = searchParams.get('week')
     const week: string = _w ? _w.toLowerCase() : "odd"
 
-    if (!subjectName) return Response.json({ err: "subjectName is required" }, { status: 400 });
-
-    const weekMemory = memory[week];
-    if (weekMemory?.[subjectName] !== undefined) {
-        Response.json(weekMemory[subjectName]);
-        return;
-    }
+    if (!subjectName) return Response.json({ err: "subjectName is required" }, { status: 400 })
+    if (memory[week] && memory[week][subjectName]) return Response.json(memory[week][subjectName])
 
     var output: any = {};
 
@@ -77,13 +72,10 @@ export async function GET(req: NextRequest) {
     })
     await Promise.all(prom);
 
-    if (Object.keys(output).length === 0) return Response.json({ err: "No subjects recognized" }, { status: 400 });
-    if (!memory[week]) memory[week] = {};
+    if (Object.keys(output).length == 0) return Response.json({ err: "No subjects reconised" }, { status: 400 })
+    if (!memory[week]) memory[week] = {}
+    memory[week][subjectName] = output
 
-    //ChatGPT: At this point, memory[week] is guaranteed to be an object
-    //Man even it gave up
-    memory[week][subjectName] = output;
-
-    return Response.json(output);
+    return Response.json(output)
 }
 
