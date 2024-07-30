@@ -20,7 +20,7 @@ export async function GET(req: NextRequest) {
 
     if (!subjectName) return Response.json({ err: "subjectName is required" }, { status: 400 })
     if (memory[week]) {
-        if (memory ? [week] ? [subjectName] ?? false : false) {
+        if (memory ? [week] ? [subjectName] ?? false : false : false) {
             Response.json(memory[week][subjectName])
             return
         }
