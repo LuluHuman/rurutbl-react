@@ -40,16 +40,21 @@ export default function TableForWeek({ oddeven }: { oddeven: "even" | "odd" }) {
 		const fulltbl: React.JSX.Element[] = [];
 
 		/*  */
-		const timeRowChildren = [<th key={"-1"}></th>];
+		const timeRowChildren = [
+			<th key={"-1"}>
+				<div>from:</div>
+				<div>to:</div>
+			</th>,
+		];
 		for (let i = 0; i < 22; i++) {
 			var timeAfterMs = timeMs + 20 * 60 * 1000;
-			const from = msToHM(timeMs)
+			const from = msToHM(timeMs);
 			const to = msToHM(timeAfterMs);
 			timeRowChildren.push(
 				<th key={i.toString()}>
-					<div>{from}</div>
-					<div>to</div>
-					<div>{to}</div>
+					{[from, to].map((time) => (
+						<div className="whitespace-nowrap">{time}</div>
+					))}
 				</th>
 			);
 
@@ -120,7 +125,6 @@ export default function TableForWeek({ oddeven }: { oddeven: "even" | "odd" }) {
 
 		setFullTable(fulltbl);
 		setLoading(false);
-		console.log(weekListIncremented);
 	}, [weekList]);
 
 	return (

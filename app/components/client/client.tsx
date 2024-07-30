@@ -122,20 +122,6 @@ export default function Client({ isOdd }: ClientType) {
 		}
 	}
 
-	const [canteenCrowdness, setCanteenCrowdness] = useState<crowdedness>();
-	useEffect(() => {
-		const canteenCrowdness: crowdedness = {
-			Recess: { "0": { "0": ["x"] } },
-			Break: { "0": { "0": ["x"] } },
-		};
-		const p = ["Recess", "Break"];
-		p.map(async (d) => {
-			const url = `/api/getCommonSubj?subjectName=${d}&week=${isOdd ? "Odd" : "Even"}`;
-			const res = await fetch(url).then((d) => d.json());
-			canteenCrowdness[d as keyof crowdedness] = res;
-		})
-		setCanteenCrowdness(canteenCrowdness);
-	}, []);
 
 	const pth = [
 		(isOdd ? "Odd" : "Even") + " Week",
@@ -156,9 +142,9 @@ export default function Client({ isOdd }: ClientType) {
 					<Track
 						settings={settings}
 						dayList={daylist}
-						canteenCrowdness={canteenCrowdness as crowdedness}
 						day={day}
 						active={activeIndex}
+						isOdd={isOdd}
 					/>
 					<p className=" w-full text-center">Current: {pth.join(" / ")}</p>
 				</>

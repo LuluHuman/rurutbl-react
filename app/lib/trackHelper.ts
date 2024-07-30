@@ -44,3 +44,4 @@ export const defaultSettings = {
         Sci: "Phy/Bio",
     },
 }
+

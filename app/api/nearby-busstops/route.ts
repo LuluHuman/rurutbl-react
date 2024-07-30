@@ -11,7 +11,7 @@ type busStop = {
 type totalBusStops = busStop[]
 const totalBusStops: totalBusStops = require("@/app/lib/bus_stop.json")
 
-export const dynamic = 'force-dynamic' // defaults to auto
+export const dynamic = 'force-dynamic' 
 export async function GET(req: NextRequest) {
     const searchParams = req.nextUrl.searchParams
     const lat: string | null = searchParams.get('lat')

@@ -122,25 +122,30 @@ export default function BusArrival() {
 
 function BusStopElement({ busStop }: { busStop: busStop }) {
 	const [isCollapsed, setCollapsedState] = useState(true);
-	const [elementChildren, setElementChildren] = useState<React.JSX.Element[]>([]);
+	const [elementChildren, setElementChildren] = useState<React.JSX.Element[]>(skeletonTable);
 
-	function timeLeft(EstimatedArrival: string) {
-		const estArrTime = new Date(EstimatedArrival).getTime();
-		const timeNow = new Date().getTime();
-		const msTimeLeft = estArrTime - timeNow;
-		const minTimeLeft = Math.floor(msTimeLeft / 60000);
-
-		if (minTimeLeft < 2) {
-			return "Arr";
-		} else if (Number.isNaN(minTimeLeft)) {
-			return "~";
-		}
-		return minTimeLeft;
+	function skeletonTable() {
+		return [1, 2, 3].map((i) => (
+			<ul className="flex justify-between border-b border-gray-500">
+				<li className="text-left px-[4px] py-[8px] w-11">___</li>
+				{[1, 2, 3].map((_) => (
+					<li className="text-center py-[4px] px-[8px] ">
+						<div className="flex flex-col w-20">
+							<div className="bg-gray-600 border-l-2 rounded-lg">
+								<div className=" flex items-center justify-center">
+									<span>__</span>
+								</div>
+								<span className="text-sm">__:__</span>
+							</div>
+						</div>
+					</li>
+				))}
+			</ul>
+		));
 	}
-
 	function populateTable() {
 		setCollapsedState(!isCollapsed);
-		if (!isCollapsed) return; // if it has been set to colapsed
+		if (!isCollapsed) return;
 
 		fetch(`/api/bus-arrival?BusStopCode=${busStop.BusStopCode}`)
 			.then((req) => req.json())
@@ -157,9 +162,9 @@ function BusStopElement({ busStop }: { busStop: busStop }) {
 							<li className="text-left px-[4px] py-[8px] w-11">
 								{service.ServiceNo}
 							</li>
-							<NextBusSection nextBus={service.NextBus} />
-							<NextBusSection nextBus={service.NextBus2} />
-							<NextBusSection nextBus={service.NextBus3} />
+							{[service.NextBus, service.NextBus2, service.NextBus3].map((x) => (
+								<NextBusSection nextBus={x} />
+							))}
 						</ul>
 					);
 					list.push(row);
@@ -176,25 +181,33 @@ function BusStopElement({ busStop }: { busStop: busStop }) {
 	function NextBusSection({ nextBus }: { nextBus: nextBus }) {
 		const children = (() => {
 			if (nextBus.EstimatedArrival == "") return <></>;
-
 			const estArr = new Date(nextBus.EstimatedArrival);
+
 			var borderColor = {
 				SEA: "border-green-400",
 				SDA: "border-yellow-600",
 				LSD: "border-red-600",
 				"": "",
-			}[nextBus.Load]; //
-			var icons = [];
+			}[nextBus.Load];
 
-			if (nextBus.VisitNumber == "2") {
-				icons.push(<VisitDouble />);
-			}
-			if (nextBus.Type == "DD") {
-				icons.push(<DirectionBusDouble />);
-			}
-			if (nextBus.Feature != "WAB") {
-				icons.push(<NotAccessible />);
-			}
+			var icons = [];
+			if (nextBus.VisitNumber == "2") icons.push(<VisitDouble />);
+			if (nextBus.Type == "DD") icons.push(<DirectionBusDouble />);
+			if (nextBus.Feature != "WAB") icons.push(<NotAccessible />);
+
+			const timeLeft = (EstimatedArrival: string) => {
+				const estArrTime = new Date(EstimatedArrival).getTime();
+				const timeNow = new Date().getTime();
+				const msTimeLeft = estArrTime - timeNow;
+				const minTimeLeft = Math.floor(msTimeLeft / 60000);
+
+				if (minTimeLeft < 1) {
+					return "Arr";
+				} else if (Number.isNaN(minTimeLeft)) {
+					return "~";
+				}
+				return minTimeLeft;
+			};
 
 			return (
 				<div className={`bg-gray-600 border-l-2 ${borderColor} rounded-lg`}>

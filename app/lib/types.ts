@@ -33,7 +33,7 @@ export interface TrackType {
     dayList: dayList;
     active?: number;
     day: string
-    canteenCrowdness: crowdedness;
+    isOdd: boolean;
 }
 
 // 
