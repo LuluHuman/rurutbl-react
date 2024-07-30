@@ -77,10 +77,13 @@ export async function GET(req: NextRequest) {
     })
     await Promise.all(prom);
 
-    if (Object.keys(output).length == 0) return Response.json({ err: "No subjects reconised" }, { status: 400 })
-    if (!memory[week]) memory[week] = {}
-    memory[week][subjectName] = output
+    if (Object.keys(output).length === 0) return Response.json({ err: "No subjects recognized" }, { status: 400 });
+    if (!memory[week]) memory[week] = {};
+    if (memory[week] !== undefined && typeof memory[week] === 'object') {
+        memory[week][subjectName] = output;
+    }
 
-    return Response.json(output)
+    return Response.json(output);
+
 }
 
