@@ -18,9 +18,11 @@ export async function GET(req: NextRequest) {
     const _w = searchParams.get('week')
     const week: string = _w ? _w.toLowerCase() : "odd"
 
-    if (!subjectName) return Response.json({ err: "subjectName is required" }, { status: 400 })
-    if (memory[week] && memory[week][subjectName] !== undefined) {
-        Response.json(memory[week][subjectName]);
+    if (!subjectName) return Response.json({ err: "subjectName is required" }, { status: 400 });
+
+    const weekMemory = memory[week];
+    if (weekMemory?.[subjectName] !== undefined) {
+        Response.json(weekMemory[subjectName]);
         return;
     }
 
