@@ -19,11 +19,9 @@ export async function GET(req: NextRequest) {
     const week: string = _w ? _w.toLowerCase() : "odd"
 
     if (!subjectName) return Response.json({ err: "subjectName is required" }, { status: 400 })
-    if (memory[week]) {
-        if (memory ? [week] ? [subjectName] ?? false : false : false) {
-            Response.json(memory[week][subjectName])
-            return
-        }
+    if (memory[week] && memory[week][subjectName] !== undefined) {
+        Response.json(memory[week][subjectName]);
+        return;
     }
 
     var output: any = {};
