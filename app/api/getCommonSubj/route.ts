@@ -79,11 +79,11 @@ export async function GET(req: NextRequest) {
 
     if (Object.keys(output).length === 0) return Response.json({ err: "No subjects recognized" }, { status: 400 });
     if (!memory[week]) memory[week] = {};
-    if (memory[week] !== undefined && typeof memory[week] === 'object') {
-        memory[week][subjectName] = output;
-    }
+
+    //ChatGPT: At this point, memory[week] is guaranteed to be an object
+    //Man even it gave up
+    memory[week][subjectName] = output;
 
     return Response.json(output);
-
 }
 
