@@ -11,8 +11,11 @@ const config: Config = {
       colors: {
         "primary-color": "var(--bg-primary)",
         "secondary-color": "var(--bg-secondary)",
-        "menu-color": "var(--bg-menu)"
+        "menu-color": "var(--bg-menu)",
       },
+      : {
+        "pbsize": "var(pb-size)"
+      }
     },
   },
   plugins: [],

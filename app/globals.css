@@ -17,7 +17,8 @@ It has worked for decades
 	--bg-secondary: #252526;
 	--bg-menu: #333333;
 
-	/* --pb-size-minWidth: 85vw;
+	--pb-size: 300px;
+	/*
 	--pb-size-maxWidth: 300px;
 	--pb-thickness: 5px; no idea where was thease var used */
 }
@@ -109,32 +110,6 @@ h1 {
 This is so that i can use this site on my Galaxy Watch (previusly on /watch). 
 ! Id rather die then rewrite Client/component.tsx 
 */
-
-@media (max-width: 500px) and (max-height: 500px) {
-	:root {
-		--color-bg: #000;
-		--color-txt: #fff;
-		--color-grey: #9799a0;
-
-		--pb-size-minWidth: 100vw;
-		--pb-size-maxWidth: 100vw;
-		--pb-thickness: 5px;
-	}
-	:root > body,
-	#root,
-	div.timer-container {
-		font-size: 2rem;
-		margin: 0;
-		padding: 0;
-		height: 100vh;
-		width: 100vw;
-	}
-
-	:root > body > ul,
-	#classTitle {
-		display: none !important;
-	}
-}
 
 @media (max-width: 640px) {
 	:root > body {

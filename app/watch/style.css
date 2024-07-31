@@ -1,0 +1,22 @@
+:root {
+	--color-bg: #000;
+	--color-txt: #fff;
+	--color-grey: #9799a0;
+
+	--pb-size: 100vw;
+	--pb-thickness: 5px;
+}
+:root > body,
+#root,
+div.timer-container {
+	font-size: 2rem;
+	margin: 0;
+	padding: 0;
+	height: 100vh;
+	width: 100vw;
+}
+
+:root > body > ul,
+#classTitle {
+	display: none !important;
+}

@@ -16,7 +16,7 @@ export function CircularProgress({ valuePercentage = 0, text }: CircularProgress
 	);
 
 	return (
-		<div className="h-[85vw] w-[85vw] max-h-[300px] max-w-[300px]">
+		<div className="h-[85vw] w-[85vw] max-h-pbsize max-w-">
 			<div className="relative w-full h-full">
 				<svg
 					className="scale-x-[1]"
@@ -44,7 +44,7 @@ export function CircularProgress({ valuePercentage = 0, text }: CircularProgress
 
 export function CircularProgressLoading() {
 	return (
-		<div className="h-[85vw] w-[85vw] max-h-[300px] max-w-[300px]">
+		<div className="h-[85vw] w-[85vw] max-h-pbsize max-w-pbsize	">
 			<div className="relative w-full h-full">
 				<svg
 					className="scale-x-[1]"
