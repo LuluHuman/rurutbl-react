@@ -16,7 +16,7 @@ export function CircularProgress({ valuePercentage = 0, text }: CircularProgress
 	);
 
 	return (
-		<div className="h-[85vw] w-[85vw] max-h-pbsize max-w-">
+		<div className="h-[85vw] w-[85vw] max-h-pbsize max-w-pbsize">
 			<div className="relative w-full h-full">
 				<svg
 					className="scale-x-[1]"
@@ -32,7 +32,7 @@ export function CircularProgress({ valuePercentage = 0, text }: CircularProgress
 						{timer}
 					</g>
 				</svg>
-				<div className="absolute top-0  w-full h-full    flex items-center justify-center flex-col   text-center">
+				<div className="absolute top-0  w-full h-full flex items-center justify-center flex-col   text-center">
 					<span>{text.title /*Math*/}</span>
 					<span>{text.subtitle /*Time until {Next Subject} || Time Left*/}</span>
 					<span>{text.timeRemaining}</span>

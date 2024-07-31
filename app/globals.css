@@ -106,11 +106,6 @@ h1 {
 	margin-left: 10px;
 }
 
-/* 
-This is so that i can use this site on my Galaxy Watch (previusly on /watch). 
-! Id rather die then rewrite Client/component.tsx 
-*/
-
 @media (max-width: 640px) {
 	:root > body {
 		display: inherit;

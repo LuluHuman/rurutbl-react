@@ -37,18 +37,18 @@ export default function Client({ isOdd }: ClientType) {
 		req.then(setweekListn);
 	}, [settings]);
 
+	const [currentTimeout, setCurrentTimeout] = useState<NodeJS.Timeout>();
 	useEffect(() => {
+		if (currentTimeout) clearInterval(currentTimeout);
+		if (!weekList) return
 		const i: NodeJS.Timeout = setInterval(() => {
-			if (!weekList) return clearInterval(i);
-
-			// Date stuff
 			const curDate = new Date();
 			const midnightOffset = getMidnightOffset(curDate);
+			const curDay = dayName[curDate.getDay()] as keyof typeof weekList;
 
-			const day = dayName[curDate.getDay()] as keyof typeof weekList;
-			setDay(day);
-
-			const dayList: dayList = weekList[day] as dayList;
+			setDay(curDay);
+			
+			const dayList: dayList = weekList[curDay] as dayList;
 			setDaylist(dayList);
 
 			const sortedTimeList = Object.keys(dayList).toSorted();
@@ -110,13 +110,14 @@ export default function Client({ isOdd }: ClientType) {
 
 			if (loading) setLoading(false);
 		}, 500);
+		setCurrentTimeout(i)
 	}, [settings, weekList]);
 
 	function locSubj(Subject: string | null | string[]) {
 		Subject = typeof Subject == "string" || Subject == null ? Subject : Subject[0];
 		switch (Subject) {
 			case "{SciElec}":
-				return settings.Elec.Sci || Subject;	
+				return settings.Elec.Sci || Subject;
 			default:
 				return Subject;
 		}

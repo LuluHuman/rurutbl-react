@@ -13,8 +13,12 @@ const config: Config = {
         "secondary-color": "var(--bg-secondary)",
         "menu-color": "var(--bg-menu)",
       },
-      : {
-        "pbsize": "var(pb-size)"
+      maxWidth: {
+        "pbsize": "var(--pb-size)"
+      },
+
+      maxHeight: {
+        "pbsize": "var(--pb-size)"
       }
     },
   },
