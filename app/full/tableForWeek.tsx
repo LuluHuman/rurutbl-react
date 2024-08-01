@@ -6,6 +6,8 @@ import { weekList } from "@/app/lib/types";
 import { Loading } from "../components/Loading";
 
 const alp = "xABCDEFGHI".split("");
+const cellClass = "text-center p-2 border border-grey";
+const trClass = cellClass + " text-[0.7em] text-[#ffffffaa]";
 
 export default function TableForWeek({ oddeven }: { oddeven: "even" | "odd" }) {
 	const [settings, setSettings] = useState(defaultSettings);
@@ -41,7 +43,9 @@ export default function TableForWeek({ oddeven }: { oddeven: "even" | "odd" }) {
 
 		/*  */
 		const timeRowChildren = [
-			<th key={"-1"}>
+			<th
+				key={"-1"}
+				className={trClass}>
 				<div>from:</div>
 				<div>to:</div>
 			</th>,
@@ -51,7 +55,9 @@ export default function TableForWeek({ oddeven }: { oddeven: "even" | "odd" }) {
 			const from = msToHM(timeMs);
 			const to = msToHM(timeAfterMs);
 			timeRowChildren.push(
-				<th key={i.toString()}>
+				<th
+					key={i.toString()}
+					className={trClass}>
 					{[from, to].map((time) => (
 						<div className="whitespace-nowrap">{time}</div>
 					))}
@@ -78,7 +84,13 @@ export default function TableForWeek({ oddeven }: { oddeven: "even" | "odd" }) {
 
 			timeMs = timeAfterMs;
 		}
-		fulltbl.push(<tr key={"timeTr"}>{timeRowChildren}</tr>);
+		fulltbl.push(
+			<tr
+				key={"timeTr"}
+				className={cellClass}>
+				{timeRowChildren}
+			</tr>
+		);
 
 		/*  */
 		for (const day in weekList) {
@@ -86,7 +98,13 @@ export default function TableForWeek({ oddeven }: { oddeven: "even" | "odd" }) {
 
 			const dayRowChildren: React.JSX.Element[] = [];
 			const dayRow = <tr key={day + "Tr"}>{dayRowChildren}</tr>;
-			dayRowChildren.push(<th key={day + "Th"}>{day}</th>);
+			dayRowChildren.push(
+				<th
+					key={day + "Th"}
+					className={trClass}>
+					{day}
+				</th>
+			);
 			fulltbl.push(dayRow);
 
 			const sortedTime = Object.keys(weekListIncremented[day]).toSorted();
@@ -115,7 +133,9 @@ export default function TableForWeek({ oddeven }: { oddeven: "even" | "odd" }) {
 				const isElecSci = curSubj == "{SciElec}";
 				const isMany = typeof curSubj == "object" && curSubj !== null;
 				const td = (
-					<td colSpan={colspan > 1 ? colspan : undefined}>
+					<td
+						colSpan={colspan > 1 ? colspan : undefined}
+						className={cellClass}>
 						{isElecSci ? settings.Elec.Sci : isMany ? curSubj.join(" / ") : curSubj}
 					</td>
 				);
@@ -129,7 +149,7 @@ export default function TableForWeek({ oddeven }: { oddeven: "even" | "odd" }) {
 
 	return (
 		<>
-			<h1 className="flex justify-center my-5 w-auto">
+			<h1 className="flex justify-center my-5 w-auto text-3xl">
 				{classFullName || "XX"}: {oddeven.replace(/^./, (str) => str.toUpperCase())} Week
 			</h1>
 			{loading ? (

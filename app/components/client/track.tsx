@@ -2,17 +2,18 @@
 
 import { crowdedness, TrackType } from "@/app/lib/types";
 import { msToHM } from "@/app/lib/trackHelper";
-import "./style.css";
-import { useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
 
+const trackStyle = "py-6 my-4 rounded-2xl max-w-[600px] w-screen";
 export function Track({ dayList, active, day, settings, isOdd }: TrackType) {
 	var track: React.JSX.Element[] = [];
-	var i = 0;
 
 	const timeList = Object.keys(dayList).toSorted();
+	for (let i = 0; i < timeList.length; i++) {
 
-	timeList.forEach(async (lsnStartTimex) => {
+		const lsnStartTimex = timeList[i];
 		const lsnStartTime = parseInt(lsnStartTimex);
+		
 		var subject = dayList[lsnStartTimex];
 		subject = i == timeList.length - 1 ? "END" : subject || "";
 
@@ -47,15 +48,21 @@ export function Track({ dayList, active, day, settings, isOdd }: TrackType) {
 			default:
 				break;
 		}
+
+		var liStyle = "flex marker:content-none border-grey ";
+		if (isEND) liStyle += "items-center justify-center h-0 mt-6 mr-5 mb-2 ml-5 border-t";
+		else liStyle += "justify-between items-center flex-wrap  p-2 mx-5 my-2  rounded-xl border ";
+
+		const liDivStyle = `${styles.join(" ")} ${isEND ? "" : "max-w-52"}`;
 		const li = (
 			<li
-				className={`${isEND ? "endLi" : "subjLi"} ${isActive ? "active" : ""} `}
+				className={liStyle + (isActive ? "outline outline-1" : "")}
 				key={typeof subject == "string" ? subject : subject[0]}>
 				{isEND ? (
-					<span>END - {HM}</span>
+					<span className="text-grey px-1 py-[2px] bg-bg">END - {HM}</span>
 				) : (
 					<>
-						<div className={styles.join(" ")}>
+						<div className={liDivStyle}>
 							{typeof subject == "string" ? subject : subject.join(" / ")}
 						</div>
 						<div className={styles.join(" ")}>{HM}</div>
@@ -65,9 +72,14 @@ export function Track({ dayList, active, day, settings, isOdd }: TrackType) {
 			</li>
 		);
 		track.push(li);
-		i++;
-	});
-	return <ul id="track">{track}</ul>;
+	}
+	return (
+		<ul
+			id="track"
+			className={trackStyle}>
+			{track}
+		</ul>
+	);
 }
 
 function Crowdedness({ subject, day, isOdd, time }: any) {
@@ -83,48 +95,48 @@ function Crowdedness({ subject, day, isOdd, time }: any) {
 				const classes = dayOfCrowd[time.toString()];
 				const classes2 = dayOfCrowd[(time + 1200000).toString()];
 				if (!classes || !classes2) return setCrowd(<>xP</>);
-				
+
 				const color = (classes: string[]) => {
 					const percentage = (classes.length / 13) * 100;
-					if (percentage <= 30) return "#0a0";
-					if (percentage <= 60 && percentage >= 30) return "#FF9800";
-					if (percentage >= 60) return "#F00";
+					if (percentage <= 30) return "bg-green-600";
+					if (percentage <= 60 && percentage >= 30) return "bg-yellow-500";
+					if (percentage >= 60) return "bg-red-700";
 				};
+				function CrowdPill({ children, c }: { children: React.ReactNode; c: any }) {
+					return (
+						<div
+							className={
+								"text-nowrap text-left overflow-hidden overflow-ellipsis text-xs rounded-3xl h-full mx-1 px-3 " +
+								color(c)
+							}
+							aria-label={c.join(", ")}>
+							{children}
+						</div>
+					);
+				}
 				setCrowd(
 					<>
 						{subject == "Recess" ? (
 							[classes, classes2].map((c) => {
-								return (
-									<div
-										className={"rangein"}
-										style={{
-											backgroundColor: color(c),
-										}}
-										aria-label={c.join(", ")}>
-										{c.length} Classes
-									</div>
-								);
+								return <CrowdPill c={c}>{c.length} Classes</CrowdPill>;
 							})
 						) : (
-							<div
-								className={"rangein"}
-								style={{
-									backgroundColor: color(classes),
-								}}
-								aria-label={classes.join(", ")}>
+							<CrowdPill c={classes}>
 								{classes.length} Classes ({classes.join(", ")})
-							</div>
+							</CrowdPill>
 						)}
 					</>
 				);
 			});
 	}, []);
-	return <div className={"rangeout"}>Crowdedness {crowdedness}</div>;
+	return <div className="w-full h-5 flex items-center">Crowdedness {crowdedness}</div>;
 }
 
 export function TrackLoading() {
 	return (
-		<ul id="track">
+		<ul
+			id="track"
+			className={trackStyle}>
 			{[1, 2, 3, 4, 5, 6].map((index) => (
 				<li
 					key={index}

@@ -1,0 +1,6 @@
+ :root > body > div.watch {
+	--pb-size: 100vw;
+	--pb-thickness: 5px;
+	--color-bg: #000;
+	background-color: var(--color-bg);
+}

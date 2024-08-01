@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import "./globals.css";
+import { headers } from 'next/headers';
 import { NavBar } from "./components/navBar";
 import "material-icons/iconfont/material-icons.css";
 
@@ -12,6 +13,10 @@ interface layout {
 }
 
 export default function RootLayout({ children }: Readonly<layout>) {
+	const headersList = headers();
+	const domain = headersList.get('host') || "";
+	const fullUrl = headersList.get('referer') || "";
+	console.log(fullUrl.replace(domain, ""));
 	return (
 		<html lang="en">
 			<head>
@@ -20,11 +25,9 @@ export default function RootLayout({ children }: Readonly<layout>) {
 					href="/manifest.json"
 				/>
 			</head>
-			<body>
+			<body className="font-sans w-screen items-start">
 				<NavBar />
-				<div id="root">
-					{children}
-				</div>
+				{children}
 			</body>
 		</html>
 	);

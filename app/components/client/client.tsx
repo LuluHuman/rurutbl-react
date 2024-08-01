@@ -11,7 +11,9 @@ import { useEffect, useState } from "react";
 import "@/app/lib/skeleton.css";
 
 const alp = "xABCDEFGHI".split("");
-export default function Client({ isOdd }: ClientType) {
+
+export default function Client({ isOdd, h2StyleCustom }: ClientType) {
+	const h2Style = h2StyleCustom || "mt-10 w-screen flex justify-center";
 	//!              "Sunday"                                                          "Saturday"
 	const dayName = ["Monday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Monday"];
 	//!                   "Sun"                                        "Sat"
@@ -40,14 +42,14 @@ export default function Client({ isOdd }: ClientType) {
 	const [currentTimeout, setCurrentTimeout] = useState<NodeJS.Timeout>();
 	useEffect(() => {
 		if (currentTimeout) clearInterval(currentTimeout);
-		if (!weekList) return
+		if (!weekList) return;
 		const i: NodeJS.Timeout = setInterval(() => {
 			const curDate = new Date();
 			const midnightOffset = getMidnightOffset(curDate);
 			const curDay = dayName[curDate.getDay()] as keyof typeof weekList;
 
 			setDay(curDay);
-			
+
 			const dayList: dayList = weekList[curDay] as dayList;
 			setDaylist(dayList);
 
@@ -110,7 +112,7 @@ export default function Client({ isOdd }: ClientType) {
 
 			if (loading) setLoading(false);
 		}, 500);
-		setCurrentTimeout(i)
+		setCurrentTimeout(i);
 	}, [settings, weekList]);
 
 	function locSubj(Subject: string | null | string[]) {
@@ -123,7 +125,6 @@ export default function Client({ isOdd }: ClientType) {
 		}
 	}
 
-
 	const pth = [
 		(isOdd ? "Odd" : "Even") + " Week",
 		day,
@@ -133,7 +134,7 @@ export default function Client({ isOdd }: ClientType) {
 		<>
 			{!loading ? (
 				<>
-					<h2 id="classTitle">
+					<h2 className={h2Style}>
 						Class {settings.class.level + alp[settings.class.class]}
 					</h2>
 					<CircularProgress
@@ -151,7 +152,7 @@ export default function Client({ isOdd }: ClientType) {
 				</>
 			) : (
 				<>
-					<h2 id="classTitle">I WANT TO BE A GIRL!!! {">w<"}</h2>
+					<h2 className={h2Style}>I WANT TO BE A GIRL!!! {">w<"}</h2>
 
 					<CircularProgressLoading />
 					<TrackLoading />

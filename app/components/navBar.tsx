@@ -4,6 +4,7 @@ import Link from "next/link";
 import { useState } from "react";
 import { usePathname } from "next/navigation";
 
+const liClass = " whitespace-nowrap m-1 p-2 rounded transition duration-500 hover:bg-menu-hover";
 export function NavBar() {
 	const pathname = usePathname();
 
@@ -28,7 +29,7 @@ export function NavBar() {
 		if (isMenu) {
 			links.push(
 				<li
-					className={`p-2 rounded mb-5 sm:list-item hidden `}
+					className={`p-2 rounded mb-5 sm:list-item hidden ${liClass}`}
 					key={path}>
 					<button
 						onClick={() => setCollapsed(!collapsed)}
@@ -43,7 +44,7 @@ export function NavBar() {
 		if (isSeperator) {
 			links.push(
 				<li
-					className={"border-t-gray-600 border-t-2 p-0"}
+					className={"border-t-gray-600 border-t-2 p-0 "}
 					key={path}
 				/>
 			);
@@ -51,16 +52,26 @@ export function NavBar() {
 		}
 		links.push(
 			<li
-				className={isActive ? "active" : ""}
+				className={
+					(isActive
+						? "bg-menu-hover sm:bg-inherit border-l-0 sm:border-l-4 border-b-4 sm:border-b-0"
+						: "") + liClass
+				}
 				key={path}>
 				<Link
 					href={path}
-					className="flex">
-					<span className="icon material-icons">{icon}</span>
-					<span className={`label ${collapsed ? "sm:hidden " : ""}`}>{label}</span>
+					className="flex flex-col sm:flex-row text-center">
+					<span className="mx-[2px] material-icons">{icon}</span>
+					<span className={`text-[10px] sm:text-base ${collapsed ? "sm:hidden " : ""}`}>
+						{label}
+					</span>
 				</Link>
 			</li>
 		);
 	}
-	return <ul className="fixed z-10 bg-menu-color">{links}</ul>;
+	return (
+		<ul className="fixed z-10 bg-menu-color  flex items-center justify-center sm:block sm:h-screen w-screen sm:w-fit bottom-0 sm:bottom-auto p-2 sm:p-0">
+			{links}
+		</ul>
+	);
 }

@@ -9,9 +9,15 @@ const config: Config = {
   theme: {
     extend: {
       colors: {
+        "bg": "var(--color-bg)",
         "primary-color": "var(--bg-primary)",
         "secondary-color": "var(--bg-secondary)",
         "menu-color": "var(--bg-menu)",
+        "menu-hover": "var(--color-menu-hover)",
+        "grey": "var(--color-grey)",
+      },
+      borderColor: {
+        "grey": "var(--color-grey)",
       },
       maxWidth: {
         "pbsize": "var(--pb-size)"

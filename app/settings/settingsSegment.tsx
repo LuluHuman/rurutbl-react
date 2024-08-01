@@ -3,104 +3,104 @@ import { defaultSettings } from "@/app/lib/trackHelper";
 import React, { useEffect, useState } from "react";
 export function ClassSelector({ title }: { title: string }) {
 	const alp = "xABCDEFGHI".split("");
-	const [levelVal, setLevelVal] = useState<number>();
-	const [classVal, setClassVal] = useState<number>();
+
+	const [classes, setClasses] = useState<any>();
+	const [classObject, setClassObj] = useState<typeof defaultSettings.class>();
+
 	const [settings, setSettings] = useState(defaultSettings);
 	const [newSettings, setNewSettings] = useState({});
-	
-	const [classes, setClasses] = useState<any>();
+
 	const [classNames, setclassNames] = useState<React.JSX.Element[]>();
 	const [levels, setlevels] = useState<React.JSX.Element[]>();
+	
 	useEffect(() => {
 		fetch("/api/getClasses")
 			.then((d) => d.json())
-			.then((classes) => {
-				const classNamesa = [<></>];
-				const levelsa = [<></>];
-
-				classes[settings.class.level].forEach((className: string) => {
-					classNamesa.push(
-						<option
-							key={className}
-							value={className}>
-							{alp[parseInt(className)]}
-						</option>
-					);
-				});
-
-				for (const level in classes) {
-					if (level == "default") continue;
-					levelsa.push(
-						<option
-							key={level}
-							value={level}>
-							{level}
-						</option>
-					);
-				}
-				setClasses(classes);
-				setclassNames(classNamesa);
-				setlevels(levelsa);
-			});
+			.then(setClasses);
 	}, []);
 
 	useEffect(() => {
-		const savedSettings = localStorage.getItem("settings");
-		if (savedSettings) setSettings(JSON.parse(savedSettings));
-		setLevelVal(settings.class.level);
-		setClassVal(settings.class.class);
+		if (!classes) return;
+
+		function Option({ label, isNumeric = false }: { label: string; isNumeric?: boolean }) {
+			return (
+				<option
+					key={label}
+					value={label}
+					className="text-black">
+					{isNumeric ? label : alp[parseInt(label)]}
+				</option>
+			);
+		}
+
+		const LevelOptions = Object.keys(classes);
+		const levels: React.JSX.Element[] = LevelOptions.map((level) => (
+			<Option
+				label={level}
+				isNumeric
+			/>
+		));
+		setlevels(levels);
+
+		const ClassOptions = classes[settings.class.level];
+		const classNames: React.JSX.Element[] = ClassOptions.map((className: string) => (
+			<Option label={className} />
+		));
+		setclassNames(classNames);
+	}, [settings, classes]);
+
+	useEffect(() => {
 		if (Object.prototype.hasOwnProperty.call(newSettings, "class")) {
 			localStorage.setItem("settings", JSON.stringify(newSettings));
 			setNewSettings({});
+			return;
 		}
-	}, [newSettings, levelVal, classVal]);
+		const savedSettings = localStorage.getItem("settings");
+		if (savedSettings) setSettings(JSON.parse(savedSettings));
+		setClassObj(settings.class);
+	}, [newSettings]);
 
 	return (
-		<div className="settingsSegment">
-			<h1>{title}</h1>
-			<div>
-				<span>
-					Selected: {levelVal || "_"}
-					{classVal ? alp[classVal] : "_"}
-				</span>
-				<div>
-					<div>
-						<select
-							value={levelVal || ""}
-							key={levelVal || "idk"}
-							onChange={(e) => {
-								setLevelVal(parseInt(e.target.value));
-								settings.class.level = parseInt(e.target.value);
+		<SettingContainer
+			title={title}
+			selectedText={
+				(classObject ? classObject.level : "3?") +
+				(classObject ? alp[classObject.class] : "B?")
+			}>
+			<Select
+				defaultOption={classObject ? classObject.level : ""}
+				key="1"
+				onChange={(e) => {
+					settings.class.level = parseInt(e.target.value);
 
-								const valueInObject = Object.prototype.hasOwnProperty;
-								const level = classes[e.target.value];
-								const classExists = valueInObject.call(level, classVal || -1);
-								if (!classExists) settings.class.class = classes[e.target.value][0];
+					const level = classes[e.target.value];
+					const valueInObject = Object.prototype.hasOwnProperty;
+					const classExists = valueInObject.call(
+						level,
+						classObject ? classObject.class : -1
+					);
+					if (!classExists) settings.class.class = classes[e.target.value][0];
 
-								setSettings(settings);
-								setNewSettings(settings);
-							}}>
-							{levels}
-						</select>
-					</div>
-					<div>
-						<select
-							value={classVal || ""}
-							key={classVal || "idk"}
-							onChange={(e) => {
-								const val = parseInt(e.target.value);
-								setClassVal(val);
-								settings.class.class = val;
+					setClassObj(settings.class);
+					setSettings(settings);
+					setNewSettings(settings);
+				}}>
+				{levels}
+			</Select>
+			<Select
+				defaultOption={classObject ? classObject.class : ""}
+				key="2"
+				onChange={(e) => {
+					const val = parseInt(e.target.value);
+					settings.class.class = val;
 
-								setSettings(settings);
-								setNewSettings(settings);
-							}}>
-							{classNames}
-						</select>
-					</div>
-				</div>
-			</div>
-		</div>
+					setClassObj(settings.class);
+					setSettings(settings);
+					setNewSettings(settings);
+				}}>
+				{classNames}
+			</Select>
+		</SettingContainer>
 	);
 }
 
@@ -126,34 +126,68 @@ export function ElecSelector({ title, props: type }: { title: string; props: "Sc
 		SciElecEle.push(
 			<option
 				key={elective}
-				value={elective}>
+				value={elective}
+				className="text-black">
 				{elective}
 			</option>
 		);
 	});
 
 	return (
-		<div className="settingsSegment">
-			<h1>{title}</h1>
-			<div>
-				<span>Selected: {elective || "_"}</span>
-				<div>
-					<div>
-						<select
-							value={elective || ""}
-							key={elective || "idk"}
-							onChange={(e) => {
-								setElective(e.target.value);
+		<SettingContainer
+			title={title}
+			selectedText={elective || "Phy/Bio?"}>
+			<Select
+				defaultOption={elective || ""}
+				onChange={(e) => {
+					setElective(e.target.value);
 
-								settings.Elec[type] = e.target.value;
-								setSettings(settings);
-								setNewSettings(settings);
-							}}>
-							{SciElecEle}
-						</select>
-					</div>
-				</div>
+					settings.Elec[type] = e.target.value;
+					setSettings(settings);
+					setNewSettings(settings);
+				}}>
+				{SciElecEle}
+			</Select>
+		</SettingContainer>
+	);
+}
+
+function SettingContainer({
+	children,
+	title,
+	selectedText,
+}: {
+	children: React.ReactNode;
+	title: string;
+	selectedText: string;
+}) {
+	return (
+		<div className="settingsSegment m-5 w-full flex flex-col items-center">
+			<h1 className="w-full text-3xl">{title}</h1>
+			<div>
+				<span>Selected: {selectedText}</span>
+				<div className="flex justify-center">{children}</div>
 			</div>
+		</div>
+	);
+}
+function Select({
+	children: options,
+	onChange,
+	defaultOption,
+}: {
+	children: React.ReactNode;
+	onChange: (event: React.ChangeEvent<HTMLSelectElement>) => void;
+	defaultOption: string | number;
+}) {
+	return (
+		<div>
+			<select
+				value={defaultOption || ""}
+				onChange={onChange}
+				className="text-black m-[2px]">
+				{options}
+			</select>
 		</div>
 	);
 }

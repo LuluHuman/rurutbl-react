@@ -5,6 +5,7 @@ import { state, busStop, services, nextBus } from "../lib/types";
 import "material-icons/iconfont/material-icons.css";
 import { Loading } from "../components/Loading";
 import { DirectionBusDouble, NotAccessible, VisitDouble } from "../components/icons";
+import Root from "../components/root";
 
 export default function BusArrival() {
 	const [state, setState] = useState<state>({ state: "loading", error: null });
@@ -77,46 +78,47 @@ export default function BusArrival() {
 	}
 
 	return (
-		<div className="w-full max-w-[640px] py-5">
-			<div>
-				<div className="flex items-center flex-col">
-					<label htmlFor="search">Search</label>
-					<br />
-					<input
-						name="search"
-						type="text"
-						placeholder="Bus Stop code or name"
-						className="text-black"
-						onInput={(e) => {
-							const q = (e.target as HTMLInputElement).value;
-							if (q == "") return setSearchChildren(undefined);
+		<Root className="w-full max-w-[640px] py-5">
+			<div className="flex items-center flex-col">
+				<label htmlFor="search">Search</label>
+				<br />
+				<input
+					name="search"
+					type="text"
+					placeholder="Bus Stop code or name"
+					className="text-black"
+					onInput={(e) => {
+						const q = (e.target as HTMLInputElement).value;
+						if (q == "") return setSearchChildren(undefined);
 
-							fetch(`/api/search-busstops?q=${encodeURI(q)}`)
-								.then((req) => req.json())
-								.then((data) => {
-									const list: React.JSX.Element[] = [];
-									data.forEach((busStop: busStop) => {
-										const busStopDiv = <BusStopElement busStop={busStop} />;
-										list.push(busStopDiv);
-									});
-									setSearchChildren(list);
-								})
-								.catch((err) => {
-									console.log(err);
-									setSearchChildren([
-										<div>Error: Could not search for bus stops</div>,
-									]);
+						fetch(`/api/search-busstops?q=${encodeURI(q)}`)
+							.then((req) => req.json())
+							.then((data) => {
+								const list: React.JSX.Element[] = [];
+								data.forEach((busStop: busStop) => {
+									const busStopDiv = <BusStopElement busStop={busStop} />;
+									list.push(busStopDiv);
 								});
-						}}
-					/>
-				</div>
-				{/*come on the poeple in my school are literally young if they dont undertand they are cooked*/}
-				{searchChildren ? <span>Search Results</span> : <h1>Nearby Bus Stops</h1>}
-				{(isLoading || isError) && !searchChildren
-					? fallbackText
-					: searchChildren || <>{children}</>}
+								setSearchChildren(list);
+							})
+							.catch((err) => {
+								console.log(err);
+								setSearchChildren([
+									<div>Error: Could not search for bus stops</div>,
+								]);
+							});
+					}}
+				/>
 			</div>
-		</div>
+			{searchChildren ? (
+				<span>Search Results</span>
+			) : (
+				<h1 className="text-3xl">Nearby Bus Stops</h1>
+			)}
+			{(isLoading || isError) && !searchChildren
+				? fallbackText
+				: searchChildren || <>{children}</>}
+		</Root>
 	);
 }
 
