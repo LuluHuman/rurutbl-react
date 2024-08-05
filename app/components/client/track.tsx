@@ -4,16 +4,17 @@ import { crowdedness, TrackType } from "@/app/lib/types";
 import { msToHM } from "@/app/lib/trackHelper";
 import React, { useEffect, useState } from "react";
 
+import Tooltip from "@mui/material/Tooltip";
+
 const trackStyle = "py-6 my-4 rounded-2xl max-w-[600px] w-screen";
 export function Track({ dayList, active, day, settings, isOdd }: TrackType) {
 	var track: React.JSX.Element[] = [];
 
 	const timeList = Object.keys(dayList).toSorted();
 	for (let i = 0; i < timeList.length; i++) {
-
 		const lsnStartTimex = timeList[i];
 		const lsnStartTime = parseInt(lsnStartTimex);
-		
+
 		var subject = dayList[lsnStartTimex];
 		subject = i == timeList.length - 1 ? "END" : subject || "";
 
@@ -83,7 +84,11 @@ export function Track({ dayList, active, day, settings, isOdd }: TrackType) {
 }
 
 function Crowdedness({ subject, day, isOdd, time }: any) {
-	const [crowdedness, setCrowd] = useState<React.JSX.Element>(<>...</>);
+	const [crowdedness, setCrowd] = useState<React.JSX.Element>(
+		<Tooltip title="Loading">
+			<span>...</span>
+		</Tooltip>
+	);
 	const path = "/api/getCommonSubj";
 	const url = `${path}?subjectName=${subject}&week=${isOdd ? "Odd" : "Even"}`;
 	useEffect(() => {
@@ -104,21 +109,30 @@ function Crowdedness({ subject, day, isOdd, time }: any) {
 				};
 				function CrowdPill({ children, c }: { children: React.ReactNode; c: any }) {
 					return (
-						<div
-							className={
-								"text-nowrap text-left overflow-hidden overflow-ellipsis text-xs rounded-3xl h-full mx-1 px-3 " +
-								color(c)
-							}
-							aria-label={c.join(", ")}>
-							{children}
-						</div>
+						<Tooltip
+							title={c.join(", ")}
+							arrow>
+							<div
+								className={
+									"text-nowrap text-left overflow-hidden overflow-ellipsis text-xs rounded-3xl h-full mx-1 px-3 " +
+									color(c)
+								}>
+								{children}
+							</div>
+						</Tooltip>
 					);
 				}
 				setCrowd(
 					<>
 						{subject == "Recess" ? (
 							[classes, classes2].map((c) => {
-								return <CrowdPill c={c}>{c.length} Classes</CrowdPill>;
+								return (
+									<CrowdPill
+										c={c}
+										key={c}>
+										{c.length} Classes
+									</CrowdPill>
+								);
 							})
 						) : (
 							<CrowdPill c={classes}>
@@ -127,7 +141,8 @@ function Crowdedness({ subject, day, isOdd, time }: any) {
 						)}
 					</>
 				);
-			});
+			})
+			.catch((err) => {});
 	}, []);
 	return <div className="w-full h-5 flex items-center">Crowdedness {crowdedness}</div>;
 }

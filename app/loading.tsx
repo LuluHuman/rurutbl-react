@@ -1,9 +1,10 @@
 import { Loading as LoadingComp } from "./components/Loading";
+import Root from "./components/root";
 
 export default function Loading() {
 	return (
-		<div className="h-screen">
+		<Root className="h-screen">
 			<LoadingComp />
-		</div>
+		</Root>
 	);
 }

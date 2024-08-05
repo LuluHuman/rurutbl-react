@@ -1,3 +1,4 @@
+import NotAccessibleIcon from "@mui/icons-material/NotAccessible";
 export function VisitDouble() {
 	return (
 		<svg
@@ -61,5 +62,9 @@ export function DirectionBusDouble() {
 }
 
 export function NotAccessible() {
-	return <span className="material-icons text-[0.875rem] leading-5">{"\uf0fe"}</span>;
+	return (
+		<span className="text-[0.875rem] leading-5">
+			<NotAccessibleIcon />
+		</span>
+	);
 }

@@ -12,7 +12,14 @@ export default async function Home() {
 
 	return (
 		<Root className="flex items-center flex-wrap justify-center">
-			<Client isOdd={isOdd} />
+			<Client
+				isOdd={isOdd}
+				config={{
+					weekNumber: weekNumber,
+					countFromDate: semstartDate,
+					countToDate: currentDate,
+				}}
+			/>
 		</Root>
 	);
 }

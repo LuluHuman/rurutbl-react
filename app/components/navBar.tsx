@@ -4,18 +4,24 @@ import Link from "next/link";
 import { useState } from "react";
 import { usePathname } from "next/navigation";
 
+import HomeIcon from "@mui/icons-material/Home";
+import MenuIcon from "@mui/icons-material/Menu";
+import ViewTimelineIcon from "@mui/icons-material/ViewTimeline";
+import DirectionsBusIcon from "@mui/icons-material/DirectionsBus";
+import SettingsIcon from "@mui/icons-material/Settings";
+
 const liClass = " whitespace-nowrap m-1 p-2 rounded transition duration-500 hover:bg-menu-hover";
 export function NavBar() {
 	const pathname = usePathname();
 
 	const [collapsed, setCollapsed] = useState(true);
 	const buttons = {
-		__Menu: ["", "\ue5d2"],
-		"/": ["Main", "\ue88a"],
-		"/full": ["Full Table", "\ueb85"],
-		"/bus-arrival": ["Bus Arrival", "\ue530"],
+		__Menu: ["", <MenuIcon />],
+		"/": ["Home", <HomeIcon />],
+		"/full": ["Full Table", <ViewTimelineIcon />],
+		"/bus-arrival": ["Bus Arrival", <DirectionsBusIcon />],
 		__Seperator: [],
-		"/settings": ["Settings", "\ue8b8"],
+		"/settings": ["Settings", <SettingsIcon />],
 	};
 
 	const links = [];
@@ -34,7 +40,7 @@ export function NavBar() {
 					<button
 						onClick={() => setCollapsed(!collapsed)}
 						className="flex">
-						<span className="icon material-icons">{icon}</span>
+						<span className="icon">{icon}</span>
 						<span className={`label ${collapsed ? "hidden" : ""}`}>{label}</span>
 					</button>
 				</li>
@@ -50,18 +56,17 @@ export function NavBar() {
 			);
 			continue;
 		}
+
+		const activeClasses =
+			"bg-menu-hover sm:bg-inherit border-l-0 sm:border-l-4 border-b-4 sm:border-b-0";
 		links.push(
 			<li
-				className={
-					(isActive
-						? "bg-menu-hover sm:bg-inherit border-l-0 sm:border-l-4 border-b-4 sm:border-b-0"
-						: "") + liClass
-				}
+				className={(isActive ? activeClasses : "") + liClass}
 				key={path}>
 				<Link
 					href={path}
 					className="flex flex-col sm:flex-row text-center">
-					<span className="mx-[2px] material-icons">{icon}</span>
+					<span className="mx-[2px]">{icon}</span>
 					<span className={`text-[10px] sm:text-base ${collapsed ? "sm:hidden " : ""}`}>
 						{label}
 					</span>
@@ -70,7 +75,7 @@ export function NavBar() {
 		);
 	}
 	return (
-		<ul className="fixed z-10 bg-menu-color  flex items-center justify-center sm:block sm:h-screen w-screen sm:w-fit bottom-0 sm:bottom-auto p-2 sm:p-0">
+		<ul className="fixed z-10 bg-menu-color flex items-center justify-center sm:block sm:h-screen w-screen sm:w-fit bottom-0 sm:bottom-auto p-2 sm:p-0">
 			{links}
 		</ul>
 	);

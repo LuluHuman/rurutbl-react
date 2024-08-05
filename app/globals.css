@@ -4,9 +4,7 @@
 
 :root {
 	--color-bg: #222;
-	--color-txt: #fff;
 	--color-grey: #9799a0;
-	--color-secondary: rgb(23 23 23);
 	--color-menu-hover: rgb(75 85 99);
 
 	--bg-primary: #1e1e1e;
@@ -14,9 +12,4 @@
 	--bg-menu: #333333;
 
 	--pb-size: 300px;
-}
-
-body {
-	background: var(--color-bg);
-	color: var(--color-txt);
 }

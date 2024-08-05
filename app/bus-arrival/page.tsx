@@ -2,16 +2,16 @@
 
 import React, { useState, useEffect } from "react";
 import { state, busStop, services, nextBus } from "../lib/types";
-import "material-icons/iconfont/material-icons.css";
 import { Loading } from "../components/Loading";
-import { DirectionBusDouble, NotAccessible, VisitDouble } from "../components/icons";
 import Root from "../components/root";
 
+import ArrowRightIcon from "@mui/icons-material/ArrowRight";
+import { DirectionBusDouble, NotAccessible, VisitDouble } from "../components/icons";
 export default function BusArrival() {
 	const [state, setState] = useState<state>({ state: "loading", error: null });
 	const [coords, setCoords] = useState<{ latitude: number; longitude: number }>();
 	const [children, setChildren] = useState<React.JSX.Element[]>();
-	const [searchChildren, setSearchChildren] = useState<React.JSX.Element[]>(); // unfortunately i could'nt search for my dad
+	const [searchChildren, setSearchChildren] = useState<React.JSX.Element[]>();
 
 	useEffect(() => {
 		if (!navigator.geolocation) {
@@ -19,10 +19,9 @@ export default function BusArrival() {
 			return;
 		}
 
-		navigator.geolocation.getCurrentPosition(onCoords, onError);
-		function onCoords({ coords: { latitude, longitude } }: GeolocationPosition) {
+		const onCoords = ({ coords: { latitude, longitude } }: GeolocationPosition) =>
 			setCoords({ latitude: latitude, longitude: longitude });
-		}
+		navigator.geolocation.getCurrentPosition(onCoords, onError);
 
 		function onError(error: GeolocationPositionError) {
 			switch (error.code) {
@@ -44,25 +43,25 @@ export default function BusArrival() {
 
 	useEffect(() => {
 		if (state.state !== "error" && coords) {
-			fetch(`/api/nearby-busstops?lat=${coords.latitude}&lon=${coords.longitude}`)
-				.then((req) => req.json())
+			const nearbyBusUrl = `/api/nearby-busstops?lat=${coords.latitude}&lon=${coords.longitude}`;
+			const request = fetch(nearbyBusUrl).then((req) => req.json());
+			request
 				.then((data) => {
-					const list: React.JSX.Element[] = [];
-					data.forEach((busStop: busStop) => {
-						const busStopDiv = <BusStopElement busStop={busStop} />;
-						list.push(busStopDiv);
-					});
-					setChildren(list);
+					const busStopsList = data.map((busStop: busStop) => (
+						<BusStopElement
+							busStop={busStop}
+							key={busStop.BusStopCode}
+						/>
+					));
+					setChildren(busStopsList);
 					setState({ state: "loaded", error: "" });
 				})
 				.catch((err: TypeError) => {
 					console.log(err);
-
+					const isNetworkError = err.message.includes("NetworkError");
 					setState({
 						state: "error",
-						error: err.message.includes("NetworkError")
-							? "Server can't be reached"
-							: err.message,
+						error: isNetworkError ? "Server can't be reached" : err.message,
 					});
 				});
 		}
@@ -71,10 +70,27 @@ export default function BusArrival() {
 	const isLoading = state.state == "loading";
 	const isError = state.state == "error";
 	var fallbackText = null;
-	if (isLoading) {
-		fallbackText = <Loading />;
-	} else if (isError) {
-		fallbackText = "Error: " + state.error;
+	if (isLoading) fallbackText = <Loading />;
+	else if (isError) fallbackText = "Error: " + state.error;
+
+	function SearchForBus(e: React.FormEvent<HTMLInputElement>) {
+		const q = (e.target as HTMLInputElement).value;
+		if (q == "") return setSearchChildren(undefined);
+
+		fetch(`/api/search-busstops?q=${encodeURI(q)}`)
+			.then((req) => req.json())
+			.then((data) => {
+				const list: React.JSX.Element[] = [];
+				data.forEach((busStop: busStop) => {
+					const busStopDiv = <BusStopElement busStop={busStop} />;
+					list.push(busStopDiv);
+				});
+				setSearchChildren(list);
+			})
+			.catch((err) => {
+				console.log(err);
+				setSearchChildren([<div>Error: Could not search for bus stops</div>]);
+			});
 	}
 
 	return (
@@ -87,27 +103,7 @@ export default function BusArrival() {
 					type="text"
 					placeholder="Bus Stop code or name"
 					className="text-black"
-					onInput={(e) => {
-						const q = (e.target as HTMLInputElement).value;
-						if (q == "") return setSearchChildren(undefined);
-
-						fetch(`/api/search-busstops?q=${encodeURI(q)}`)
-							.then((req) => req.json())
-							.then((data) => {
-								const list: React.JSX.Element[] = [];
-								data.forEach((busStop: busStop) => {
-									const busStopDiv = <BusStopElement busStop={busStop} />;
-									list.push(busStopDiv);
-								});
-								setSearchChildren(list);
-							})
-							.catch((err) => {
-								console.log(err);
-								setSearchChildren([
-									<div>Error: Could not search for bus stops</div>,
-								]);
-							});
-					}}
+					onInput={SearchForBus}
 				/>
 			</div>
 			{searchChildren ? (
@@ -126,125 +122,19 @@ function BusStopElement({ busStop }: { busStop: busStop }) {
 	const [isCollapsed, setCollapsedState] = useState(true);
 	const [elementChildren, setElementChildren] = useState<React.JSX.Element[]>(skeletonTable);
 
-	function skeletonTable() {
-		return [1, 2, 3].map((i) => (
-			<ul className="flex justify-between border-b border-gray-500">
-				<li className="text-left px-[4px] py-[8px] w-11">___</li>
-				{[1, 2, 3].map((_) => (
-					<li className="text-center py-[4px] px-[8px] ">
-						<div className="flex flex-col w-20">
-							<div className="bg-gray-600 border-l-2 rounded-lg">
-								<div className=" flex items-center justify-center">
-									<span>__</span>
-								</div>
-								<span className="text-sm">__:__</span>
-							</div>
-						</div>
-					</li>
-				))}
-			</ul>
-		));
-	}
-	function populateTable() {
-		setCollapsedState(!isCollapsed);
-		if (!isCollapsed) return;
-
-		fetch(`/api/bus-arrival?BusStopCode=${busStop.BusStopCode}`)
-			.then((req) => req.json())
-			.then((Services: services) => {
-				if (Services.length == 0) {
-					setElementChildren([<span>{"Not In Operation. [ Services[] is empty]"}</span>]);
-					return;
-				}
-
-				const list: React.JSX.Element[] = [];
-				Services.forEach((service) => {
-					const row = (
-						<ul className="flex justify-between border-b border-gray-500">
-							<li className="text-left px-[4px] py-[8px] w-11">
-								{service.ServiceNo}
-							</li>
-							{[service.NextBus, service.NextBus2, service.NextBus3].map((x) => (
-								<NextBusSection nextBus={x} />
-							))}
-						</ul>
-					);
-					list.push(row);
-				});
-
-				setElementChildren(list);
-			})
-			.catch((err) => {
-				console.log(err);
-				setElementChildren([<span>Server Error: Could not load bus arrival</span>]);
-			});
-	}
-
-	function NextBusSection({ nextBus }: { nextBus: nextBus }) {
-		const children = (() => {
-			if (nextBus.EstimatedArrival == "") return <></>;
-			const estArr = new Date(nextBus.EstimatedArrival);
-
-			var borderColor = {
-				SEA: "border-green-400",
-				SDA: "border-yellow-600",
-				LSD: "border-red-600",
-				"": "",
-			}[nextBus.Load];
-
-			var icons = [];
-			if (nextBus.VisitNumber == "2") icons.push(<VisitDouble />);
-			if (nextBus.Type == "DD") icons.push(<DirectionBusDouble />);
-			if (nextBus.Feature != "WAB") icons.push(<NotAccessible />);
-
-			const timeLeft = (EstimatedArrival: string) => {
-				const estArrTime = new Date(EstimatedArrival).getTime();
-				const timeNow = new Date().getTime();
-				const msTimeLeft = estArrTime - timeNow;
-				const minTimeLeft = Math.floor(msTimeLeft / 60000);
-
-				if (minTimeLeft < 1) {
-					return "Arr";
-				} else if (Number.isNaN(minTimeLeft)) {
-					return "~";
-				}
-				return minTimeLeft;
-			};
-
-			return (
-				<div className={`bg-gray-600 border-l-2 ${borderColor} rounded-lg`}>
-					<div className={" flex items-center justify-center"}>
-						<span>{timeLeft(nextBus.EstimatedArrival)}</span>
-						{icons}
-					</div>
-					<span className="text-sm">
-						{estArr.getHours()}:
-						{estArr.getMinutes().toString().length == 1
-							? estArr.getMinutes().toString() + "0"
-							: estArr.getMinutes()}
-					</span>
-				</div>
-			);
-		})();
-
-		return (
-			<li className="text-center py-[4px] px-[8px] ">
-				<div className={`flex flex-col w-20`}>{children}</div>
-			</li>
-		);
-	}
-
 	return (
 		<div
 			key={busStop.BusStopCode}
 			className="flex flex-wrap items-center p-3 border-b-gray-500 border-b-2 w-[99%] select-none">
-			<span className={`material-icons transition ${isCollapsed ? "" : "rotate-90"}`}>
-				{"\ue5df"}
+			<span className={`transition ${isCollapsed ? "" : "rotate-90"}`}>
+				<ArrowRightIcon />
 			</span>
 			<div
 				className="flex flex-col m-2 cursor-pointer"
 				style={{ width: "calc(100% - 3rem)" }}
-				onClick={populateTable}>
+				onClick={() =>
+					populateTable(setCollapsedState, setElementChildren, isCollapsed, busStop)
+				}>
 				<span>{busStop.Description}</span>
 				<span className="text-gray-600 text-sm">{`${busStop.RoadName} (${busStop.BusStopCode})`}</span>
 			</div>
@@ -252,5 +142,124 @@ function BusStopElement({ busStop }: { busStop: busStop }) {
 				{elementChildren}
 			</div>
 		</div>
+	);
+}
+
+function skeletonTable() {
+	return [1, 2, 3].map((i) => (
+		<ul className="flex justify-between border-b border-gray-500">
+			<li className="text-left px-[4px] py-[8px] w-11">___</li>
+			{[1, 2, 3].map((_) => (
+				<li className="text-center py-[4px] px-[8px] ">
+					<div className="flex flex-col w-20">
+						<div className="bg-gray-600 border-l-2 rounded-lg">
+							<div className=" flex items-center justify-center">
+								<span>__</span>
+							</div>
+							<span className="text-sm">__:__</span>
+						</div>
+					</div>
+				</li>
+			))}
+		</ul>
+	));
+}
+
+function populateTable(
+	setCollapsedState: React.Dispatch<React.SetStateAction<boolean>>,
+	setElementChildren: React.Dispatch<React.SetStateAction<React.JSX.Element[]>>,
+	isCollapsed: boolean,
+	busStop: busStop
+) {
+	setCollapsedState(!isCollapsed);
+	if (!isCollapsed) return;
+
+	fetch(`/api/bus-arrival?BusStopCode=${busStop.BusStopCode}`)
+		.then((req) => req.json())
+		.then((Services: services) => {
+			if (Services.length == 0) {
+				setElementChildren([<span>{"Not In Operation. [ Services[] is empty]"}</span>]);
+				return;
+			}
+
+			const list: React.JSX.Element[] = [];
+			Services.forEach((service) => {
+				const row = (
+					<ul
+						className="flex justify-between border-b border-gray-500"
+						key={busStop.BusStopCode}>
+						<li className="text-left px-[4px] py-[8px] w-11">{service.ServiceNo}</li>
+						{[service.NextBus, service.NextBus2, service.NextBus3].map((x) => (
+							<NextBusSection
+								nextBus={x}
+								key={`${busStop.BusStopCode}-${service.ServiceNo}`}
+							/>
+						))}
+					</ul>
+				);
+				list.push(row);
+			});
+
+			setElementChildren(list);
+		})
+		.catch((err) =>
+			setElementChildren([
+				<span>
+					Server Error: Could not load bus arrival
+					<br />
+					{err}
+				</span>,
+			])
+		);
+}
+
+function NextBusSection({ nextBus }: { nextBus: nextBus }) {
+	const children = (() => {
+		if (nextBus.EstimatedArrival == "") return <></>;
+		const estArr = new Date(nextBus.EstimatedArrival);
+
+		var borderColor = {
+			SEA: "border-green-400",
+			SDA: "border-yellow-600",
+			LSD: "border-red-600",
+			"": "",
+		}[nextBus.Load];
+
+		var icons = [];
+		if (nextBus.VisitNumber == "2") icons.push(<VisitDouble />);
+		if (nextBus.Type == "DD") icons.push(<DirectionBusDouble />);
+		if (nextBus.Feature != "WAB") icons.push(<NotAccessible />);
+
+		const timeLeft = (EstimatedArrival: string) => {
+			const estArrTime = new Date(EstimatedArrival).getTime();
+			const timeNow = new Date().getTime();
+			const msTimeLeft = estArrTime - timeNow;
+			const minTimeLeft = Math.floor(msTimeLeft / 60000);
+
+			if (minTimeLeft < 1) return "Arr";
+			else if (Number.isNaN(minTimeLeft)) return "~";
+			return minTimeLeft;
+		};
+
+		return (
+			<div className={`bg-gray-600 border-l-2 ${borderColor} rounded-lg`}>
+				<div className={" flex items-center justify-center"}>
+					<span>{timeLeft(nextBus.EstimatedArrival)}</span>
+					{icons}
+				</div>
+				<span className="text-sm">
+					{estArr.getHours()}:
+					{estArr.getMinutes().toString().length == 1
+						? estArr.getMinutes().toString() + "0"
+						: estArr.getMinutes()}
+				</span>
+			</div>
+		);
+	})();
+
+	return (
+		<li className="text-center py-[4px] px-[8px]">
+			<div className={`flex flex-col w-20`}>{children}</div>
+		</li>
 	);
 }

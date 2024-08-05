@@ -6,18 +6,24 @@ import { Track, TrackLoading } from "./track";
 import { dayList, ClientType, crowdedness, weekList } from "../../lib/types";
 import { getMidnightOffset, getCurrentLsn, defaultSettings, msToHM } from "../../lib/trackHelper";
 
-import { useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
+
+import Accordion from "@mui/material/Accordion";
+import AccordionSummary from "@mui/material/AccordionSummary";
+import AccordionDetails from "@mui/material/AccordionDetails";
 
 import "@/app/lib/skeleton.css";
+import Link from "next/link";
 
 const alp = "xABCDEFGHI".split("");
 
-export default function Client({ isOdd, h2StyleCustom }: ClientType) {
+export default function Client({ isOdd, h2StyleCustom, config }: ClientType) {
 	const h2Style = h2StyleCustom || "mt-10 w-screen flex justify-center";
 	//!              "Sunday"                                                          "Saturday"
 	const dayName = ["Monday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Monday"];
 	//!                   "Sun"                                        "Sat"
 	const shortDayName = ["Mon", "Mon", "Tues", "Wed", "Thurs", "Fri", "Mon"];
+	const weekState = isOdd ? "odd" : "even";
 
 	const [loading, setLoading] = useState(true);
 	const [trackLabels, setTrackLabels] = useState({ title: "", subtitle: "", timeRemaining: "" });
@@ -35,50 +41,58 @@ export default function Client({ isOdd, h2StyleCustom }: ClientType) {
 
 	useEffect(() => {
 		const { level, class: className } = settings.class;
-		const req = import(`@/public/classes/${level}/${className}/${isOdd ? "odd" : "even"}.json`);
+		const req = import(`@/public/classes/${level}/${className}/${weekState}.json`);
 		req.then(setweekListn);
 	}, [settings]);
+
+	useEffect(() => {
+		if (!weekList) return;
+		const curDate = new Date();
+		const midnightOffset = getMidnightOffset(curDate);
+		const curDay = dayName[curDate.getDay()] as keyof typeof weekList;
+
+		const dayList: dayList = weekList[curDay] as dayList;
+		const sortedTimeList = Object.keys(dayList).toSorted();
+		const lastLsnTime = parseInt(sortedTimeList[sortedTimeList.length - 1]);
+		if (midnightOffset > lastLsnTime) {
+			const nextI = curDate.getDay() + 1;
+			const nextDay = dayName[nextI] as keyof typeof weekList;
+			const nextdayList = weekList[nextDay];
+
+			setDay(nextDay);
+			setDaylist(nextdayList);
+
+			const sortedTimeList = Object.keys(nextdayList).toSorted();
+			const startMs = parseInt(sortedTimeList[0]);
+			const HM = msToHM(startMs);
+			setTrackLabels({
+				title: `${shortDayName[nextI] || shortDayName[1]} - ${HM}`,
+				subtitle: `First lesson is ${nextdayList[sortedTimeList[0]]}`,
+				timeRemaining: "",
+			});
+
+			if (loading) setLoading(false);
+			return;
+		}
+		setDay(curDay);
+	}, [settings, weekList]);
 
 	const [currentTimeout, setCurrentTimeout] = useState<NodeJS.Timeout>();
 	useEffect(() => {
 		if (currentTimeout) clearInterval(currentTimeout);
 		if (!weekList) return;
+		if (!day) return;
 		const i: NodeJS.Timeout = setInterval(() => {
 			const curDate = new Date();
 			const midnightOffset = getMidnightOffset(curDate);
-			const curDay = dayName[curDate.getDay()] as keyof typeof weekList;
 
-			setDay(curDay);
-
-			const dayList: dayList = weekList[curDay] as dayList;
+			const dayList: dayList = weekList[day as keyof weekList] as dayList;
 			setDaylist(dayList);
 
 			const sortedTimeList = Object.keys(dayList).toSorted();
 			const lastLsnTime = parseInt(sortedTimeList[sortedTimeList.length - 1]);
 
-			if (midnightOffset > lastLsnTime) {
-				clearInterval(i);
-
-				const nextI = curDate.getDay() + 1;
-				const nextDay = dayName[nextI] as keyof typeof weekList;
-				setDay(nextDay);
-
-				const nextdayList = weekList[nextDay];
-				setDaylist(nextdayList);
-
-				const sortedTimeList = Object.keys(nextdayList).toSorted();
-
-				const startMs = parseInt(sortedTimeList[0]);
-				const HM = msToHM(startMs);
-				setTrackLabels({
-					title: `${shortDayName[nextI] || shortDayName[1]} - ${HM}`,
-					subtitle: `First lesson is ${nextdayList[sortedTimeList[0]]}`,
-					timeRemaining: "",
-				});
-
-				if (loading) setLoading(false);
-				return;
-			}
+			if (midnightOffset > lastLsnTime) return;
 
 			const nextLsnTime: string = getCurrentLsn(sortedTimeList, midnightOffset);
 
@@ -113,7 +127,7 @@ export default function Client({ isOdd, h2StyleCustom }: ClientType) {
 			if (loading) setLoading(false);
 		}, 500);
 		setCurrentTimeout(i);
-	}, [settings, weekList]);
+	}, [settings, weekList, day]);
 
 	function locSubj(Subject: string | null | string[]) {
 		Subject = typeof Subject == "string" || Subject == null ? Subject : Subject[0];
@@ -125,11 +139,52 @@ export default function Client({ isOdd, h2StyleCustom }: ClientType) {
 		}
 	}
 
-	const pth = [
-		(isOdd ? "Odd" : "Even") + " Week",
-		day,
-		`Class ${settings.class.level + alp[settings.class.class]}`,
-	];
+	const wlurl = `/classes/${settings.class.level}/${settings.class.class}/${weekState}.json`;
+	var pth: { [key: string]: string | number | React.JSX.Element } = {};
+	if (config)
+		pth = {
+			Week: `${config.weekNumber} (${weekState})`,
+			"Stated Day": <SetDay />,
+			"Actual Day": `${
+				dayName[config.countToDate.getDay()]
+			} (i: ${config.countToDate.getDay()})`,
+			"Class Level": settings.class.level,
+			"Class Alphabat": `${alp[settings.class.class]} (${settings.class.class})`,
+			"Date From": `${config.countFromDate.toDateString()} (Semester Start)`,
+			"Date To": `${config.countToDate.toDateString()} (Current Date)`,
+			"Week List File": (
+				<Link
+					className="underline"
+					href={wlurl}>
+					@/public{wlurl}
+				</Link>
+			),
+		};
+
+	function SetDay() {
+		const onClick = () => {
+			const day = window.prompt("Set Day:");
+			if (!day) return;
+			if (!dayName.includes(day)) return;
+			setTrackLabels({
+				title: `Day Override`,
+				subtitle: day,
+				timeRemaining: "",
+			});
+			setDay(day);
+		};
+		return (
+			<>
+				<span>{day} </span>
+				<button
+					onClick={onClick}
+					className="underline">
+					(Change)
+				</button>
+			</>
+		);
+	}
+
 	return (
 		<>
 			{!loading ? (
@@ -148,7 +203,29 @@ export default function Client({ isOdd, h2StyleCustom }: ClientType) {
 						active={activeIndex}
 						isOdd={isOdd}
 					/>
-					<p className=" w-full text-center">Current: {pth.join(" / ")}</p>
+					{config ? (
+						<div className="w-full flex justify-center">
+							<Accordion className="w-96 bg-secondary-color text-white">
+								<AccordionSummary>
+									<span>Developer Tools (For sigmas only)</span>
+								</AccordionSummary>
+								<AccordionDetails>
+									<p>
+										{Object.keys(pth).map((pthKey: string) => (
+											<div>
+												{pthKey}:{" "}
+												<span className="text-orange-600">
+													{pth[pthKey]}
+												</span>
+											</div>
+										))}
+									</p>
+								</AccordionDetails>
+							</Accordion>
+						</div>
+					) : (
+						""
+					)}
 				</>
 			) : (
 				<>

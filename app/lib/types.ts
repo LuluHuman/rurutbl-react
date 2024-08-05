@@ -48,7 +48,8 @@ export interface CircularProgressType {
 
 export interface ClientType {
     isOdd: boolean;
-    h2StyleCustom?: string
+    h2StyleCustom?: string;
+    config?: any
 }
 
 export interface state {
