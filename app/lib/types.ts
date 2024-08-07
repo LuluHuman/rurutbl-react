@@ -48,7 +48,7 @@ export interface CircularProgressType {
 
 export interface ClientType {
     isOdd: boolean;
-    simple: boolean;
+    simple?: boolean;
     config?: any
 }
 
