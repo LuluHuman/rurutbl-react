@@ -1,3 +1,4 @@
+export const alp = "xABCDEFGHI".split("");
 export function getMidnightOffset(curDate: Date) {
     const _h = curDate.getHours() * 60 * 60 * 1000;
     const _m = curDate.getMinutes() * 60 * 1000;
@@ -45,3 +46,28 @@ export const defaultSettings = {
     },
 }
 
+
+export function locSubjInit(settings: typeof defaultSettings){
+    return (Subject: string | null | string[]) => {
+        Subject = typeof Subject == "string" || Subject == null ? Subject : Subject[0];
+        switch (Subject) {
+            case "{SciElec}":
+                return settings.Elec.Sci || Subject;
+            default:
+                return Subject;
+        }
+    }   
+}
+
+export function ToDayStr(day: number) {
+    const dayName = [
+        { long: "Monday", short: "Mon" },
+        { long: "Monday", short: "Mon" },
+        { long: "Tuesday", short: "Tues" },
+        { long: "Wednesday", short: "Wed" },
+        { long: "Thursday", short: "Thurs" },
+        { long: "Friday", short: "Fri" },
+        { long: "Monday", short: "Mon" },
+    ];
+    return dayName[day];
+}

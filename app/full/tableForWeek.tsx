@@ -1,7 +1,7 @@
 "use client";
 
 import React, { useEffect, useState } from "react";
-import { defaultSettings, getCurrentLsn, msToHM } from "@/app/lib/trackHelper";
+import { defaultSettings, getCurrentLsn, msToHM } from "@/app/lib/functions";
 import { weekList } from "@/app/lib/types";
 import { Loading } from "../components/Loading";
 

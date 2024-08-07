@@ -32,7 +32,7 @@ export interface TrackType {
     },
     dayList: dayList;
     active?: number;
-    day: string
+    day?: keyof weekList
     isOdd: boolean;
 }
 
@@ -48,7 +48,7 @@ export interface CircularProgressType {
 
 export interface ClientType {
     isOdd: boolean;
-    h2StyleCustom?: string;
+    simple: boolean;
     config?: any
 }
 

@@ -1,13 +1,15 @@
 "use client";
 
 import { crowdedness, TrackType } from "@/app/lib/types";
-import { msToHM } from "@/app/lib/trackHelper";
+import { msToHM } from "@/app/lib/functions";
 import React, { useEffect, useState } from "react";
 
 import Tooltip from "@mui/material/Tooltip";
 
 const trackStyle = "py-6 my-4 rounded-2xl max-w-[600px] w-screen";
 export function Track({ dayList, active, day, settings, isOdd }: TrackType) {
+	if (!day) return <TrackLoading />;
+	
 	var track: React.JSX.Element[] = [];
 
 	const timeList = Object.keys(dayList).toSorted();

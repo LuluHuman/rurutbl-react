@@ -15,7 +15,7 @@ export default async function Watch() {
 		<Root className="flex items-center flex-wrap justify-center watch">
 			<Client
 				isOdd={isOdd}
-				h2StyleCustom="hidden"
+				simple
 			/>
 		</Root>
 	);

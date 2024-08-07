@@ -1,62 +1,66 @@
 "use client";
-// Hold crap this code better without date24
 import { CircularProgress, CircularProgressLoading } from "./circularProgress";
 import { Track, TrackLoading } from "./track";
-
-import { dayList, ClientType, crowdedness, weekList } from "../../lib/types";
-import { getMidnightOffset, getCurrentLsn, defaultSettings, msToHM } from "../../lib/trackHelper";
-
-import React, { useEffect, useState } from "react";
+import { Config, PublicConfig } from "./config";
 
 import Accordion from "@mui/material/Accordion";
 import AccordionSummary from "@mui/material/AccordionSummary";
 import AccordionDetails from "@mui/material/AccordionDetails";
 
+import { dayList, ClientType, weekList } from "../../lib/types";
+import {
+	getMidnightOffset,
+	getCurrentLsn,
+	defaultSettings,
+	msToHM,
+	locSubjInit,
+	ToDayStr,
+	alp,
+} from "../../lib/functions";
+
+import React, { useEffect, useState } from "react";
+
 import "@/app/lib/skeleton.css";
-import Link from "next/link";
 
-const alp = "xABCDEFGHI".split("");
-
-export default function Client({ isOdd, h2StyleCustom, config }: ClientType) {
-	const h2Style = h2StyleCustom || "mt-10 w-screen flex justify-center";
-	//!              "Sunday"                                                          "Saturday"
-	const dayName = ["Monday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Monday"];
-	//!                   "Sun"                                        "Sat"
-	const shortDayName = ["Mon", "Mon", "Tues", "Wed", "Thurs", "Fri", "Mon"];
-	const weekState = isOdd ? "odd" : "even";
+export default function Client({ isOdd, simple = false, config }: ClientType) {
+	const [settings, setSettings] = useState(defaultSettings);
 
 	const [loading, setLoading] = useState(true);
 	const [trackLabels, setTrackLabels] = useState({ title: "", subtitle: "", timeRemaining: "" });
 	const [progressPercentage, setProgressPercentage] = useState(0);
-	const [weekList, setweekListn] = useState<weekList>();
-	const [daylist, setDaylist] = useState({});
-	const [day, setDay] = useState("");
 	const [activeIndex, setActiveIndex] = useState(0);
-	const [settings, setSettings] = useState(defaultSettings);
+
+	const [weekState, setweekState] = useState<"odd" | "even">("odd");
+	const [weekList, setweekListn] = useState<weekList>();
+	const [day, setDay] = useState<keyof weekList>();
+	const [daylist, setDaylist] = useState({});
 
 	useEffect(() => {
 		const savedSettings = localStorage.getItem("settings");
 		if (savedSettings) setSettings(JSON.parse(savedSettings));
+
+		setweekState(isOdd ? "odd" : "even");
 	}, []);
 
 	useEffect(() => {
 		const { level, class: className } = settings.class;
 		const req = import(`@/public/classes/${level}/${className}/${weekState}.json`);
 		req.then(setweekListn);
-	}, [settings]);
+	}, [weekState, settings]);
 
 	useEffect(() => {
 		if (!weekList) return;
 		const curDate = new Date();
 		const midnightOffset = getMidnightOffset(curDate);
-		const curDay = dayName[curDate.getDay()] as keyof typeof weekList;
 
+		const curDay = ToDayStr(curDate.getDay()).long as keyof typeof weekList;
 		const dayList: dayList = weekList[curDay] as dayList;
+
 		const sortedTimeList = Object.keys(dayList).toSorted();
 		const lastLsnTime = parseInt(sortedTimeList[sortedTimeList.length - 1]);
 		if (midnightOffset > lastLsnTime) {
 			const nextI = curDate.getDay() + 1;
-			const nextDay = dayName[nextI] as keyof typeof weekList;
+			const nextDay = ToDayStr(nextI).long as keyof typeof weekList;
 			const nextdayList = weekList[nextDay];
 
 			setDay(nextDay);
@@ -66,7 +70,7 @@ export default function Client({ isOdd, h2StyleCustom, config }: ClientType) {
 			const startMs = parseInt(sortedTimeList[0]);
 			const HM = msToHM(startMs);
 			setTrackLabels({
-				title: `${shortDayName[nextI] || shortDayName[1]} - ${HM}`,
+				title: `${ToDayStr(nextI).short || ToDayStr(1).short} - ${HM}`,
 				subtitle: `First lesson is ${nextdayList[sortedTimeList[0]]}`,
 				timeRemaining: "",
 			});
@@ -86,14 +90,16 @@ export default function Client({ isOdd, h2StyleCustom, config }: ClientType) {
 			const curDate = new Date();
 			const midnightOffset = getMidnightOffset(curDate);
 
-			const dayList: dayList = weekList[day as keyof weekList] as dayList;
+			const dayList: dayList = weekList[day];
 			setDaylist(dayList);
 
 			const sortedTimeList = Object.keys(dayList).toSorted();
 			const lastLsnTime = parseInt(sortedTimeList[sortedTimeList.length - 1]);
 
+			if (loading) setLoading(false);
 			if (midnightOffset > lastLsnTime) return;
 
+			const locSubj = locSubjInit(settings);
 			const nextLsnTime: string = getCurrentLsn(sortedTimeList, midnightOffset);
 
 			const prevI = sortedTimeList.indexOf(nextLsnTime) - 1;
@@ -108,90 +114,45 @@ export default function Client({ isOdd, h2StyleCustom, config }: ClientType) {
 			const prevtotalSec = parseInt(prevSubTime) / 1000;
 			const SubjDuration = LessonSecTotal - prevtotalSec;
 
-			const remainingPercentage = (SubjDuration - remainingSec) / SubjDuration;
-			setProgressPercentage(remainingPercentage);
-			setActiveIndex(sortedTimeList.indexOf(nextLsnTime) - 1);
-
 			const totalSecLeft = LessonSecTotal - curSecTotal;
 			const time = new Date(totalSecLeft * 1000).toISOString().substr(11, 8);
 
 			const _fallbackTitle = `Time until Start class (${dayList[sortedTimeList[0]]})`;
-			const nextLessionLabel = "Time " + (nextLsn ? `until ${locSubj(nextLsn)}` : "Left");
+			const nextLessionLabel = "Time " + (nextLsn ? "until" + locSubj(nextLsn) : "Left");
 
+			const remainingPercentage = (SubjDuration - remainingSec) / SubjDuration;
+			setProgressPercentage(remainingPercentage);
+			setActiveIndex(sortedTimeList.indexOf(nextLsnTime) - 1);
 			setTrackLabels({
 				title: locSubj(curLsn) || _fallbackTitle,
 				subtitle: curLsn ? nextLessionLabel : "",
 				timeRemaining: time,
 			});
-
-			if (loading) setLoading(false);
 		}, 500);
 		setCurrentTimeout(i);
 	}, [settings, weekList, day]);
-
-	function locSubj(Subject: string | null | string[]) {
-		Subject = typeof Subject == "string" || Subject == null ? Subject : Subject[0];
-		switch (Subject) {
-			case "{SciElec}":
-				return settings.Elec.Sci || Subject;
-			default:
-				return Subject;
-		}
-	}
-
-	const wlurl = `/classes/${settings.class.level}/${settings.class.class}/${weekState}.json`;
-	var pth: { [key: string]: string | number | React.JSX.Element } = {};
-	if (config)
-		pth = {
-			Week: `${config.weekNumber} (${weekState})`,
-			"Stated Day": <SetDay />,
-			"Actual Day": `${
-				dayName[config.countToDate.getDay()]
-			} (i: ${config.countToDate.getDay()})`,
-			"Class Level": settings.class.level,
-			"Class Alphabat": `${alp[settings.class.class]} (${settings.class.class})`,
-			"Date From": `${config.countFromDate.toDateString()} (Semester Start)`,
-			"Date To": `${config.countToDate.toDateString()} (Current Date)`,
-			"Week List File": (
-				<Link
-					className="underline"
-					href={wlurl}>
-					@/public{wlurl}
-				</Link>
-			),
-		};
-
-	function SetDay() {
-		const onClick = () => {
-			const day = window.prompt("Set Day:");
-			if (!day) return;
-			if (!dayName.includes(day)) return;
-			setTrackLabels({
-				title: `Day Override`,
-				subtitle: day,
-				timeRemaining: "",
-			});
-			setDay(day);
-		};
-		return (
-			<>
-				<span>{day} </span>
-				<button
-					onClick={onClick}
-					className="underline">
-					(Change)
-				</button>
-			</>
-		);
-	}
 
 	return (
 		<>
 			{!loading ? (
 				<>
-					<h2 className={h2Style}>
-						Class {settings.class.level + alp[settings.class.class]}
-					</h2>
+					{simple ? (
+						<></>
+					) : (
+						<PublicConfig
+							settings={settings}
+							states={{
+								weekState: weekState,
+								day: day,
+							}}
+							setStates={{
+								setLoading: setLoading,
+								setTrackLabels: setTrackLabels,
+								setweekState: setweekState,
+								setDay: setDay,
+							}}
+						/>
+					)}
 					<CircularProgress
 						valuePercentage={progressPercentage}
 						text={trackLabels}
@@ -201,36 +162,29 @@ export default function Client({ isOdd, h2StyleCustom, config }: ClientType) {
 						dayList={daylist}
 						day={day}
 						active={activeIndex}
-						isOdd={isOdd}
+						isOdd={weekState == "odd"}
 					/>
-					{config ? (
-						<div className="w-full flex justify-center">
-							<Accordion className="w-96 bg-secondary-color text-white">
-								<AccordionSummary>
-									<span>Developer Tools (For sigmas only)</span>
-								</AccordionSummary>
-								<AccordionDetails>
-									<p>
-										{Object.keys(pth).map((pthKey: string) => (
-											<div>
-												{pthKey}:{" "}
-												<span className="text-orange-600">
-													{pth[pthKey]}
-												</span>
-											</div>
-										))}
-									</p>
-								</AccordionDetails>
-							</Accordion>
-						</div>
+					{simple ? (
+						<></>
 					) : (
-						""
+						<Config
+							config={config}
+							settings={settings}
+							states={{
+								day: day,
+								weekState: weekState,
+							}}
+							setStates={{
+								setTrackLabels: setTrackLabels,
+								setLoading: setLoading,
+								setweekState: setweekState,
+								setDay: setDay,
+							}}
+						/>
 					)}
 				</>
 			) : (
 				<>
-					<h2 className={h2Style}>I WANT TO BE A GIRL!!! {">w<"}</h2>
-
 					<CircularProgressLoading />
 					<TrackLoading />
 				</>

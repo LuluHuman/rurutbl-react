@@ -1,5 +1,5 @@
 "use client";
-import { defaultSettings } from "@/app/lib/trackHelper";
+import { defaultSettings } from "@/app/lib/functions";
 import React, { useEffect, useState } from "react";
 export function ClassSelector({ title }: { title: string }) {
 	const alp = "xABCDEFGHI".split("");
@@ -12,7 +12,7 @@ export function ClassSelector({ title }: { title: string }) {
 
 	const [classNames, setclassNames] = useState<React.JSX.Element[]>();
 	const [levels, setlevels] = useState<React.JSX.Element[]>();
-	
+
 	useEffect(() => {
 		fetch("/api/getClasses")
 			.then((d) => d.json())

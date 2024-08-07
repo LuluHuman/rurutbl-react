@@ -3,6 +3,7 @@ import { CircularProgressType } from "@/app/lib/types";
 import React from "react";
 
 export function CircularProgress({ valuePercentage = 0, text }: CircularProgressType) {
+	if (text.title == "") return <></>;
 	const FULL_DASH_ARRAY = 283;
 	const circleDasharray = `${(1 - valuePercentage) * FULL_DASH_ARRAY} 283`;
 
