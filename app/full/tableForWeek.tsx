@@ -1,7 +1,7 @@
 "use client";
 
 import React, { useEffect, useState } from "react";
-import { defaultSettings, getCurrentLsn, msToHM } from "@/app/lib/functions";
+import { defaultSettings, getCurrentLsn, DateMs } from "@/app/lib/functions";
 import { weekList } from "@/app/lib/types";
 import { Loading } from "../components/Loading";
 
@@ -52,8 +52,8 @@ export default function TableForWeek({ oddeven }: { oddeven: "even" | "odd" }) {
 		];
 		for (let i = 0; i < 22; i++) {
 			var timeAfterMs = timeMs + 20 * 60 * 1000;
-			const from = msToHM(timeMs);
-			const to = msToHM(timeAfterMs);
+			const from = new DateMs().toHourMinuteString(timeMs);
+			const to = new DateMs().toHourMinuteString(timeAfterMs);
 			timeRowChildren.push(
 				<th
 					key={i.toString()}

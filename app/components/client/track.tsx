@@ -1,7 +1,7 @@
 "use client";
 
 import { crowdedness, TrackType } from "@/app/lib/types";
-import { msToHM } from "@/app/lib/functions";
+import { DateMs } from "@/app/lib/functions";
 import React, { useEffect, useState } from "react";
 
 import Tooltip from "@mui/material/Tooltip";
@@ -20,7 +20,7 @@ export function Track({ dayList, active, day, settings, isOdd }: TrackType) {
 		var subject = dayList[lsnStartTimex];
 		subject = i == timeList.length - 1 ? "END" : subject || "";
 
-		var HM = msToHM(lsnStartTime);
+		var HM = new DateMs().toHourMinuteString(lsnStartTime);
 
 		let isFinished = i < (active || 0);
 		let isActive = i == active;

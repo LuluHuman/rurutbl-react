@@ -3,20 +3,8 @@ import { CircularProgress, CircularProgressLoading } from "./circularProgress";
 import { Track, TrackLoading } from "./track";
 import { Config, PublicConfig } from "./config";
 
-import Accordion from "@mui/material/Accordion";
-import AccordionSummary from "@mui/material/AccordionSummary";
-import AccordionDetails from "@mui/material/AccordionDetails";
-
 import { dayList, ClientType, weekList } from "../../lib/types";
-import {
-	getMidnightOffset,
-	getCurrentLsn,
-	defaultSettings,
-	msToHM,
-	locSubjInit,
-	ToDayStr,
-	alp,
-} from "../../lib/functions";
+import { DateMs, getCurrentLsn, defaultSettings, locSubjInit, ToDayStr } from "../../lib/functions";
 
 import React, { useEffect, useState } from "react";
 
@@ -50,31 +38,30 @@ export default function Client({ isOdd, simple = false, config }: ClientType) {
 
 	useEffect(() => {
 		if (!weekList) return;
-		const curDate = new Date();
-		const midnightOffset = getMidnightOffset(curDate);
+		const curDate = new DateMs();
 
-		const curDay = ToDayStr(curDate.getDay()).long as keyof typeof weekList;
+		const curDayI = curDate.getDay();
+		const curDay = ToDayStr(curDayI).long;
 		const dayList: dayList = weekList[curDay] as dayList;
 
 		const sortedTimeList = Object.keys(dayList).toSorted();
 		const lastLsnTime = parseInt(sortedTimeList[sortedTimeList.length - 1]);
-		if (midnightOffset > lastLsnTime) {
-			const nextI = curDate.getDay() + 1;
-			const nextDay = ToDayStr(nextI).long as keyof typeof weekList;
+		if (curDate.getMidnightOffset() > lastLsnTime) {
+			const nextDayI = curDayI + 1;
+			const nextDay = ToDayStr(nextDayI).long;
 			const nextdayList = weekList[nextDay];
 
-			setDay(nextDay);
-			setDaylist(nextdayList);
+			const nextSortedTimeList = Object.keys(nextdayList).toSorted();
 
-			const sortedTimeList = Object.keys(nextdayList).toSorted();
-			const startMs = parseInt(sortedTimeList[0]);
-			const HM = msToHM(startMs);
+			const firstLsnTime = parseInt(nextSortedTimeList[0]);
+			const HM = new DateMs().toHourMinuteString(firstLsnTime);
 			setTrackLabels({
-				title: `${ToDayStr(nextI).short || ToDayStr(1).short} - ${HM}`,
-				subtitle: `First lesson is ${nextdayList[sortedTimeList[0]]}`,
+				title: `${ToDayStr(nextDayI).short || ToDayStr(1).short} - ${HM}`,
+				subtitle: `First lesson is ${nextdayList[nextSortedTimeList[0]]}`,
 				timeRemaining: "",
 			});
 
+			setDay(nextDay);
 			if (loading) setLoading(false);
 			return;
 		}
@@ -83,13 +70,16 @@ export default function Client({ isOdd, simple = false, config }: ClientType) {
 
 	const [currentTimeout, setCurrentTimeout] = useState<NodeJS.Timeout>();
 	useEffect(() => {
-		if (currentTimeout) clearInterval(currentTimeout);
-		if (!weekList) return;
-		if (!day) return;
-		const i: NodeJS.Timeout = setInterval(() => {
-			const curDate = new Date();
-			const midnightOffset = getMidnightOffset(curDate);
+		const locSubj = locSubjInit(settings);
 
+		if (currentTimeout) clearInterval(currentTimeout);
+		Loop();
+		setCurrentTimeout(setInterval(Loop, 500));
+
+		function Loop() {
+			if (!weekList) return;
+			if (!day) return;
+			const msSinceMidnight = new DateMs().getMidnightOffset();
 			const dayList: dayList = weekList[day];
 			setDaylist(dayList);
 
@@ -97,16 +87,15 @@ export default function Client({ isOdd, simple = false, config }: ClientType) {
 			const lastLsnTime = parseInt(sortedTimeList[sortedTimeList.length - 1]);
 
 			if (loading) setLoading(false);
-			if (midnightOffset > lastLsnTime) return;
+			if (msSinceMidnight > lastLsnTime) return;
 
-			const locSubj = locSubjInit(settings);
-			const nextLsnTime: string = getCurrentLsn(sortedTimeList, midnightOffset);
+			const nextLsnTime: string = getCurrentLsn(sortedTimeList, msSinceMidnight);
 
 			const prevI = sortedTimeList.indexOf(nextLsnTime) - 1;
 			const curLsn = dayList[sortedTimeList[prevI]];
 			const nextLsn = dayList[nextLsnTime];
 
-			const curSecTotal = midnightOffset / 1000;
+			const curSecTotal = msSinceMidnight / 1000;
 			const LessonSecTotal = parseInt(nextLsnTime) / 1000;
 			const remainingSec = LessonSecTotal - curSecTotal;
 
@@ -115,10 +104,10 @@ export default function Client({ isOdd, simple = false, config }: ClientType) {
 			const SubjDuration = LessonSecTotal - prevtotalSec;
 
 			const totalSecLeft = LessonSecTotal - curSecTotal;
-			const time = new Date(totalSecLeft * 1000).toISOString().substr(11, 8);
+			const time = new DateMs(totalSecLeft * 1000).toISOString().substr(11, 8);
 
 			const _fallbackTitle = `Time until Start class (${dayList[sortedTimeList[0]]})`;
-			const nextLessionLabel = "Time " + (nextLsn ? "until" + locSubj(nextLsn) : "Left");
+			const nextLessionLabel = "Time " + (nextLsn ? "until " + locSubj(nextLsn) : "Left");
 
 			const remainingPercentage = (SubjDuration - remainingSec) / SubjDuration;
 			setProgressPercentage(remainingPercentage);
@@ -128,31 +117,49 @@ export default function Client({ isOdd, simple = false, config }: ClientType) {
 				subtitle: curLsn ? nextLessionLabel : "",
 				timeRemaining: time,
 			});
-		}, 500);
-		setCurrentTimeout(i);
+		}
 	}, [settings, weekList, day]);
 
+	function Main({ children }: { children: React.ReactNode }) {
+		const states = {
+			weekState: weekState,
+			day: day,
+		};
+		const setStates = {
+			setTrackLabels: setTrackLabels,
+			setLoading: setLoading,
+			setweekState: setweekState,
+			setDay: setDay,
+		};
+		return (
+			<>
+				{simple ? (
+					<></>
+				) : (
+					<PublicConfig
+						settings={settings}
+						states={states}
+						setStates={setStates}
+					/>
+				)}
+				{children}
+				{simple ? (
+					<></>
+				) : (
+					<Config
+						config={config}
+						settings={settings}
+						states={states}
+						setStates={setStates}
+					/>
+				)}
+			</>
+		);
+	}
 	return (
 		<>
 			{!loading ? (
-				<>
-					{simple ? (
-						<></>
-					) : (
-						<PublicConfig
-							settings={settings}
-							states={{
-								weekState: weekState,
-								day: day,
-							}}
-							setStates={{
-								setLoading: setLoading,
-								setTrackLabels: setTrackLabels,
-								setweekState: setweekState,
-								setDay: setDay,
-							}}
-						/>
-					)}
+				<Main>
 					<CircularProgress
 						valuePercentage={progressPercentage}
 						text={trackLabels}
@@ -164,25 +171,7 @@ export default function Client({ isOdd, simple = false, config }: ClientType) {
 						active={activeIndex}
 						isOdd={weekState == "odd"}
 					/>
-					{simple ? (
-						<></>
-					) : (
-						<Config
-							config={config}
-							settings={settings}
-							states={{
-								day: day,
-								weekState: weekState,
-							}}
-							setStates={{
-								setTrackLabels: setTrackLabels,
-								setLoading: setLoading,
-								setweekState: setweekState,
-								setDay: setDay,
-							}}
-						/>
-					)}
-				</>
+				</Main>
 			) : (
 				<>
 					<CircularProgressLoading />
