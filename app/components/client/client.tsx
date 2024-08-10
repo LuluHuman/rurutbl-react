@@ -74,7 +74,6 @@ export default function Client({ isOdd, simple = false, config }: ClientType) {
 		if (currentTimeout) clearInterval(currentTimeout);
 		Loop();
 		setCurrentTimeout(setInterval(Loop, 500));
-
 		function Loop() {
 			if (!weekList) return;
 			if (!day) return;
@@ -111,6 +110,7 @@ export default function Client({ isOdd, simple = false, config }: ClientType) {
 			const remainingPercentage = (SubjDuration - remainingSec) / SubjDuration;
 			setProgressPercentage(remainingPercentage);
 			setActiveIndex(sortedTimeList.indexOf(nextLsnTime) - 1);
+
 			setTrackLabels({
 				title: locSubj(curLsn) || _fallbackTitle,
 				subtitle: curLsn ? nextLessionLabel : "",
@@ -119,46 +119,29 @@ export default function Client({ isOdd, simple = false, config }: ClientType) {
 		}
 	}, [settings, weekList, day]);
 
-	function Main({ children }: { children: React.ReactNode }) {
-		const states = {
-			weekState: weekState,
-			day: day,
-		};
-		const setStates = {
-			setTrackLabels: setTrackLabels,
-			setLoading: setLoading,
-			setweekState: setweekState,
-			setDay: setDay,
-		};
-		return (
-			<>
-				{simple ? (
-					<></>
-				) : (
-					<PublicConfig
-						settings={settings}
-						states={states}
-						setStates={setStates}
-					/>
-				)}
-				{children}
-				{simple ? (
-					<></>
-				) : (
-					<Config
-						config={config}
-						settings={settings}
-						states={states}
-						setStates={setStates}
-					/>
-				)}
-			</>
-		);
-	}
+	const states = {
+		weekState: weekState,
+		day: day,
+	};
+	const setStates = {
+		setTrackLabels: setTrackLabels,
+		setLoading: setLoading,
+		setweekState: setweekState,
+		setDay: setDay,
+	};
 	return (
 		<>
 			{!loading ? (
-				<Main>
+				<>
+					{simple ? (
+						<></>
+					) : (
+						<PublicConfig
+							settings={settings}
+							states={states}
+							setStates={setStates}
+						/>
+					)}
 					<CircularProgress
 						valuePercentage={progressPercentage}
 						text={trackLabels}
@@ -170,7 +153,18 @@ export default function Client({ isOdd, simple = false, config }: ClientType) {
 						active={activeIndex}
 						isOdd={weekState == "odd"}
 					/>
-				</Main>
+
+					{simple ? (
+						<></>
+					) : (
+						<Config
+							config={config}
+							settings={settings}
+							states={states}
+							setStates={setStates}
+						/>
+					)}
+				</>
 			) : (
 				<>
 					<CircularProgressLoading />
