@@ -47,10 +47,9 @@ export default function Client({ isOdd, simple = false, config }: ClientType) {
 		const sortedTimeList = Object.keys(dayList).toSorted();
 		const lastLsnTime = parseInt(sortedTimeList[sortedTimeList.length - 1]);
 		if (curDate.getMidnightOffset() > lastLsnTime) {
-			const nextDayI = curDayI + 1;
+			const nextDayI = curDayI + 1 > 6 ? 0 : curDayI + 1;
 			const nextDay = ToDayStr(nextDayI).long;
 			const nextdayList = weekList[nextDay];
-
 			const nextSortedTimeList = Object.keys(nextdayList).toSorted();
 
 			const firstLsnTime = parseInt(nextSortedTimeList[0]);

@@ -144,42 +144,42 @@ export function PublicConfig({
 			</AccordionSummary>
 			<AccordionDetails>
 				<table className="w-screen">
-					<tr>
-						<th>Class: </th>
-						<th className={ConfigClass}>
-							<Link
-								href={"/settings"}
-								className={button + buttonActive}>
-								{" " + settings.class.level + alp[settings.class.class]}
-							</Link>
-						</th>
-					</tr>
-
-					<tr>
-						<th>Week: </th>
-						<th className={ConfigClass}>
-							{["Odd", "Even"].map((state) => (
-								<Button
-									isActive={states.weekState == state.toLowerCase()}
-									setState={[setStates.setweekState, state.toLowerCase()]}>
-									{state}
-								</Button>
-							))}
-						</th>
-					</tr>
-
-					<tr>
-						<th>Day: </th>
-						<th className={ConfigClass}>
-							{days.map((dayKey: string) => (
-								<Button
-									isActive={states.day == dayKey}
-									setState={[setStates.setDay, dayKey]}>
-									{dayKey.split("")[0]}
-								</Button>
-							))}
-						</th>
-					</tr>
+					<tbody>
+						<tr key={"class"}>
+							<th>Class: </th>
+							<th className={ConfigClass}>
+								<Link
+									href={"/settings"}
+									className={button + buttonActive}>
+									{" " + settings.class.level + alp[settings.class.class]}
+								</Link>
+							</th>
+						</tr>
+						<tr key={"week"}>
+							<th>Week: </th>
+							<th className={ConfigClass}>
+								{["Odd", "Even"].map((state) => (
+									<Button
+										isActive={states.weekState == state.toLowerCase()}
+										setState={[setStates.setweekState, state.toLowerCase()]}>
+										{state}
+									</Button>
+								))}
+							</th>
+						</tr>
+						<tr key={"day"}>
+							<th>Day: </th>
+							<th className={ConfigClass}>
+								{days.map((dayKey: string) => (
+									<Button
+										isActive={states.day == dayKey}
+										setState={[setStates.setDay, dayKey]}>
+										{dayKey.split("")[0]}
+									</Button>
+								))}
+							</th>
+						</tr>
+					</tbody>
 				</table>
 			</AccordionDetails>
 		</Accordion>
