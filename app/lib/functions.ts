@@ -12,17 +12,7 @@ export class DateMs extends Date {
     toHourMinuteString(duration: number) {
         const midnight = this.getTime() - this.getMidnightOffset();
         const startDate = new Date(midnight + duration);
-
-
-        var hours = startDate.getHours();
-        var minutes: string | number = startDate.getMinutes();
-        minutes = (minutes < 10) ? "0" + minutes : minutes;
-
-        const isPM = hours > 12;
-        hours = isPM ? hours - 12 : hours;
-        minutes = minutes == 0 ? "00" : minutes;
-
-        return `${hours}:${minutes} ${isPM ? "PM" : "AM"}`;
+        return startDate.toLocaleString("en-US", { timeStyle: "short" }); // I just save myself 150 Bucks~
     }
 
 }

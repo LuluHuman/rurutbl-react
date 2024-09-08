@@ -9,7 +9,7 @@ import Tooltip from "@mui/material/Tooltip";
 const trackStyle = "py-6 my-4 rounded-2xl max-w-[600px] w-screen";
 export function Track({ dayList, active, day, settings, isOdd }: TrackType) {
 	if (!day) return <TrackLoading />;
-	
+
 	var track: React.JSX.Element[] = [];
 
 	const timeList = Object.keys(dayList).toSorted();
@@ -98,10 +98,10 @@ function Crowdedness({ subject, day, isOdd, time }: any) {
 			.then((d) => d.json())
 			.then((crowdness) => {
 				const dayOfCrowd = crowdness[day as keyof crowdedness];
-				if (dayOfCrowd == undefined) return setCrowd(<>xP</>);
+				if (dayOfCrowd == undefined) return setCrowd(<>err ;-;</>);
 				const classes = dayOfCrowd[time.toString()];
 				const classes2 = dayOfCrowd[(time + 1200000).toString()];
-				if (!classes || !classes2) return setCrowd(<>xP</>);
+				if (!classes || !classes2) return setCrowd(<>err ;-;</>);
 
 				const color = (classes: string[]) => {
 					const percentage = (classes.length / 13) * 100;
@@ -116,7 +116,7 @@ function Crowdedness({ subject, day, isOdd, time }: any) {
 							arrow>
 							<div
 								className={
-									"text-nowrap text-left overflow-hidden overflow-ellipsis text-xs rounded-3xl h-full mx-1 px-3 " +
+									"text-nowrap text-left overflow-hidden overflow-ellipsis text-xs rounded-3xl h-full mx-1 px-3 cursor-help " +
 									color(c)
 								}>
 								{children}

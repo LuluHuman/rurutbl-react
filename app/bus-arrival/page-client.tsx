@@ -8,6 +8,7 @@ import Root from "../components/root";
 
 import ArrowRightIcon from "@mui/icons-material/ArrowRight";
 import { DirectionBusDouble, NotAccessible, VisitDouble } from "../components/icons";
+
 export default function BusArrival({ google_api_key }: { google_api_key: string }) {
 	const [state, setState] = useState<state>({ state: "loading", error: null });
 	const [coords, setCoords] = useState<{ latitude: number; longitude: number }>();
@@ -44,61 +45,58 @@ export default function BusArrival({ google_api_key }: { google_api_key: string 
 	}, []);
 
 	useEffect(() => {
-		if (state.state !== "error" && coords) {
-			const nearbyBusUrl = `/api/nearby-busstops?lat=${coords.latitude}&lon=${coords.longitude}`;
-			const request = fetch(nearbyBusUrl).then((req) => req.json());
-			request
-				.then((data) => {
-					const busStopsList = data.map((busStop: busStop) => (
-						<BusStopElement
-							busStop={busStop}
-							key={busStop.BusStopCode}
-						/>
-					));
+		if (state.state == "error" || !coords) return;
+		const nearbyBusUrl = `/api/nearby-busstops?lat=${coords.latitude}&lon=${coords.longitude}`;
+		const request = fetch(nearbyBusUrl).then((req) => req.json());
+		request
+			.then((data) => {
+				const busStopsList = data.map((busStop: busStop) => (
+					<BusStopElement
+						busStop={busStop}
+						key={busStop.BusStopCode}
+					/>
+				));
 
-					const position = { lat: coords.latitude, lng: coords.longitude };
-					setMap(
-						<div className="h-72 w-full">
-							<APIProvider apiKey={google_api_key}>
-								<Map
-									defaultCenter={position}
-									defaultZoom={17}
-									mapId={"Morethen1"}>
-									{data.map((busStop: busStop) => {
-										return (
-											<AdvancedMarker
-												position={{
-													lat: busStop.Latitude,
-													lng: busStop.Longitude,
-												}}>
-												<button
-													className="bg-blue-500 text-white w-fit px-2"
-													onClick={() =>
-														console.log(busStop.Description)
-													}>
-													<h1 className="text-nowrap">
-														{busStop.Description}
-													</h1>
-												</button>
-											</AdvancedMarker>
-										);
-									})}
-								</Map>
-							</APIProvider>
-						</div>
-					);
-					setChildren(busStopsList);
-					setState({ state: "loaded", error: "" });
-				})
-				.catch((err: TypeError) => {
-					console.log(err);
-					const isNetworkError = err.message.includes("NetworkError");
-					setState({
-						state: "error",
-						error: isNetworkError ? "Server can't be reached" : err.message,
-					});
+				const position = { lat: coords.latitude, lng: coords.longitude };
+				setMap(
+					<div className="h-72 w-full">
+						<APIProvider apiKey={google_api_key}>
+							<Map
+								defaultCenter={position}
+								defaultZoom={17}
+								mapId={"Morethen1"}
+								gestureHandling={"greedy"}
+								disableDefaultUI>
+								<Marker position={position} />
+								{data.map((busStop: busStop) => (
+									<AdvancedMarker
+										position={{
+											lat: busStop.Latitude,
+											lng: busStop.Longitude,
+										}}
+										/*clickable={true}
+										onClick={() => console.log(busStop.Description)}*/
+									>
+										<div className="bg-blue-500 text-white w-fit px-2">
+											<h1 className="text-nowrap">{busStop.Description}</h1>
+										</div>
+									</AdvancedMarker>
+								))}
+							</Map>
+						</APIProvider>
+					</div>
+				);
+				setChildren(busStopsList);
+				setState({ state: "loaded", error: "" });
+			})
+			.catch((err: TypeError) => {
+				console.log(err);
+				const isNetworkError = err.message.includes("NetworkError");
+				setState({
+					state: "error",
+					error: isNetworkError ? "Server can't be reached" : err.message,
 				});
-		}
+			});
 	}, [coords]);
 
 	const isLoading = state.state == "loading";
@@ -210,7 +208,7 @@ function populateTable(
 	isCollapsed: boolean,
 	busStop: busStop
 ) {
-	setCollapsedState(!isCollapsed);
+	setCollapsedState((s) => !s);
 	if (!isCollapsed) return;
 
 	fetch(`/api/bus-arrival?BusStopCode=${busStop.BusStopCode}`)
@@ -287,10 +285,7 @@ function NextBusSection({ nextBus }: { nextBus: nextBus }) {
 					{icons}
 				</div>
 				<span className="text-sm">
-					{estArr.getHours()}:
-					{estArr.getMinutes().toString().length == 1
-						? estArr.getMinutes().toString() + "0"
-						: estArr.getMinutes()}
+					{estArr.toLocaleString("en-US", { timeStyle: "short", hour12: false })}
 				</span>
 			</div>
 		);
