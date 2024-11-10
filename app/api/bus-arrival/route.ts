@@ -6,7 +6,7 @@ export const dynamic = 'force-dynamic' // defaults to auto
 export async function GET(req: NextRequest) {
     const searchParams = req.nextUrl.searchParams
     const busStopCode = searchParams.get('BusStopCode')
-    if (!busStopCode) return Response.json({ error: "param busStopCode was not set" }, { status: 400})
+    if (!busStopCode) return Response.json({ error: "param busStopCode was not set" }, { status: 400 })
 
     let _busStopIsCached = Object.prototype.hasOwnProperty.call(cache, busStopCode)
     let _isBeforeExpiry = cache[busStopCode] ? cache[busStopCode].clears_in > new Date().getTime() : false
@@ -16,7 +16,7 @@ export async function GET(req: NextRequest) {
     }
 
     const headersList = { "AccountKey": process.env.datamallkey }
-    const url = `http://datamall2.mytransport.sg/ltaodataservice/BusArrivalv2?BusStopCode=${busStopCode}`
+    const url = `http://datamall2.mytransport.sg/ltaodataservice/v3/BusArrival?BusStopCode=${busStopCode}`
     const reqOptions = { url: url, method: "GET", headers: headersList }
     try {
 
@@ -26,7 +26,7 @@ export async function GET(req: NextRequest) {
             clears_in: new Date().getTime() + 30000
         }
         return Response.json(response.data.Services);
-    } catch (err:any) {
+    } catch (err: any) {
         return Response.json({ error: err.message }, { status: 5000 })
     }
 }
