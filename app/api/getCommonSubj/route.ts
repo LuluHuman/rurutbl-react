@@ -8,7 +8,7 @@ interface mem {
     }
 }
 const memory: mem = {}
-const alp = "xABCDEFGHI".split("");
+const alp = "ABCDEFGHI".split("");
 
 export const dynamic = 'force-dynamic'
 export async function GET(req: NextRequest) {

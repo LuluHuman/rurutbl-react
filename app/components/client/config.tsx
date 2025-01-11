@@ -55,7 +55,8 @@ export function Config({
 		return (
 			<>
 				<span>
-					{config.weekNumber} ({states.weekState}){" "}
+					{config.weekNumber} ({states.weekState}/
+					{states.weekState == "odd" ? "Non-HBL Week" : "HBL Week"}){" "}
 				</span>
 				<button
 					onClick={onClick}
@@ -162,7 +163,7 @@ export function PublicConfig({
 									<Button
 										isActive={states.weekState == state.toLowerCase()}
 										setState={[setStates.setweekState, state.toLowerCase()]}>
-										{state}
+										{state == "Odd" ? "Non-HBL wk" : "HBL wk"}
 									</Button>
 								))}
 							</th>

@@ -5,7 +5,7 @@ import { defaultSettings, getCurrentLsn, DateMs } from "@/app/lib/functions";
 import { weekList } from "@/app/lib/types";
 import { Loading } from "../components/Loading";
 
-const alp = "xABCDEFGHI".split("");
+const alp = "ABCDEFGHI".split("");
 const cellClass = "text-center p-2 border border-grey";
 const trClass = cellClass + " text-[0.7em] text-[#ffffffaa]";
 

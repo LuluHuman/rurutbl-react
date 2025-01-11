@@ -1,5 +1,5 @@
 import { weekList } from "./types";
-export const alp = "xABCDEFGHI".split("");
+export const alp = "ABCDEFGHI".split("");
 
 export class DateMs extends Date {
     getMidnightOffset() {
@@ -31,8 +31,8 @@ export function getCurrentLsn(timeList: Array<string>, midOffset: number) {
 
 export const defaultSettings = {
     class: {
-        level: 3,
-        class: 2,
+        level: 4,
+        class: 1,
     },
     Elec: {
         Sci: "Phy/Bio",

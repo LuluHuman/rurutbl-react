@@ -2,7 +2,7 @@
 import { defaultSettings } from "@/app/lib/functions";
 import React, { useEffect, useState } from "react";
 export function ClassSelector({ title }: { title: string }) {
-	const alp = "xABCDEFGHI".split("");
+	const alp = "ABCDEFGHI".split("");
 
 	const [classes, setClasses] = useState<any>();
 	const [classObject, setClassObj] = useState<typeof defaultSettings.class>();

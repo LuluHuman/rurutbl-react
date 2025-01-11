@@ -5,6 +5,7 @@ import { DateMs } from "@/app/lib/functions";
 import React, { useEffect, useState } from "react";
 
 import Tooltip from "@mui/material/Tooltip";
+// import Link from "next/link";
 
 const trackStyle = "py-6 my-4 rounded-2xl max-w-[600px] w-screen";
 export function Track({ dayList, active, day, settings, isOdd }: TrackType) {
@@ -56,7 +57,15 @@ export function Track({ dayList, active, day, settings, isOdd }: TrackType) {
 		if (isEND) liStyle += "items-center justify-center h-0 mt-6 mr-5 mb-2 ml-5 border-t";
 		else liStyle += "justify-between items-center flex-wrap  p-2 mx-5 my-2  rounded-xl border ";
 
-		const liDivStyle = `${styles.join(" ")} ${isEND ? "" : "max-w-52"}`;
+		// const coordsLink =
+		// 	`/src/` +
+		// 	`?l=${settings.class.level}` +
+		// 	`&c=${settings.class.class}` +
+		// 	`&w=${isOdd ? "odd" : "even"}` +
+		// 	`&i=${i + 1}` +
+		// 	`&d=${day}`;
+
+		const liDivStyle = `flex-1 ${styles.join(" ")} ${isEND ? "" : "max-w-52"}`;
 		const li = (
 			<li
 				className={liStyle + (isActive ? "outline outline-1" : "")}
@@ -68,7 +77,15 @@ export function Track({ dayList, active, day, settings, isOdd }: TrackType) {
 						<div className={liDivStyle}>
 							{typeof subject == "string" ? subject : subject.join(" / ")}
 						</div>
-						<div className={styles.join(" ")}>{HM}</div>
+						<div className="flex gap-1 items-center">
+							{/* <Link
+								href={coordsLink}
+								target="_blank"
+								className="text-neutral-500 text-xs outline-1 outline outline-white px-2 py-1 rounded-full mx-2">
+								View Source
+							</Link> */}
+							<div className={styles.join(" ")}>{HM}</div>
+						</div>
 						{crowd}
 					</>
 				)}
@@ -98,10 +115,10 @@ function Crowdedness({ subject, day, isOdd, time }: any) {
 			.then((d) => d.json())
 			.then((crowdness) => {
 				const dayOfCrowd = crowdness[day as keyof crowdedness];
-				if (dayOfCrowd == undefined) return setCrowd(<>err ;-;</>);
+				if (dayOfCrowd == undefined) return setCrowd(<>err ;-; /1</>);
 				const classes = dayOfCrowd[time.toString()];
 				const classes2 = dayOfCrowd[(time + 1200000).toString()];
-				if (!classes || !classes2) return setCrowd(<>err ;-;</>);
+				if (!classes) return setCrowd(<>err ;-; /2</>);
 
 				const color = (classes: string[]) => {
 					const percentage = (classes.length / 13) * 100;
@@ -132,13 +149,15 @@ function Crowdedness({ subject, day, isOdd, time }: any) {
 									<CrowdPill
 										c={c}
 										key={c}>
-										{c.length} Classes
+										{classes.length > 1 ? `${c.length} Classes` : `ALONE!!!`}
 									</CrowdPill>
 								);
 							})
 						) : (
 							<CrowdPill c={classes}>
-								{classes.length} Classes ({classes.join(", ")})
+								{classes.length > 1
+									? `${classes.length} Classes (${classes.join(", ")})`
+									: "ALONE!!!"}
 							</CrowdPill>
 						)}
 					</>

@@ -12,7 +12,6 @@ import SettingsIcon from "@mui/icons-material/Settings";
 
 const liClass = " whitespace-nowrap m-1 p-2 rounded transition duration-500 hover:bg-menu-hover";
 export function NavBar() {
-	return <></>;
 	const pathname = usePathname();
 
 	const [collapsed, setCollapsed] = useState(true);

@@ -3,7 +3,6 @@ import fs from "fs"
 
 var preload: undefined | object
 
-export const dynamic = 'force-dynamic' // defaults to auto
 export async function GET() {
     if (preload) return Response.json(preload)
 
