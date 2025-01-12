@@ -14,7 +14,7 @@ export function ClassSelector({ title }: { title: string }) {
 	const [levels, setlevels] = useState<React.JSX.Element[]>();
 
 	useEffect(() => {
-		fetch("/api/getClasses")
+		fetch("/api/classes")
 			.then((d) => d.json())
 			.then(setClasses);
 	}, []);

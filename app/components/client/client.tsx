@@ -9,6 +9,7 @@ import { DateMs, getCurrentLsn, defaultSettings, locSubjInit, ToDayStr } from ".
 import React, { useEffect, useState } from "react";
 
 import "@/app/lib/skeleton.css";
+import WeatherData from "./weather";
 
 export default function Client({ isOdd, simple = false, config }: ClientType) {
 	const [settings, setSettings] = useState(defaultSettings);
@@ -136,11 +137,19 @@ export default function Client({ isOdd, simple = false, config }: ClientType) {
 					{simple ? (
 						<></>
 					) : (
-						<PublicConfig
-							settings={settings}
-							states={states}
-							setStates={setStates}
-						/>
+						<div className="w-full flex justify-center">
+							<div className="max-w-[600px] w-screen">
+								<PublicConfig
+									settings={settings}
+									states={states}
+									setStates={setStates}
+								/>
+								<WeatherData
+									dayList={daylist}
+									day={day}
+								/>
+							</div>
+						</div>
 					)}
 					<CircularProgress
 						valuePercentage={progressPercentage}

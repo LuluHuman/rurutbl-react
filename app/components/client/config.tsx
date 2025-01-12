@@ -144,7 +144,7 @@ export function PublicConfig({
 				<span className="w-full text-center">Modify Class, Week and Day</span>
 			</AccordionSummary>
 			<AccordionDetails>
-				<table className="w-screen">
+				<table className="w-full">
 					<tbody>
 						<tr key={"class"}>
 							<th>Class: </th>
@@ -161,6 +161,7 @@ export function PublicConfig({
 							<th className={ConfigClass}>
 								{["Odd", "Even"].map((state) => (
 									<Button
+										key={state}
 										isActive={states.weekState == state.toLowerCase()}
 										setState={[setStates.setweekState, state.toLowerCase()]}>
 										{state == "Odd" ? "Non-HBL wk" : "HBL wk"}
@@ -171,8 +172,9 @@ export function PublicConfig({
 						<tr key={"day"}>
 							<th>Day: </th>
 							<th className={ConfigClass}>
-								{days.map((dayKey: string) => (
+								{days.map((dayKey: string, i) => (
 									<Button
+										key={i}
 										isActive={states.day == dayKey}
 										setState={[setStates.setDay, dayKey]}>
 										{dayKey.split("")[0]}

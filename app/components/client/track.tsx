@@ -108,7 +108,7 @@ function Crowdedness({ subject, day, isOdd, time }: any) {
 			<span>...</span>
 		</Tooltip>
 	);
-	const path = "/api/getCommonSubj";
+	const path = "/api/commonSubj";
 	const url = `${path}?subjectName=${subject}&week=${isOdd ? "Odd" : "Even"}`;
 	useEffect(() => {
 		fetch(url)
@@ -144,11 +144,11 @@ function Crowdedness({ subject, day, isOdd, time }: any) {
 				setCrowd(
 					<>
 						{subject == "Recess" ? (
-							[classes, classes2].map((c) => {
+							[classes, classes2].map((c, i) => {
 								return (
 									<CrowdPill
 										c={c}
-										key={c}>
+										key={i}>
 										{classes.length > 1 ? `${c.length} Classes` : `ALONE!!!`}
 									</CrowdPill>
 								);

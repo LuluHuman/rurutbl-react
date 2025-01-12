@@ -14,6 +14,7 @@ const liClass = " whitespace-nowrap m-1 p-2 rounded transition duration-500 hove
 export function NavBar() {
 	const pathname = usePathname();
 
+	if (pathname == "/watch") return <></>;
 	const [collapsed, setCollapsed] = useState(true);
 	const buttons = {
 		__Menu: ["", <MenuIcon />],
