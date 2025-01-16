@@ -17,6 +17,11 @@ export function ClassSelector({ title }: { title: string }) {
 		fetch("/api/classes")
 			.then((d) => d.json())
 			.then(setClasses);
+
+		const savedSettings = localStorage.getItem("settings");
+		if (savedSettings) {
+			setClassObj(JSON.parse(savedSettings).class);
+		}
 	}, []);
 
 	useEffect(() => {
@@ -36,6 +41,7 @@ export function ClassSelector({ title }: { title: string }) {
 		const LevelOptions = Object.keys(classes);
 		const levels: React.JSX.Element[] = LevelOptions.map((level) => (
 			<Option
+				key={level}
 				label={level}
 				isNumeric
 			/>
@@ -44,7 +50,10 @@ export function ClassSelector({ title }: { title: string }) {
 
 		const ClassOptions = classes[settings.class.level];
 		const classNames: React.JSX.Element[] = ClassOptions.map((className: string) => (
-			<Option label={className} />
+			<Option
+				key={className}
+				label={className}
+			/>
 		));
 		setclassNames(classNames);
 	}, [settings, classes]);
@@ -57,8 +66,12 @@ export function ClassSelector({ title }: { title: string }) {
 		}
 		const savedSettings = localStorage.getItem("settings");
 		if (savedSettings) setSettings(JSON.parse(savedSettings));
-		setClassObj(settings.class);
+		setClassObj(JSON.parse(savedSettings as any).class);
 	}, [newSettings]);
+
+	useEffect(() => {
+		console.log(classObject);
+	}, [classObject]);
 
 	return (
 		<SettingContainer
@@ -122,10 +135,10 @@ export function ElecSelector({ title, props: type }: { title: string; props: "Sc
 
 	const SciElecEle = [<></>];
 	const SciElec = ["Physics", "Biology"];
-	SciElec.forEach((elective) => {
+	SciElec.forEach((elective, i) => {
 		SciElecEle.push(
 			<option
-				key={elective}
+				key={elective + i}
 				value={elective}
 				className="text-black">
 				{elective}
@@ -138,6 +151,7 @@ export function ElecSelector({ title, props: type }: { title: string; props: "Sc
 			title={title}
 			selectedText={elective || "Phy/Bio?"}>
 			<Select
+				key={"3"}
 				defaultOption={elective || ""}
 				onChange={(e) => {
 					setElective(e.target.value);

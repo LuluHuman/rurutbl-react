@@ -130,10 +130,15 @@ export default function Client({ isOdd, simple = false, config }: ClientType) {
 		setweekState: setweekState,
 		setDay: setDay,
 	};
+
 	return (
 		<>
 			{!loading ? (
 				<>
+					<CircularProgress
+						valuePercentage={progressPercentage}
+						text={trackLabels}
+					/>
 					{simple ? (
 						<></>
 					) : (
@@ -151,10 +156,6 @@ export default function Client({ isOdd, simple = false, config }: ClientType) {
 							</div>
 						</div>
 					)}
-					<CircularProgress
-						valuePercentage={progressPercentage}
-						text={trackLabels}
-					/>
 					<Track
 						settings={settings}
 						dayList={daylist}

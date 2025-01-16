@@ -16,7 +16,7 @@ export default async function Home() {
 	const isOdd = !HBLWeeks.includes(weekNumber); // renamed to Non-HBL week
 
 	return (
-		<Root className="flex items-center flex-wrap justify-center">
+		<Root className="flex items-center flex-wrap justify-center flex-col">
 			<Client
 				isOdd={isOdd}
 				config={{

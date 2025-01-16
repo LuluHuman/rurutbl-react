@@ -1,3 +1,5 @@
+"use client";
+
 import { alp, defaultSettings, ToDayStr } from "@/app/lib/functions";
 
 import Link from "next/link";
@@ -5,6 +7,10 @@ import Accordion from "@mui/material/Accordion";
 import AccordionSummary from "@mui/material/AccordionSummary";
 import AccordionDetails from "@mui/material/AccordionDetails";
 import { weekList } from "@/app/lib/types";
+import { Button, IconButton } from "@mui/material";
+import ArrowBackIosNewIcon from "@mui/icons-material/ArrowBackIosNew";
+import ArrowForwardIosIcon from "@mui/icons-material/ArrowForwardIos";
+
 export function Config({
 	config,
 	settings,
@@ -84,7 +90,7 @@ export function Config({
 		<div className="w-full flex justify-center">
 			<Accordion className="w-96 bg-secondary-color text-white">
 				<AccordionSummary>
-					<span>Developer Tools (For sigmas only)</span>
+					<span>Debug</span>
 				</AccordionSummary>
 				<AccordionDetails>
 					{Object.keys(pth).map((pthKey: string) => (
@@ -107,84 +113,153 @@ export function PublicConfig({
 	setStates: { [key: string]: (value: any) => void };
 }) {
 	const days = ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday"];
-	const ConfigClass = "flex flex-wrap items-center justify-center w-auto";
-	const button =
-		"flex border-grey justify-between items-center flex-wrap p-2 mx-1 my-2  rounded-xl border ";
-	const buttonActive = "outline outline-1";
+	const outlineButtons =
+		"p-2 m-1 hover:bg-white hover:bg-opacity-15 rounded-full text-center outline outline-1";
+	return (
+		<div className={"w-full px-2 py-4 "}>
+			<Link
+				href={"/settings"}
+				className={
+					"p-2 mx-2 hover:bg-white hover:bg-opacity-15 rounded-full text-center outline outline-1" +
+					outlineButtons
+				}>
+				{settings.class.level + alp[settings.class.class]}
+			</Link>
+			<select
+				className={"bg-transparent " + outlineButtons}
+				value={states.weekState}
+				onChange={(e) => {
+					const val = e.target.value;
 
-	function Button({
-		isActive,
-		children,
-		setState,
-	}: {
-		isActive: boolean;
-		children: React.ReactNode;
-		setState: [(value: any) => void, any];
-	}) {
-		return (
-			<button
-				className={button + (isActive ? buttonActive : "")}
-				onClick={() => {
 					setStates.setLoading(true);
-					setState[0](setState[1]);
+					setStates.setweekState(val);
 					setStates.setTrackLabels({
 						title: "",
 						subtitle: "",
 						timeRemaining: "",
 					});
 				}}>
-				{children}
-			</button>
-		);
-	}
+				{["Odd", "Even"].map((state) => (
+					<option
+						key={state}
+						value={state.toLowerCase()}>
+						{state == "Odd" ? "Non-HBL wk" : "HBL wk"}
+					</option>
+				))}
+			</select>
+			<div className="flex  w-full justify-between ">
+				<IconButton
+					className="hover:bg-white hover:bg-opacity-15 rounded-full p-2"
+					onClick={() => {
+						const index = days.findIndex((o) => o == states.day);
+						const prevIndex = index - 1 < 0 ? days.length - 1 : index - 1;
+						const prevDay = days[prevIndex];
 
-	return (
-		<Accordion className="w-full bg-secondary-color text-white">
-			<AccordionSummary>
-				<span className="w-full text-center">Modify Class, Week and Day</span>
-			</AccordionSummary>
-			<AccordionDetails>
-				<table className="w-full">
-					<tbody>
-						<tr key={"class"}>
-							<th>Class: </th>
-							<th className={ConfigClass}>
-								<Link
-									href={"/settings"}
-									className={button + buttonActive}>
-									{" " + settings.class.level + alp[settings.class.class]}
-								</Link>
-							</th>
-						</tr>
-						<tr key={"week"}>
-							<th>Week: </th>
-							<th className={ConfigClass}>
-								{["Odd", "Even"].map((state) => (
-									<Button
-										key={state}
-										isActive={states.weekState == state.toLowerCase()}
-										setState={[setStates.setweekState, state.toLowerCase()]}>
-										{state == "Odd" ? "Non-HBL wk" : "HBL wk"}
-									</Button>
-								))}
-							</th>
-						</tr>
-						<tr key={"day"}>
-							<th>Day: </th>
-							<th className={ConfigClass}>
-								{days.map((dayKey: string, i) => (
-									<Button
-										key={i}
-										isActive={states.day == dayKey}
-										setState={[setStates.setDay, dayKey]}>
-										{dayKey.split("")[0]}
-									</Button>
-								))}
-							</th>
-						</tr>
-					</tbody>
-				</table>
-			</AccordionDetails>
-		</Accordion>
+						setStates.setLoading(true);
+						setStates.setDay(prevDay);
+						setStates.setTrackLabels({
+							title: "",
+							subtitle: "",
+							timeRemaining: "",
+						});
+					}}>
+					<ArrowBackIosNewIcon className="fill-white" />
+				</IconButton>
+				<div className="gap-2 flex">
+					<select
+						className="bg-transparent p-2 hover:bg-white hover:bg-opacity-15 rounded-full text-center"
+						value={states.day}
+						onChange={(e) => {
+							const val = e.target.value;
+
+							setStates.setLoading(true);
+							setStates.setDay(val);
+							setStates.setTrackLabels({
+								title: "",
+								subtitle: "",
+								timeRemaining: "",
+							});
+						}}>
+						{days.map((dayKey: string, i) => (
+							<option
+								key={i}
+								value={dayKey}
+								// className={states.day == dayKey}
+								// setState={[setStates.setDay, dayKey]}>
+							>
+								{dayKey}
+							</option>
+						))}
+					</select>
+				</div>
+				<IconButton
+					className="hover:bg-white hover:bg-opacity-15 rounded-full p-2"
+					onClick={() => {
+						const index = days.findIndex((o) => o == states.day);
+						const nextIndex = index + 1 > days.length - 1 ? 0 : index + 1;
+						const nextDay = days[nextIndex];
+
+						setStates.setLoading(true);
+						setStates.setDay(nextDay);
+						setStates.setTrackLabels({
+							title: "",
+							subtitle: "",
+							timeRemaining: "",
+						});
+					}}>
+					<ArrowForwardIosIcon className="fill-white" />
+				</IconButton>
+			</div>
+		</div>
 	);
+
+	// return (
+	// 	<Accordion className="w-full bg-secondary-color text-white">
+	// 		<AccordionSummary>
+	// 			<span className="w-full text-center">Modify Class, Week and Day</span>
+	// 		</AccordionSummary>
+	// 		<AccordionDetails>
+	// 			<table className="w-full">
+	// 				<tbody>
+	// 					<tr key={"class"}>
+	// 						<th>Class: </th>
+	// 						<th className={ConfigClass}>
+	// 							<Link
+	// 								href={"/settings"}
+	// 								className={button + buttonActive}>
+	// 								{" " + settings.class.level + alp[settings.class.class]}
+	// 							</Link>
+	// 						</th>
+	// 					</tr>
+	// 					<tr key={"week"}>
+	// 						<th>Week: </th>
+	// 						<th className={ConfigClass}>
+	// 							{["Odd", "Even"].map((state) => (
+	// 								<Button
+	// 									key={state}
+	// 									isActive={states.weekState == state.toLowerCase()}
+	// 									setState={[setStates.setweekState, state.toLowerCase()]}>
+	// 									{state == "Odd" ? "Non-HBL wk" : "HBL wk"}
+	// 								</Button>
+	// 							))}
+	// 						</th>
+	// 					</tr>
+	// 					<tr key={"day"}>
+	// 						<th>Day: </th>
+	// 						<th className={ConfigClass}>
+	// 							{days.map((dayKey: string, i) => (
+	// 								<Button
+	// 									key={i}
+	// 									isActive={states.day == dayKey}
+	// 									setState={[setStates.setDay, dayKey]}>
+	// 									{dayKey.split("")[0]}
+	// 								</Button>
+	// 							))}
+	// 						</th>
+	// 					</tr>
+	// 				</tbody>
+	// 			</table>
+	// 		</AccordionDetails>
+	// 	</Accordion>
+	// );
 }
