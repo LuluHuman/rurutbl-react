@@ -1,6 +1,5 @@
 import type { Metadata } from "next";
 import "./globals.css";
-import { headers } from 'next/headers';
 import { NavBar } from "./components/navBar";
 
 export const metadata: Metadata = {
@@ -12,10 +11,6 @@ interface layout {
 }
 
 export default function RootLayout({ children }: Readonly<layout>) {
-	const headersList = headers();
-	const domain = headersList.get('host') || "";
-	const fullUrl = headersList.get('referer') || "";
-	console.log(fullUrl.replace(domain, ""));
 	return (
 		<html lang="en">
 			<head>

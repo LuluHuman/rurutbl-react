@@ -103,7 +103,7 @@ export default function Client({ isOdd, simple = false, config }: ClientType) {
 			const SubjDuration = LessonSecTotal - prevtotalSec;
 
 			const totalSecLeft = LessonSecTotal - curSecTotal;
-			const time = new DateMs(totalSecLeft * 1000).toISOString().substr(11, 8);
+			const time = new DateMs(totalSecLeft * 1000).toISOString().substring(11, 19);
 
 			const _fallbackTitle = `Time until Start class (${dayList[sortedTimeList[0]]})`;
 			const nextLessionLabel = "Time " + (nextLsn ? "until " + locSubj(nextLsn) : "Left");

@@ -7,8 +7,8 @@ import { usePathname } from "next/navigation";
 import HomeIcon from "@mui/icons-material/Home";
 import MenuIcon from "@mui/icons-material/Menu";
 import ViewTimelineIcon from "@mui/icons-material/ViewTimeline";
-import DirectionsBusIcon from "@mui/icons-material/DirectionsBus";
 import SettingsIcon from "@mui/icons-material/Settings";
+
 
 const liClass = " whitespace-nowrap m-1 p-2 rounded transition duration-500 hover:bg-menu-hover";
 export function NavBar() {
@@ -20,7 +20,6 @@ export function NavBar() {
 		__Menu: ["", <MenuIcon />],
 		"/": ["Home", <HomeIcon />],
 		"/full": ["Full Table", <ViewTimelineIcon />],
-		"/bus-arrival": ["Bus Arrival", <DirectionsBusIcon />],
 		__Seperator: [],
 		"/settings": ["Settings", <SettingsIcon />],
 	};
