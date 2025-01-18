@@ -66,7 +66,8 @@ export function ClassSelector({ title }: { title: string }) {
 		}
 		const savedSettings = localStorage.getItem("settings");
 		if (savedSettings) setSettings(JSON.parse(savedSettings));
-		setClassObj(JSON.parse(savedSettings as any).class);
+		const settings = JSON.parse(savedSettings as any) || defaultSettings;
+		setClassObj(settings.class);
 	}, [newSettings]);
 
 	useEffect(() => {
