@@ -72,17 +72,19 @@ export function Config({
 			</>
 		);
 	}
-
 	const wlurl = `/classes/${settings.class.level}/${settings.class.class}/${states.weekState}.json`;
-	const curDay = config.countToDate.getDay();
+	const countToDate = new Date(config.countToDate);
+	const countFromDate = new Date(config.countFromDate);
+	const curDay = countToDate.getDay();
+
 	var pth: { [key: string]: string | number | React.JSX.Element } = {
 		Week: <Week />,
 		"Stated Day": <Day />,
 		"Actual Day": `${ToDayStr(curDay).long} (i: ${curDay})`,
 		"Class Level": settings.class.level,
 		"Class Alphabat": `${alp[settings.class.class]} (${settings.class.class})`,
-		"Date From": `${config.countFromDate.toDateString()} (Semester Start)`,
-		"Date To": `${config.countToDate.toDateString()} (Current Date)`,
+		"Date From": `${countFromDate.toDateString()} (Semester Start)`,
+		"Date To": `${countToDate.toDateString()} (Current Date)`,
 		"Week List File": <Link href={wlurl}>@/public{wlurl}</Link>,
 	};
 
@@ -116,7 +118,7 @@ export function PublicConfig({
 	const outlineButtons =
 		"p-2 m-1 hover:bg-white hover:bg-opacity-15 rounded-full text-center outline outline-1";
 	return (
-		<div className={"w-full px-2 py-4 "}>
+		<div className={"w-full px-2 py-4 *:text-nowrap *:my-4"}>
 			<Link
 				href={"/settings"}
 				className={
@@ -147,6 +149,24 @@ export function PublicConfig({
 					</option>
 				))}
 			</select>
+
+			<a
+				href="/full"
+				className={
+					"p-2 mx-2 hover:bg-white hover:bg-opacity-15 rounded-full text-center outline outline-1 " +
+					outlineButtons
+				}>
+				Show All Weeks
+			</a>
+
+			<a
+				href="/settings"
+				className={
+					"p-2 mx-2 hover:bg-white hover:bg-opacity-15 rounded-full text-center outline outline-1 " +
+					outlineButtons
+				}>
+				Settings
+			</a>
 			<div className="flex  w-full justify-between ">
 				<IconButton
 					className="hover:bg-white hover:bg-opacity-15 rounded-full p-2"
@@ -163,7 +183,7 @@ export function PublicConfig({
 							timeRemaining: "",
 						});
 					}}>
-					<ArrowBackIosNewIcon className="fill-white" />
+					<ArrowBackIosNewIcon className="*:fill-white" />
 				</IconButton>
 				<div className="gap-2 flex">
 					<select
@@ -183,10 +203,7 @@ export function PublicConfig({
 						{days.map((dayKey: string, i) => (
 							<option
 								key={i}
-								value={dayKey}
-								// className={states.day == dayKey}
-								// setState={[setStates.setDay, dayKey]}>
-							>
+								value={dayKey}>
 								{dayKey}
 							</option>
 						))}
@@ -207,59 +224,9 @@ export function PublicConfig({
 							timeRemaining: "",
 						});
 					}}>
-					<ArrowForwardIosIcon className="fill-white" />
+					<ArrowForwardIosIcon className="*:fill-white" />
 				</IconButton>
 			</div>
 		</div>
 	);
-
-	// return (
-	// 	<Accordion className="w-full bg-secondary-color text-white">
-	// 		<AccordionSummary>
-	// 			<span className="w-full text-center">Modify Class, Week and Day</span>
-	// 		</AccordionSummary>
-	// 		<AccordionDetails>
-	// 			<table className="w-full">
-	// 				<tbody>
-	// 					<tr key={"class"}>
-	// 						<th>Class: </th>
-	// 						<th className={ConfigClass}>
-	// 							<Link
-	// 								href={"/settings"}
-	// 								className={button + buttonActive}>
-	// 								{" " + settings.class.level + alp[settings.class.class]}
-	// 							</Link>
-	// 						</th>
-	// 					</tr>
-	// 					<tr key={"week"}>
-	// 						<th>Week: </th>
-	// 						<th className={ConfigClass}>
-	// 							{["Odd", "Even"].map((state) => (
-	// 								<Button
-	// 									key={state}
-	// 									isActive={states.weekState == state.toLowerCase()}
-	// 									setState={[setStates.setweekState, state.toLowerCase()]}>
-	// 									{state == "Odd" ? "Non-HBL wk" : "HBL wk"}
-	// 								</Button>
-	// 							))}
-	// 						</th>
-	// 					</tr>
-	// 					<tr key={"day"}>
-	// 						<th>Day: </th>
-	// 						<th className={ConfigClass}>
-	// 							{days.map((dayKey: string, i) => (
-	// 								<Button
-	// 									key={i}
-	// 									isActive={states.day == dayKey}
-	// 									setState={[setStates.setDay, dayKey]}>
-	// 									{dayKey.split("")[0]}
-	// 								</Button>
-	// 							))}
-	// 						</th>
-	// 					</tr>
-	// 				</tbody>
-	// 			</table>
-	// 		</AccordionDetails>
-	// 	</Accordion>
-	// );
 }

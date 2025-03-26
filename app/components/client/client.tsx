@@ -3,7 +3,7 @@ import { CircularProgress, CircularProgressLoading } from "./circularProgress";
 import { Track, TrackLoading } from "./track";
 import { Config, PublicConfig } from "./config";
 
-import { dayList, ClientType, weekList } from "../../lib/types";
+import { dayList, weekList } from "../../lib/types";
 import { DateMs, getCurrentLsn, defaultSettings, locSubjInit, ToDayStr } from "../../lib/functions";
 
 import React, { useEffect, useState } from "react";
@@ -11,7 +11,7 @@ import React, { useEffect, useState } from "react";
 import "@/app/lib/skeleton.css";
 import WeatherData from "./weather";
 
-export default function Client({ isOdd, simple = false, config }: ClientType) {
+export default function Client({ simple = false }: { simple?: boolean }) {
 	const [settings, setSettings] = useState(defaultSettings);
 
 	const [loading, setLoading] = useState(true);
@@ -23,12 +23,30 @@ export default function Client({ isOdd, simple = false, config }: ClientType) {
 	const [weekList, setweekListn] = useState<weekList>();
 	const [day, setDay] = useState<keyof weekList>();
 	const [daylist, setDaylist] = useState({});
+	// const [config, setConfig] = useState<{
+	// 	isOdd: boolean;
+	// 	weekNumber: number;
+	// 	countFromDate: number;
+	// 	countToDate: number;
+	// }>();
 
 	useEffect(() => {
+		fetch("/api/current")
+			.then((d) => d.json())
+			.then((data) => {
+				const current = data as {
+					isOdd: boolean;
+					weekNumber: number;
+					countFromDate: number;
+					countToDate: number;
+				};
+
+				// setConfig(current);
+				setweekState(current.isOdd ? "odd" : "even");
+			});
+
 		const savedSettings = localStorage.getItem("settings");
 		if (savedSettings) setSettings(JSON.parse(savedSettings));
-
-		setweekState(isOdd ? "odd" : "even");
 	}, []);
 
 	useEffect(() => {
@@ -74,7 +92,7 @@ export default function Client({ isOdd, simple = false, config }: ClientType) {
 
 		if (currentTimeout) clearInterval(currentTimeout);
 		Loop();
-		setCurrentTimeout(setInterval(Loop, 500));
+		setCurrentTimeout(setInterval(Loop, 1000));
 		function Loop() {
 			if (!weekList) return;
 			if (!day) return;
@@ -164,7 +182,7 @@ export default function Client({ isOdd, simple = false, config }: ClientType) {
 						isOdd={weekState == "odd"}
 					/>
 
-					{simple ? (
+					{/* {simple ? (
 						<></>
 					) : (
 						<Config
@@ -173,7 +191,7 @@ export default function Client({ isOdd, simple = false, config }: ClientType) {
 							states={states}
 							setStates={setStates}
 						/>
-					)}
+					)} */}
 				</>
 			) : (
 				<>

@@ -1,6 +1,5 @@
 import type { Metadata } from "next";
 import "./globals.css";
-import { NavBar } from "./components/navBar";
 
 export const metadata: Metadata = {
 	title: "RuruTBL",
@@ -19,8 +18,7 @@ export default function RootLayout({ children }: Readonly<layout>) {
 					href="/manifest.json"
 				/>
 			</head>
-			<body className="font-sans w-screen items-start bg-bg text-white">
-				<NavBar />
+			<body className="font-sans w-screen items-start bg-bg text-white fill-white">
 				{children}
 			</body>
 		</html>
