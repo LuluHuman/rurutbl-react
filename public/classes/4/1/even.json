@@ -9,7 +9,9 @@
         "45600000": "Break",
         "46800000": "Social Studies",
         "49200000": "A Math/D&T/POA",
-        "52800000": null
+        "52800000": "Break / End",
+        "54000000": "ML LSP",
+        "57600000": null
     },
     "Tuesday": {
         "28800000": "{SciElec}",
@@ -20,7 +22,10 @@
         "42000000": "Recess",
         "44400000": "Chemestry",
         "48000000": "Eng",
-        "50400000": null
+        "51600000": "Break / End",
+        "54000000": "Chem (SBB), Bio/Phy LSP",
+        "57600000": "Bio/Phy (SBB), Chem LSP",
+        "61200000": null
     },
     "Wednesday": {
         "31200000": "A Math/D&T/POA",
@@ -30,7 +35,10 @@
         "44400000": "Break",
         "45600000": "Geog/His",
         "48000000": "Eng",
-        "50400000": null
+        "50400000": "Break / End",
+        "51600000": "English Consultation",
+        "54900000": "CL LSP",
+        "57600000": null
     },
     "Thursday": {
         "28800000": "CCE",
@@ -40,7 +48,10 @@
         "40800000": "MTL",
         "43200000": "A Math/D&T/POA",
         "46800000": "Eng",
-        "50400000": null
+        "50400000": "Break / End",
+        "52800000": "Math LSP",
+        "55800000": "Geog / Hist ",
+        "58500000": null
     },
     "Friday": {
         "27600000": "Eng",
@@ -51,6 +62,9 @@
         "42000000": "Phy",
         "43200000": "Geog/His",
         "44400000": "Social Studies",
-        "45600000": null
+        "45600000": "<blank>",
+        "52200000": "D&T Coursework / POA",
+        "55800000": "D&T Coursework",
+        "59400000": null
     }
 }
