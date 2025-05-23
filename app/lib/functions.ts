@@ -17,14 +17,14 @@ export class DateMs extends Date {
 
 }
 
-export function getCurrentLsn(timeList: Array<string>, midOffset: number) {
+export function getNextLsn(timeList: Array<string>, midOffset: number) {
     let curLessont24: any = -Infinity;
-    timeList.forEach((lsnStartTime) => {
-        const intTime = parseInt(lsnStartTime)
-        const _beforeNow = midOffset < intTime;
-        const _lastSavedisLess = curLessont24 < intTime;
+    timeList.forEach((strTime) => {
+        const lsnStartTime = parseInt(strTime)
+        const _hasntStart = midOffset < lsnStartTime;
+        const _lastSavedisLess = curLessont24 < lsnStartTime;
         const _default = curLessont24 == -Infinity;
-        if (_beforeNow && _lastSavedisLess && _default) curLessont24 = intTime
+        if (_hasntStart && _lastSavedisLess && _default) curLessont24 = lsnStartTime
     });
     return curLessont24 == -Infinity ? null : curLessont24.toString();
 }

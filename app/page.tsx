@@ -4,7 +4,7 @@ export const dynamic = "force-dynamic"; // defaults to auto
 import "./globals.css";
 export default async function Home() {
 	return (
-		<Root className="flex items-center flex-wrap justify-center flex-col">
+		<Root className="flex items-center flex-wrap justify-center flex-col  pt-4">
 			<Client />
 		</Root>
 	);

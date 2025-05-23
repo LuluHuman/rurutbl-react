@@ -1,7 +1,7 @@
 "use client";
 
 import React, { useEffect, useState } from "react";
-import { defaultSettings, getCurrentLsn, DateMs } from "@/app/lib/functions";
+import { defaultSettings, getNextLsn, DateMs } from "@/app/lib/functions";
 import { weekList } from "@/app/lib/types";
 import { Loading } from "../components/Loading";
 
@@ -71,7 +71,7 @@ export default function TableForWeek({ oddeven }: { oddeven: "even" | "odd" }) {
 				const dayList = weekList[day as keyof weekList];
 				const timeList = Object.keys(dayList).toSorted();
 
-				const timeAfter = getCurrentLsn(timeList, timeMs);
+				const timeAfter = getNextLsn(timeList, timeMs);
 				if (timeAfter !== null) {
 					const timeI = timeList.indexOf(timeAfter.toString()) - 1;
 					const steppedTime = timeList[timeI];

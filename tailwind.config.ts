@@ -9,11 +9,12 @@ const config: Config = {
   theme: {
     extend: {
       colors: {
-        "bg": "var(--color-bg)",
-        "primary-color": "var(--bg-primary)",
-        "secondary-color": "var(--bg-secondary)",
-        "menu-color": "var(--bg-menu)",
-        "menu-hover": "var(--color-menu-hover)",
+        "bg": "var(--md-sys-color-background)",
+        "primary-color": "var(--md-sys-color-primary)",
+        "on-primary-color": "var(--md-sys-color-on-primary)",
+        "secondary-color": "var(--md-sys-color-secondary)",
+        "on-secondary-color": "var(--md-sys-color-on-secondary)",
+        "secondary-container": "var(--md-sys-color-secondary-container)",
         "grey": "var(--color-grey)",
       },
       borderColor: {

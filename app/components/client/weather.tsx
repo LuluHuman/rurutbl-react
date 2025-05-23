@@ -10,12 +10,12 @@ const days = ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", 
 export default function WeatherData({ dayList, day }: { dayList: dayList; day?: keyof weekList }) {
 	const placeholder = (
 		<div
-			className="flex items-center gap-2 p-2 m-2 bg-neutral-600 rounded-lg"
+			className="flex items-center gap-2 p-2 m-2 bg-on-secondary-color rounded-lg"
 			key={"12asdf"}>
-			<div className="size-6 bg-neutral-700"></div>
+			<div className="size-6 bg-primary-color"></div>
 			<div className="w-full">
-				<h1 className="w-3/4 h-4 bg-neutral-700 m-2"></h1>
-				<p className="w-3/4  h-4 bg-neutral-700 m-2"></p>
+				<h1 className="w-3/4 h-4 bg-primary-color m-2"></h1>
+				<p className="w-3/4  h-4 bg-primary-color m-2"></p>
 			</div>
 		</div>
 	);

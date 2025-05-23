@@ -34,7 +34,7 @@ export function Track({ dayList, active, day, settings, isOdd }: TrackType) {
 		switch (subject) {
 			case "Recess":
 			case "Break": {
-				styles.push("text-gray-500");
+				styles.push("opacity-50");
 				crowd = (
 					<Crowdedness
 						subject={subject}
@@ -53,9 +53,11 @@ export function Track({ dayList, active, day, settings, isOdd }: TrackType) {
 				break;
 		}
 
-		var liStyle = "flex marker:content-none border-grey ";
-		if (isEND) liStyle += "items-center justify-center h-0 mt-6 mr-5 mb-2 ml-5 border-t";
-		else liStyle += "justify-between items-center flex-wrap  p-2 mx-5 my-2  rounded-xl border ";
+		var liStyle = "flex marker:content-none bg-on-secondary-color ";
+		if (isEND)
+			liStyle +=
+				"items-center justify-center h-0 mt-6 mr-5 mb-2 ml-5 border-t border-primary-color ";
+		else liStyle += "justify-between items-center flex-wrap  p-2 mx-5 my-2  rounded-xl ";
 
 		// const coordsLink =
 		// 	`/src/` +
@@ -71,7 +73,7 @@ export function Track({ dayList, active, day, settings, isOdd }: TrackType) {
 				className={liStyle + (isActive ? "outline outline-1" : "")}
 				key={typeof subject == "string" ? subject : subject[0]}>
 				{isEND ? (
-					<span className="text-grey px-1 py-[2px] bg-bg">END - {HM}</span>
+					<span className="text-primary-color px-1 py-[2px] bg-bg">END - {HM}</span>
 				) : (
 					<>
 						<div className={liDivStyle}>
@@ -84,7 +86,7 @@ export function Track({ dayList, active, day, settings, isOdd }: TrackType) {
 								className="text-neutral-500 text-xs outline-1 outline outline-white px-2 py-1 rounded-full mx-2">
 								View Source
 							</Link> */}
-							<div className={styles.join(" ")}>{HM}</div>
+							<div className={styles.join(" ") + " text-primary-color"}>{HM}</div>
 						</div>
 						{crowd}
 					</>

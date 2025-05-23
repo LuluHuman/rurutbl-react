@@ -18,9 +18,7 @@ export default function RootLayout({ children }: Readonly<layout>) {
 					href="/manifest.json"
 				/>
 			</head>
-			<body className="font-sans w-screen items-start bg-bg text-white fill-white">
-				{children}
-			</body>
+			<body className="font-sans w-screen items-start bg-bg">{children}</body>
 		</html>
 	);
 }

@@ -119,54 +119,56 @@ export function PublicConfig({
 		"p-2 m-1 hover:bg-white hover:bg-opacity-15 rounded-full text-center outline outline-1";
 	return (
 		<div className={"w-full px-2 py-4 *:text-nowrap *:my-4"}>
-			<Link
-				href={"/settings"}
-				className={
-					"p-2 mx-2 hover:bg-white hover:bg-opacity-15 rounded-full text-center outline outline-1" +
-					outlineButtons
-				}>
-				{settings.class.level + alp[settings.class.class]}
-			</Link>
-			<select
-				className={"bg-transparent " + outlineButtons}
-				value={states.weekState}
-				onChange={(e) => {
-					const val = e.target.value;
+			<div className="overflow-x-scroll">
+				<Link
+					href={"/settings"}
+					className={
+						"p-2 mx-2 hover:bg-white hover:bg-opacity-15 rounded-full text-center outline outline-1" +
+						outlineButtons
+					}>
+					{settings.class.level + alp[settings.class.class]}
+				</Link>
+				<select
+					className={"bg-transparent " + outlineButtons}
+					value={states.weekState}
+					onChange={(e) => {
+						const val = e.target.value;
 
-					setStates.setLoading(true);
-					setStates.setweekState(val);
-					setStates.setTrackLabels({
-						title: "",
-						subtitle: "",
-						timeRemaining: "",
-					});
-				}}>
-				{["Odd", "Even"].map((state) => (
-					<option
-						key={state}
-						value={state.toLowerCase()}>
-						{state == "Odd" ? "Non-HBL wk" : "HBL wk"}
-					</option>
-				))}
-			</select>
+						setStates.setLoading(true);
+						setStates.setweekState(val);
+						setStates.setTrackLabels({
+							title: "",
+							subtitle: "",
+							timeRemaining: "",
+						});
+					}}>
+					{["Odd", "Even"].map((state) => (
+						<option
+							key={state}
+							value={state.toLowerCase()}>
+							{state == "Odd" ? "Non-HBL wk" : "HBL wk"}
+						</option>
+					))}
+				</select>
 
-			<a
-				href="/full"
-				className={
-					"p-2 mx-2 hover:bg-white hover:bg-opacity-15 rounded-full text-center outline outline-1 " +
-					outlineButtons
-				}>
-				Show All Weeks
-			</a>
+				<a
+					href="/full"
+					className={
+						"p-2 mx-2 hover:bg-white hover:bg-opacity-15 rounded-full text-center outline outline-1 " +
+						outlineButtons
+					}>
+					Show All Weeks
+				</a>
 
-			<a
-				href="/settings"
-				className={
-					"p-2 mx-2 hover:bg-white hover:bg-opacity-15 rounded-full text-center outline outline-1 " +
-					outlineButtons
-				}>
-				Settings
-			</a>
+				<a
+					href="/settings"
+					className={
+						"p-2 mx-2 hover:bg-white hover:bg-opacity-15 rounded-full text-center outline outline-1 " +
+						outlineButtons
+					}>
+					Settings
+				</a>
+			</div>
 			<div className="flex  w-full justify-between ">
 				<IconButton
 					className="hover:bg-white hover:bg-opacity-15 rounded-full p-2"

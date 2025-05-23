@@ -4,7 +4,7 @@ import { Track, TrackLoading } from "./track";
 import { Config, PublicConfig } from "./config";
 
 import { dayList, weekList } from "../../lib/types";
-import { DateMs, getCurrentLsn, defaultSettings, locSubjInit, ToDayStr } from "../../lib/functions";
+import { DateMs, getNextLsn, defaultSettings, locSubjInit, ToDayStr } from "../../lib/functions";
 
 import React, { useEffect, useState } from "react";
 
@@ -23,12 +23,6 @@ export default function Client({ simple = false }: { simple?: boolean }) {
 	const [weekList, setweekListn] = useState<weekList>();
 	const [day, setDay] = useState<keyof weekList>();
 	const [daylist, setDaylist] = useState({});
-	// const [config, setConfig] = useState<{
-	// 	isOdd: boolean;
-	// 	weekNumber: number;
-	// 	countFromDate: number;
-	// 	countToDate: number;
-	// }>();
 
 	useEffect(() => {
 		fetch("/api/current")
@@ -41,7 +35,6 @@ export default function Client({ simple = false }: { simple?: boolean }) {
 					countToDate: number;
 				};
 
-				// setConfig(current);
 				setweekState(current.isOdd ? "odd" : "even");
 			});
 
@@ -94,9 +87,8 @@ export default function Client({ simple = false }: { simple?: boolean }) {
 		Loop();
 		setCurrentTimeout(setInterval(Loop, 1000));
 		function Loop() {
-			if (!weekList) return;
-			if (!day) return;
-			const msSinceMidnight = new DateMs().getMidnightOffset();
+			if (!weekList || !day) return;
+			const curTime = new DateMs().getMidnightOffset();
 			const dayList: dayList = weekList[day];
 			setDaylist(dayList);
 
@@ -104,36 +96,32 @@ export default function Client({ simple = false }: { simple?: boolean }) {
 			const lastLsnTime = parseInt(sortedTimeList[sortedTimeList.length - 1]);
 
 			if (loading) setLoading(false);
-			if (msSinceMidnight > lastLsnTime) return;
+			if (curTime > lastLsnTime) return;
 
-			const nextLsnTime: string = getCurrentLsn(sortedTimeList, msSinceMidnight);
+			const subEnd_String: string = getNextLsn(sortedTimeList, curTime);
+			const subEnd_Int = parseInt(subEnd_String);
 
-			const prevI = sortedTimeList.indexOf(nextLsnTime) - 1;
-			const curLsn = dayList[sortedTimeList[prevI]];
-			const nextLsn = dayList[nextLsnTime];
+			const subI = sortedTimeList.indexOf(subEnd_String) - 1;
+			setActiveIndex(subI);
 
-			const curSecTotal = msSinceMidnight / 1000;
-			const LessonSecTotal = parseInt(nextLsnTime) / 1000;
-			const remainingSec = LessonSecTotal - curSecTotal;
+			const subStart_String = subI < 0 ? "0" : sortedTimeList[subI];
+			const subStart_Int = subI < 0 ? 0 : parseInt(subStart_String);
 
-			const prevSubTime = sortedTimeList[prevI];
-			const prevtotalSec = parseInt(prevSubTime) / 1000;
-			const SubjDuration = LessonSecTotal - prevtotalSec;
+			const subRem = subEnd_Int - curTime;
+			const subDur = subEnd_Int - subStart_Int;
+			const percentage = (subDur - subRem) / subDur;
+			setProgressPercentage(percentage);
 
-			const totalSecLeft = LessonSecTotal - curSecTotal;
-			const time = new DateMs(totalSecLeft * 1000).toISOString().substring(11, 19);
+			const nextLsn = dayList[subEnd_String];
+			const curLsn = dayList[subStart_String];
 
-			const _fallbackTitle = `Time until Start class (${dayList[sortedTimeList[0]]})`;
+			const _fallbackTitle = `Fisrt Subject: ${dayList[sortedTimeList[0]]}`;
 			const nextLessionLabel = "Time " + (nextLsn ? "until " + locSubj(nextLsn) : "Left");
-
-			const remainingPercentage = (SubjDuration - remainingSec) / SubjDuration;
-			setProgressPercentage(remainingPercentage);
-			setActiveIndex(sortedTimeList.indexOf(nextLsnTime) - 1);
-
+			const timeString = new DateMs(subRem).toISOString().substring(11, 19);
 			setTrackLabels({
 				title: locSubj(curLsn) || _fallbackTitle,
 				subtitle: curLsn ? nextLessionLabel : "",
-				timeRemaining: time,
+				timeRemaining: timeString,
 			});
 		}
 	}, [settings, weekList, day]);
@@ -181,17 +169,6 @@ export default function Client({ simple = false }: { simple?: boolean }) {
 						active={activeIndex}
 						isOdd={weekState == "odd"}
 					/>
-
-					{/* {simple ? (
-						<></>
-					) : (
-						<Config
-							config={config}
-							settings={settings}
-							states={states}
-							setStates={setStates}
-						/>
-					)} */}
 				</>
 			) : (
 				<>

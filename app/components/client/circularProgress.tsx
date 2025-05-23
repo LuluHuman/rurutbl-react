@@ -15,7 +15,7 @@ export function CircularProgress({ valuePercentage = 0, text }: CircularProgress
 	let timer = (
 		<path
 			strokeDasharray={circleDasharray}
-			className="stroke-[5px] rotate-90 origin-center transition-all duration-1000 ease-linear  stroke-current"
+			className="stroke-[5px] rotate-90 origin-center transition-all duration-1000 ease-linear  stroke-primary-color"
 			style={{ strokeLinecap: "round", fillRule: "nonzero" }} // Tailwind you suck (better then bootstrap tho)
 			d="M 50, 50m -45, 0a 45,45 0 1,0 90,0a 45,45 0 1,0 -90,0"
 		/>
@@ -30,7 +30,7 @@ export function CircularProgress({ valuePercentage = 0, text }: CircularProgress
 					xmlns="http://www.w3.org/2000/svg">
 					<g className="fill-none stroke-none]">
 						<circle
-							className="stroke-[5px] stroke-gray-600"
+							className="stroke-[5px] stroke-on-primary-color"
 							cx="50"
 							cy="50"
 							r="45"
@@ -38,7 +38,7 @@ export function CircularProgress({ valuePercentage = 0, text }: CircularProgress
 						{timer}
 					</g>
 				</svg>
-				<div className="absolute top-0  w-full h-full flex items-center justify-center flex-col   text-center">
+				<div className="absolute top-0  w-full h-full flex items-center justify-center flex-col text-center">
 					<span>{text.title /*Math*/}</span>
 					<span>{text.subtitle /*Time until {Next Subject} || Time Left*/}</span>
 					<span>{text.timeRemaining}</span>
@@ -58,19 +58,19 @@ export function CircularProgressLoading() {
 					xmlns="http://www.w3.org/2000/svg">
 					<g className="fill-none stroke-none">
 						<circle
-							className="stroke-[5px] stroke-gray-600"
+							className="stroke-[5px] stroke-on-primary-color"
 							cx="50"
 							cy="50"
 							r="45"
 						/>
 						<path
 							strokeDasharray="283"
-							className="stroke-[5px] rotate-90 origin-center transition-all ease-linear  stroke-current"
+							className="stroke-[5px] rotate-90 origin-center transition-all ease-linear stroke-primary-color"
 							d="M 50, 50m -45, 0a 45,45 0 1,0 90,0a 45,45 0 1,0 -90,0"
 						/>
 					</g>
 				</svg>
-				<div className="absolute top-0  w-full h-full    flex items-center justify-center flex-col   text-center">
+				<div className="absolute top-0 w-full h-full flex items-center justify-center flex-col text-center">
 					<span className="px40" />
 					<span
 						className="px40"
