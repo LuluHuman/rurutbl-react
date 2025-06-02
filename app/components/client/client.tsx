@@ -115,7 +115,7 @@ export default function Client({ simple = false }: { simple?: boolean }) {
 			const nextLsn = dayList[subEnd_String];
 			const curLsn = dayList[subStart_String];
 
-			const _fallbackTitle = `Fisrt Subject: ${dayList[sortedTimeList[0]]}`;
+			const _fallbackTitle = `First Subject: ${dayList[sortedTimeList[0]]}`;
 			const nextLessionLabel = "Time " + (nextLsn ? "until " + locSubj(nextLsn) : "Left");
 			const timeString = new DateMs(subRem).toISOString().substring(11, 19);
 			setTrackLabels({

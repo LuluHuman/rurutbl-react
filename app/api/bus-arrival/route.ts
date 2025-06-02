@@ -16,11 +16,13 @@ export async function GET(req: NextRequest) {
     }
 
     const headersList = { "AccountKey": process.env.datamallkey }
-    const url = `http://datamall2.mytransport.sg/ltaodataservice/v3/BusArrival?BusStopCode=${busStopCode}`
+    const url = `https://datamall2.mytransport.sg/ltaodataservice/v3/BusArrival?BusStopCode=${busStopCode}`
     const reqOptions = { url: url, method: "GET", headers: headersList }
     try {
+        console.log(reqOptions);
 
         const response = await axios.request(reqOptions)
+        
         cache[busStopCode] = {
             data: response.data,
             clears_in: new Date().getTime() + 30000

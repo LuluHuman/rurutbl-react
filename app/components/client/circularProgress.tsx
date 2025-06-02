@@ -16,7 +16,7 @@ export function CircularProgress({ valuePercentage = 0, text }: CircularProgress
 		<path
 			strokeDasharray={circleDasharray}
 			className="stroke-[5px] rotate-90 origin-center transition-all duration-1000 ease-linear  stroke-primary-color"
-			style={{ strokeLinecap: "round", fillRule: "nonzero" }} // Tailwind you suck (better then bootstrap tho)
+			style={{ strokeLinecap: "round", fillRule: "nonzero" }}
 			d="M 50, 50m -45, 0a 45,45 0 1,0 90,0a 45,45 0 1,0 -90,0"
 		/>
 	);

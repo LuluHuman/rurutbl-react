@@ -46,8 +46,6 @@ export async function GET(req: NextRequest) {
 }
 
 async function GetPrayerTimes(date: Date) {
-    console.log("fetching");
-
     try {
         const url = `https://isomer-user-content.by.gov.sg/muis_prayers_timetable_${date.getFullYear()}.json`
         const headersList = { "User-Agent": "Mozilla/5.0 (X11; Linux x86_64; rv:135.0) Gecko/20100101 Firefox/135.0" }
