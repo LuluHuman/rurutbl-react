@@ -27,7 +27,7 @@ export async function GET(req: NextRequest) {
         }
         return Response.json(response.data.Services);
     } catch (err: any) {
-        return Response.json({ error: err.message }, { status: 5000 })
+        return Response.json({ error: err.message }, { status: 500 })
     }
 }
 
