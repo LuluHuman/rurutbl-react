@@ -45,6 +45,8 @@ export default function Client({ simple = false }: { simple?: boolean }) {
 	useEffect(() => {
 		const { level, class: className } = settings.class;
 		const req = import(`@/public/classes/${level}/${className}/${weekState}.json`);
+		console.log(`@/public/classes/${level}/${className}/${weekState}.json`);
+		
 		req.then(setweekListn);
 	}, [weekState, settings]);
 

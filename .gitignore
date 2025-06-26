@@ -43,3 +43,4 @@ public/workbox-*.js.map
 .env
 tools
 public/pages
+.next

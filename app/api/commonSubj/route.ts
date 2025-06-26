@@ -72,7 +72,7 @@ export async function GET(req: NextRequest) {
     })
     await Promise.all(prom);
 
-    if (Object.keys(output).length == 0) return Response.json({ err: "No subjects reconised" }, { status: 400 })
+    if (Object.keys(output).length == 0) return Response.json({ err: "No subjects recognised" }, { status: 400 })
     if (!memory[week]) memory[week] = {}
     memory[week][subjectName] = output
 

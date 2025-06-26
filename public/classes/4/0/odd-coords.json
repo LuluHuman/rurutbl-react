@@ -1,298 +1,280 @@
 {
-    "pixel_per_period": 99,
+    "pixel_per_period": 104,
     "output_diag": {
         "Monday": {
             "1": {
-                "x": 567,
+                "x": 583,
                 "y": 308,
                 "length": 3,
                 "Name": "CCE"
             },
             "2": {
-                "x": 772,
+                "x": 799,
                 "y": 308,
                 "length": 2,
                 "Name": "Math"
             },
             "3": {
-                "x": 874,
+                "x": 906,
                 "y": 308,
                 "length": 1,
                 "Name": "Break"
             },
             "4": {
-                "x": 1181,
+                "x": 1229,
                 "y": 308,
                 "length": 3,
-                "Name": "CPA"
+                "Name": "MTL"
             },
             "5": {
-                "x": 1385,
+                "x": 1445,
                 "y": 308,
                 "length": 2,
                 "Name": "Recess"
             },
             "6": {
-                "x": 1692,
+                "x": 1768,
                 "y": 308,
                 "length": 3,
                 "Name": "Elect-D&T/Science/Sci"
             },
             "7": {
-                "x": 1999,
+                "x": 2091,
                 "y": 308,
                 "length": 3,
-                "Name": "Eng"
+                "Name": "PE"
             },
             "8": {
                 "x": 2305,
                 "y": 308,
-                "length": 3,
-                "Name": "EBS"
+                "length": 2,
+                "Name": "Eng"
             }
         },
         "Tuesday": {
             "1": {
-                "x": 567,
-                "y": 561,
-                "length": 3,
-                "Name": "MTL"
-            },
-            "2": {
-                "x": 772,
-                "y": 561,
-                "length": 2,
-                "Name": "Science/Sci [4A/"
-            },
-            "3": {
-                "x": 976,
-                "y": 561,
-                "length": 2,
-                "Name": "Recess"
-            },
-            "4": {
-                "x": 1283,
+                "x": 583,
                 "y": 561,
                 "length": 3,
                 "Name": "Math"
             },
+            "2": {
+                "x": 906,
+                "y": 561,
+                "length": 3,
+                "Name": "Eng"
+            },
+            "3": {
+                "x": 1122,
+                "y": 561,
+                "length": 2,
+                "Name": "Science/Sci [4A/"
+            },
+            "4": {
+                "x": 1337,
+                "y": 561,
+                "length": 2,
+                "Name": "Recess"
+            },
             "5": {
-                "x": 1590,
+                "x": 1660,
                 "y": 561,
                 "length": 3,
                 "Name": "CPA"
             },
             "6": {
-                "x": 1897,
+                "x": 1983,
                 "y": 561,
                 "length": 3,
-                "Name": "Eng"
+                "Name": "CCE/1"
             },
             "7": {
-                "x": 2204,
+                "x": 2305,
                 "y": 561,
                 "length": 3,
                 "Name": "EBS"
-            },
-            "8": {
-                "x": 2305,
-                "y": 561,
-                "length": 1,
-                "Name": ""
             }
         },
         "Wednesday": {
             "1": {
-                "x": 363,
+                "x": 368,
                 "y": 814,
                 "length": 1,
                 "Name": ""
             },
             "2": {
-                "x": 465,
+                "x": 476,
                 "y": 814,
                 "length": 1,
                 "Name": ""
             },
             "3": {
-                "x": 772,
+                "x": 799,
                 "y": 814,
                 "length": 3,
                 "Name": "Elect-D&T/Science/Sci"
             },
             "4": {
-                "x": 976,
-                "y": 814,
-                "length": 2,
-                "Name": "Recess"
-            },
-            "5": {
-                "x": 1283,
-                "y": 814,
-                "length": 3,
-                "Name": "CCE/1"
-            },
-            "6": {
-                "x": 1488,
-                "y": 814,
-                "length": 2,
-                "Name": "MTL"
-            },
-            "7": {
-                "x": 1590,
-                "y": 814,
-                "length": 1,
-                "Name": "Break"
-            },
-            "8": {
-                "x": 1897,
+                "x": 1122,
                 "y": 814,
                 "length": 3,
                 "Name": "CPA"
             },
-            "9": {
-                "x": 2101,
+            "5": {
+                "x": 1337,
                 "y": 814,
                 "length": 2,
-                "Name": "Eng"
+                "Name": "Recess"
+            },
+            "6": {
+                "x": 1552,
+                "y": 814,
+                "length": 2,
+                "Name": "Math"
+            },
+            "7": {
+                "x": 1875,
+                "y": 814,
+                "length": 3,
+                "Name": "PE"
+            },
+            "8": {
+                "x": 1983,
+                "y": 814,
+                "length": 1,
+                "Name": "Break"
+            },
+            "9": {
+                "x": 2198,
+                "y": 814,
+                "length": 2,
+                "Name": "MTL"
             },
             "10": {
                 "x": 2305,
                 "y": 814,
-                "length": 2,
-                "Name": "Math"
+                "length": 1,
+                "Name": ""
             }
         },
         "Thursday": {
             "1": {
-                "x": 465,
+                "x": 476,
                 "y": 1067,
                 "length": 2,
                 "Name": "CCE"
             },
             "2": {
-                "x": 772,
+                "x": 799,
                 "y": 1067,
                 "length": 3,
-                "Name": "MTL"
+                "Name": "Math"
             },
             "3": {
-                "x": 1079,
+                "x": 1122,
                 "y": 1067,
                 "length": 3,
-                "Name": "PE"
+                "Name": "Eng"
             },
             "4": {
-                "x": 1283,
+                "x": 1337,
                 "y": 1067,
                 "length": 2,
                 "Name": "Recess"
             },
             "5": {
-                "x": 1590,
+                "x": 1660,
                 "y": 1067,
                 "length": 3,
-                "Name": "S5"
+                "Name": "MTL"
             },
             "6": {
-                "x": 1897,
+                "x": 1983,
+                "y": 1067,
+                "length": 3,
+                "Name": "CPA"
+            },
+            "7": {
+                "x": 2305,
                 "y": 1067,
                 "length": 3,
                 "Name": "EBS"
-            },
-            "7": {
-                "x": 2204,
-                "y": 1067,
-                "length": 3,
-                "Name": "Math"
-            },
-            "8": {
-                "x": 2305,
-                "y": 1067,
-                "length": 1,
-                "Name": ""
             }
         },
         "Friday": {
             "1": {
-                "x": 363,
+                "x": 368,
                 "y": 1320,
                 "length": 1,
                 "Name": ""
             },
             "2": {
-                "x": 465,
+                "x": 476,
                 "y": 1320,
                 "length": 1,
                 "Name": ""
             },
             "3": {
-                "x": 670,
+                "x": 691,
                 "y": 1320,
                 "length": 2,
-                "Name": "moEEE EEIAE TScienceA~ e FA AT"
+                "Name": ""
             },
             "4": {
-                "x": 874,
-                "y": 1320,
-                "length": 2,
-                "Name": "Eng"
-            },
-            "5": {
-                "x": 976,
-                "y": 1320,
-                "length": 1,
-                "Name": "Break"
-            },
-            "6": {
-                "x": 1181,
+                "x": 906,
                 "y": 1320,
                 "length": 2,
                 "Name": "MTL"
             },
+            "5": {
+                "x": 1122,
+                "y": 1320,
+                "length": 2,
+                "Name": "Eng"
+            },
+            "6": {
+                "x": 1229,
+                "y": 1320,
+                "length": 1,
+                "Name": "Break"
+            },
             "7": {
-                "x": 1385,
+                "x": 1445,
                 "y": 1320,
                 "length": 2,
                 "Name": "Math"
             },
             "8": {
-                "x": 1692,
+                "x": 1768,
                 "y": 1320,
                 "length": 3,
-                "Name": "PE"
+                "Name": "EBS"
             },
             "9": {
-                "x": 1794,
+                "x": 1875,
                 "y": 1320,
                 "length": 1,
                 "Name": ""
             },
             "10": {
-                "x": 1897,
+                "x": 1983,
                 "y": 1320,
                 "length": 1,
                 "Name": ""
             },
             "11": {
-                "x": 1999,
+                "x": 2091,
                 "y": 1320,
                 "length": 1,
                 "Name": ""
             },
             "12": {
-                "x": 2101,
+                "x": 2198,
                 "y": 1320,
                 "length": 1,
                 "Name": ""
             },
             "13": {
-                "x": 2204,
-                "y": 1320,
-                "length": 1,
-                "Name": ""
-            },
-            "14": {
                 "x": 2305,
                 "y": 1320,
                 "length": 1,
