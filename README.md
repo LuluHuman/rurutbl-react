@@ -1,24 +1,33 @@
-# Rurutbl 
+# ⚠️Project will terminate after graduation
+
+---
+
+---
+
+# Rurutbl
+
 ## Overview
-Rurutbl is a [Next.js](https://nextjs.org/) webapp that uses the converted output from [RuruTbl Scanner](https://github.com/rurutbl/rurutbl-scanner)  which transforms [aSc Timetables](https://www.asctimetables.com/) to a more glanceable page
+
+Rurutbl is a [Next.js](https://nextjs.org/) webapp that uses the converted output from [RuruTbl Scanner](https://github.com/rurutbl/rurutbl-scanner) which transforms [aSc Timetables](https://www.asctimetables.com/) to a more glanceable page
 
 Website: https://rurutbl.luluhoy.tech/
 
 Other Rurutbl Repos
-* API Repo: https://github.com/rurutbl/rurutbl-api
-* Scanner: https://github.com/rurutbl/rurutbl-scanner
-* Legacy site: https://github.com/rurutbl/rurutbl-static
+
+-   API Repo: https://github.com/rurutbl/rurutbl-api
+-   Scanner: https://github.com/rurutbl/rurutbl-scanner
+-   Legacy site: https://github.com/rurutbl/rurutbl-static
 
 ### Features
-* **Timer:** Countdown towards next subject
-* **Only your class:** your selected class without going through 23 pages in a PDF file
-* **Just today and tommorow:** Focuses on current/next day
-* **Bus Arrival:** Bus Arrival timings using LTA's [Datamall](https://datamall.lta.gov.sg/) API
 
+-   **Timer:** Countdown towards next subject
+-   **Only your class:** your selected class without going through 23 pages in a PDF file
+-   **Just today and tommorow:** Focuses on current/next day
+-   **Bus Arrival:** Bus Arrival timings using LTA's [Datamall](https://datamall.lta.gov.sg/) API
 
 # Installation
 
-You'll need NodeJS to install Rurutbl.  Get node.js from here: http://nodejs.org/.
+You'll need NodeJS to install Rurutbl. Get node.js from here: http://nodejs.org/.
 
 run `npm i` to install all packages
 
@@ -40,7 +49,7 @@ Open [http://localhost:3000](http://localhost:3000) with your browser to see the
 
 # Building Rurutbl
 
-Run the following to get a static site in the  `out` folder
+Run the following to get a static site in the `out` folder
 
 ```bash
 npm run build
@@ -51,6 +60,3 @@ pnpm build
 # or
 bun build
 ```
-
-# Contribution
-If you find bugs or have ideas, please share them in via GitHub Issues
