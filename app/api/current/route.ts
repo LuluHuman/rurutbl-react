@@ -4,7 +4,7 @@ import { type NextRequest } from 'next/server'
 export const dynamic = 'force-dynamic'
 export async function GET(req: NextRequest) {
     const millisecondsPerWeek = 7 * 24 * 60 * 60 * 1000;
-    const semstartDate = new Date("2025-6-28"); //? Date shall be set every Saturday of the semester (2 Days before Mon)
+    const semstartDate = new Date("2025-6-28"); //? Date should be set every Saturday of the semester (2 Days before Mon)
     const currentDate = new Date();
 
     const _timeDifference = currentDate.getTime() - semstartDate.getTime();

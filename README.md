@@ -1,9 +1,3 @@
-# ⚠️Project will terminate after graduation
-
----
-
----
-
 # Rurutbl
 
 ## Overview
@@ -30,6 +24,24 @@ Other Rurutbl Repos
 You'll need NodeJS to install Rurutbl. Get node.js from here: http://nodejs.org/.
 
 run `npm i` to install all packages
+
+# Set up
+
+### .env Variables
+
+A `datamallkey` variable is required for bus APIs. Register the key at https://datamall.lta.gov.sg/content/datamall/en/request-for-api.html
+
+### semstartDate Varable
+
+`semstartDate` is the date where semester starts. The date should be 2 days before Monday
+
+### Bus Stop Refresh
+
+Run `./tools/fetch_all_busstops.js` to refetch all avalable bus stops
+
+### Class schedule
+
+All the class schedule file are in the `./public/classes` directory
 
 # Running Rurutbl
 
